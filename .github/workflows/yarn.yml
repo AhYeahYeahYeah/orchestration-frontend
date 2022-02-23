@@ -45,11 +45,11 @@ jobs:
         # scp参数
         ARGS: "-avzr --delete"
         # 源目录，编译后生成的文件目录
-        SOURCE: "./"
+        SOURCE: "./dist/"
         # 服务器ip：换成你的服务器IP
         REMOTE_HOST: "8.141.159.53"
         # 用户
         REMOTE_USER: "bank"
         # 目标地址 你在服务器上部署代码的地方
         TARGET: "/www/wwwroot/orchestration.rinne.top"
-        EXCLUDE: "/dist/"
+        EXCLUDE: "/node_modules/"
