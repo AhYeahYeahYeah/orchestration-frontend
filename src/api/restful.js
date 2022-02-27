@@ -1,29 +1,16 @@
-import axios from "axios";
+// eslint-disable-next-line max-classes-per-file
+import axios from 'axios';
 
-const baseUrl = "http://conductor.rinne.top";
-const generalBackendPort = "10451";
-const conductorPort = "5000";
-const version = "v1";
+const baseUrl = 'http://conductor.rinne.top';
+const generalBackendPort = '10451';
+const conductorPort = '5000';
+const version = 'v1';
 
-const generalBackendbase = `${baseUrl}:${generalBackendPort}/${version}`;
-const authBase = `${generalBackendbase}/auth`;
-const entityBase = `${generalBackendbase}/entity`;
+const generalBackendBase = `${baseUrl}:${generalBackendPort}/${version}`;
+const authBase = `${generalBackendBase}/auth`;
+const entityBase = `${generalBackendBase}/entity`;
 
 const conductorBase = `${baseUrl}:${conductorPort}/api`;
-
-async function poll(fn, fnCondition, ms) {
-    let count = 0;
-    let result = await fn();
-    while (fnCondition(result)) {
-        await wait(ms);
-        result = await fn();
-        count++;
-        if (count > 16) {
-            break;
-        }
-    }
-    return result;
-}
 
 function wait(ms = 500) {
     return new Promise((resolve) => {
@@ -31,21 +18,45 @@ function wait(ms = 500) {
     });
 }
 
+async function poll(fn, fnCondition, ms) {
+    let count = 0;
+    let result = await fn();
+    while (fnCondition(result)) {
+        // eslint-disable-next-line no-await-in-loop
+        await wait(ms);
+        // eslint-disable-next-line no-await-in-loop
+        result = await fn();
+        count += 1;
+        if (count > 16) {
+            break;
+        }
+    }
+    return result;
+}
+
 export class AuthApi {
     constructor() {
         this.instance = axios.create({
             baseURL: `${authBase}/`,
             timeout: 1050,
-            headers: { Accept: "application/json" },
+            headers: { Accept: 'application/json' }
         });
     }
 
     async customerLogin(data) {
-        return await this.instance.post("/clogin", data);
+        return this.instance.post('/clogin', data);
+    }
+
+    async customerRegister(data) {
+        return this.instance.post('/cregister', data);
     }
 
     async adminLogin(data) {
-        return await this.instance.post("/alogin", data);
+        return this.instance.post('/alogin', data);
+    }
+
+    async adminRegister(data) {
+        return this.instance.post('/aregister', data);
     }
 }
 
@@ -55,203 +66,203 @@ export class EntityApi {
             baseURL: `${entityBase}/`,
             timeout: 1050,
             headers: {
-                Accept: "application/json",
-                Authorization: token,
-            },
+                Accept: 'application/json',
+                Authorization: token
+            }
         });
     }
 
     // Product
     async getProducts() {
-        return await this.instance.get("/product");
+        return this.instance.get('/product');
     }
 
     async getProduct(pid) {
-        return await this.instance.get(`/product/${pid}`);
+        return this.instance.get(`/product/${pid}`);
     }
 
     async addProduct(data) {
-        return await this.instance.post("/product", data);
+        return this.instance.post('/product', data);
     }
 
     async deleteProduct(pid) {
-        return await this.instance.delete(`/product/${pid}`);
+        return this.instance.delete(`/product/${pid}`);
     }
 
     async updateProduct(data) {
-        return await this.instance.put("/product", data);
+        return this.instance.put('/product', data);
     }
 
     // ServiceInfo
-    async getServiceInfo() {
-        return await this.instance.get("/serviceinfo");
+    async getServiceInfos() {
+        return this.instance.get('/serviceinfo');
     }
 
     async getServiceInfo(sid) {
-        return await this.instance.get(`/serviceinfo/${sid}`);
+        return this.instance.get(`/serviceinfo/${sid}`);
     }
 
     // Admin
     async getAdmins() {
-        return await this.instance.get("/admin");
+        return this.instance.get('/admin');
     }
 
     async getAdmin(aid) {
-        return await this.instance.get(`/admin/${aid}`);
+        return this.instance.get(`/admin/${aid}`);
     }
 
     async addAdmin(data) {
-        return await this.instance.post("/admin", data);
+        return this.instance.post('/admin', data);
     }
 
     async updateAdmin(data) {
-        return await this.instance.put("/admin", data);
+        return this.instance.put('/admin', data);
     }
 
     // Customer
     async getCustomers() {
-        return await this.instance.get("/customer");
+        return this.instance.get('/customer');
     }
 
     async getCustomer(cid) {
-        return await this.instance.get(`/customer/${cid}`);
+        return this.instance.get(`/customer/${cid}`);
     }
 
     async addCustomer(data) {
-        return await this.instance.post("/customer", data);
+        return this.instance.post('/customer', data);
     }
 
     async deleteCustomer(cid) {
-        return await this.instance.delete(`/customer/${cid}`);
+        return this.instance.delete(`/customer/${cid}`);
     }
 
     async updateCustomer(data) {
-        return await this.instance.put("/customer", data);
+        return this.instance.put('/customer', data);
     }
 
     // CustomerProfile
     async getCustomerProfiles() {
-        return await this.instance.get("/customerprofile");
+        return this.instance.get('/customerprofile');
     }
 
     async getCustomerProfile(cid) {
-        return await this.instance.get(`/customerprofile/${cid}`);
+        return this.instance.get(`/customerprofile/${cid}`);
     }
 
     async addCustomerProfile(data) {
-        return await this.instance.post("/customerprofile", data);
+        return this.instance.post('/customerprofile', data);
     }
 
     async deleteCustomerProfile(cid) {
-        return await this.instance.delete(`/customerprofile/${cid}`);
+        return this.instance.delete(`/customerprofile/${cid}`);
     }
 
     async updateCustomerProfile(data) {
-        return await this.instance.put("/customerprofile", data);
+        return this.instance.put('/customerprofile', data);
     }
 
     // Whitelist
     async getWhitelists() {
-        return await this.instance.get("/whitelist");
+        return this.instance.get('/whitelist');
     }
 
     async getWhitelist(wid) {
-        return await this.instance.get(`/whitelist/${wid}`);
+        return this.instance.get(`/whitelist/${wid}`);
     }
 
     async addWhitelist(data) {
-        return await this.instance.post("/whitelist", data);
+        return this.instance.post('/whitelist', data);
     }
 
     async deleteWhitelist(wid) {
-        return await this.instance.delete(`/whitelist/${wid}`);
+        return this.instance.delete(`/whitelist/${wid}`);
     }
 
     async updateWhitelist(data) {
-        return await this.instance.put("/whitelist", data);
+        return this.instance.put('/whitelist', data);
     }
 
     // Blacklist
     async getBlacklists() {
-        return await this.instance.get("/blacklist");
+        return this.instance.get('/blacklist');
     }
 
     async getBlacklist(bid) {
-        return await this.instance.get(`/blacklist/${bid}`);
+        return this.instance.get(`/blacklist/${bid}`);
     }
 
     async addBlacklist(data) {
-        return await this.instance.post("/blacklist", data);
+        return this.instance.post('/blacklist', data);
     }
 
     async deleteBlacklist(bid) {
-        return await this.instance.delete(`/blacklist/${bid}`);
+        return this.instance.delete(`/blacklist/${bid}`);
     }
 
     async updateBlacklist(data) {
-        return await this.instance.put("/blacklist", data);
+        return this.instance.put('/blacklist', data);
     }
 
     // UserGroup
     async getUserGroups() {
-        return await this.instance.get("/usergroup");
+        return this.instance.get('/usergroup');
     }
 
     async getUserGroup(gid) {
-        return await this.instance.get(`/usergroup/${gid}`);
+        return this.instance.get(`/usergroup/${gid}`);
     }
 
     async addUserGroup(data) {
-        return await this.instance.post("/usergroup", data);
+        return this.instance.post('/usergroup', data);
     }
 
     async deleteUserGroup(gid) {
-        return await this.instance.delete(`/usergroup/${gid}`);
+        return this.instance.delete(`/usergroup/${gid}`);
     }
 
     async updateUserGroup(data) {
-        return await this.instance.put("/usergroup", data);
+        return this.instance.put('/usergroup', data);
     }
 
     // Order
     async getOrders() {
-        return await this.instance.get("/order");
+        return this.instance.get('/order');
     }
 
     async getOrder(oid) {
-        return await this.instance.get(`/order/${oid}`);
+        return this.instance.get(`/order/${oid}`);
     }
 
     async addOrder(data) {
-        return await this.instance.post("/order", data);
+        return this.instance.post('/order', data);
     }
 
     // WorkFlow
     async getWorkFlows() {
-        return await this.instance.get("/workflow");
+        return this.instance.get('/workflow');
     }
 
     async getWorkFlow(fid) {
-        return await this.instance.get(`/workflow/${fid}`);
+        return this.instance.get(`/workflow/${fid}`);
     }
 
     async addWorkFlow(data) {
-        return await this.instance.post("/workflow", data);
+        return this.instance.post('/workflow', data);
     }
 
     async deleteWorkFlow(fid) {
-        return await this.instance.delete(`/workflow/${fid}`);
+        return this.instance.delete(`/workflow/${fid}`);
     }
 
     async updateWorkFlow(data) {
-        return await this.instance.put("/workflow", data);
+        return this.instance.put('/workflow', data);
     }
 }
 
 export class QueryApi {
-    async startQuery(id) {
-        let fetchReport = () => axios.get(`${conductorBase}/workflow/${id}`);
-        let validate = (result) => result.data.status !== "COMPLETED" && result.data.status !== "FAILED";
+    startQuery = async (id) => {
+        const fetchReport = () => axios.get(`${conductorBase}/workflow/${id}`);
+        const validate = (result) => result.data.status !== 'COMPLETED' && result.data.status !== 'FAILED';
         return poll(fetchReport, validate, 500);
-    }
+    };
 }
