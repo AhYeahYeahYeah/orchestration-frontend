@@ -46,14 +46,14 @@ const Register = () => {
                                                         gutterBottom
                                                         variant={matchDownSM ? 'h3' : 'h2'}
                                                     >
-                                                        Sign up
+                                                        注册
                                                     </Typography>
                                                     <Typography
                                                         variant="caption"
                                                         fontSize="16px"
                                                         textAlign={matchDownSM ? 'center' : 'inherit'}
                                                     >
-                                                        Enter your credentials to continue
+                                                        请输入必要信息
                                                     </Typography>
                                                 </Stack>
                                             </Grid>
@@ -68,7 +68,7 @@ const Register = () => {
                                     <Grid item xs={12}>
                                         <Grid item container direction="column" alignItems="center" xs={12}>
                                             <Typography component={Link} to="/login" variant="subtitle1" sx={{ textDecoration: 'none' }}>
-                                                Already have an account?
+                                                已有账号?
                                             </Typography>
                                         </Grid>
                                     </Grid>

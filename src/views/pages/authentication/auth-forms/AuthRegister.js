@@ -16,8 +16,7 @@ import {
     InputLabel,
     OutlinedInput,
     TextField,
-    Typography,
-    useMediaQuery
+    Typography
 } from '@mui/material';
 
 // third party
@@ -62,7 +61,6 @@ registerPlugin(
 const FirebaseRegister = ({ ...others }) => {
     const theme = useTheme();
     const scriptedRef = useScriptRef();
-    const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
     const [showPassword, setShowPassword] = useState(false);
     const [checked, setChecked] = useState(true);
 
@@ -112,7 +110,7 @@ const FirebaseRegister = ({ ...others }) => {
                         acceptedFileTypes={['image/png', 'image/jpeg']}
                         maxFiles={1}
                         name="avatar"
-                        labelIdle='Drag & Drop your avatar or <span class="filepond--label-action">Browse</span>'
+                        labelIdle='拖入图片 或 <span class="filepond--label-action">浏览</span>'
                     />
                 </Grid>
             </Grid>
@@ -145,32 +143,17 @@ const FirebaseRegister = ({ ...others }) => {
             >
                 {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
                     <form noValidate onSubmit={handleSubmit} {...others}>
-                        <Grid container spacing={matchDownSM ? 0 : 2}>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    fullWidth
-                                    label="First Name"
-                                    margin="normal"
-                                    name="fname"
-                                    type="text"
-                                    defaultValue=""
-                                    sx={{ ...theme.typography.customInput }}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    fullWidth
-                                    label="Last Name"
-                                    margin="normal"
-                                    name="lname"
-                                    type="text"
-                                    defaultValue=""
-                                    sx={{ ...theme.typography.customInput }}
-                                />
-                            </Grid>
-                        </Grid>
+                        <TextField
+                            fullWidth
+                            label="昵称"
+                            margin="normal"
+                            name="nickname"
+                            type="text"
+                            defaultValue=""
+                            sx={{ ...theme.typography.customInput }}
+                        />
                         <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
-                            <InputLabel htmlFor="outlined-adornment-email-register">Email Address / Username</InputLabel>
+                            <InputLabel htmlFor="outlined-adornment-email-register">邮箱/用户名</InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-email-register"
                                 type="email"
@@ -192,7 +175,7 @@ const FirebaseRegister = ({ ...others }) => {
                             error={Boolean(touched.password && errors.password)}
                             sx={{ ...theme.typography.customInput }}
                         >
-                            <InputLabel htmlFor="outlined-adornment-password-register">Password</InputLabel>
+                            <InputLabel htmlFor="outlined-adornment-password-register">密码</InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-password-register"
                                 type={showPassword ? 'text' : 'password'}
@@ -259,9 +242,9 @@ const FirebaseRegister = ({ ...others }) => {
                                     }
                                     label={
                                         <Typography variant="subtitle1">
-                                            Agree with &nbsp;
+                                            同意 &nbsp;
                                             <Typography variant="subtitle1" component={Link} to="#">
-                                                Terms & Condition.
+                                                使用协议及条款。
                                             </Typography>
                                         </Typography>
                                     }
@@ -285,7 +268,7 @@ const FirebaseRegister = ({ ...others }) => {
                                     variant="contained"
                                     color="secondary"
                                 >
-                                    Sign up
+                                    注册
                                 </Button>
                             </AnimateButton>
                         </Box>
