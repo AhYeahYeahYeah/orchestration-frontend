@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -8,7 +7,6 @@ import {
     Box,
     Button,
     Checkbox,
-    Divider,
     FormControl,
     FormControlLabel,
     FormHelperText,
@@ -28,7 +26,6 @@ import { Formik } from 'formik';
 
 // project imports
 import useScriptRef from 'hooks/useScriptRef';
-import Google from 'assets/images/icons/social-google.svg';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { strengthColor, strengthIndicator } from 'utils/password-strength';
 
@@ -66,7 +63,6 @@ const FirebaseRegister = ({ ...others }) => {
     const theme = useTheme();
     const scriptedRef = useScriptRef();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
-    const customization = useSelector((state) => state.customization);
     const [showPassword, setShowPassword] = useState(false);
     const [checked, setChecked] = useState(true);
 
@@ -77,10 +73,7 @@ const FirebaseRegister = ({ ...others }) => {
 
     const handleAddFile = (err, file) => {
         const base64 = file?.getFileEncodeDataURL();
-    };
-
-    const googleHandler = async () => {
-        console.error('Register');
+        console.log(base64);
     };
 
     const handleClickShowPassword = () => {
