@@ -273,10 +273,12 @@ export class EntityApi {
     }
 }
 
-export class QueryApi {
+export class ConductorApi {
     startQuery = async (id) => {
         const fetchReport = () => axios.get(`${conductorBase}/workflow/${id}`);
         const validate = (result) => result.data.status !== 'COMPLETED' && result.data.status !== 'FAILED';
         return poll(fetchReport, validate, 500);
     };
+
+    setWorkFlow = async (workflow) => axios.post(`${conductorBase}/metadata/workflow`, JSON.parse(workflow));
 }
