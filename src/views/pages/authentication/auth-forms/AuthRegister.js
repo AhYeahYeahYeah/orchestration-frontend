@@ -15,7 +15,6 @@ import {
     InputAdornment,
     InputLabel,
     OutlinedInput,
-    TextField,
     Typography
 } from '@mui/material';
 
@@ -44,6 +43,8 @@ import FilePondPluginImageResize from 'filepond-plugin-image-resize';
 import FilePondPluginImageCrop from 'filepond-plugin-image-crop';
 import FilePondPluginImageTransform from 'filepond-plugin-image-transform';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+import { AuthApi } from '../../../../api/restful';
+import sha1 from 'js-sha1';
 
 registerPlugin(
     FilePondPluginImageExifOrientation,
@@ -68,10 +69,10 @@ const FirebaseRegister = ({ ...others }) => {
     const [level, setLevel] = useState();
 
     const [files, setFiles] = useState([]);
-
+    const [base64, setBase64] = useState('');
     const handleAddFile = (err, file) => {
-        const base64 = file?.getFileEncodeDataURL();
-        console.log(base64);
+        setBase64(file?.getFileEncodeDataURL());
+        // console.log(base64);
     };
 
     const handleClickShowPassword = () => {
@@ -117,19 +118,38 @@ const FirebaseRegister = ({ ...others }) => {
 
             <Formik
                 initialValues={{
-                    email: '',
+                    account: '',
+                    nickName: '',
+                    aname: '',
                     password: '',
                     submit: null
                 }}
                 validationSchema={Yup.object().shape({
-                    email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
+                    account: Yup.string().max(255).required('Account is required'),
+                    nickName: Yup.string().max(255).required('NickName is required'),
+                    aname: Yup.string().max(255).required('Name is required'),
                     password: Yup.string().max(255).required('Password is required')
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                     try {
                         if (scriptedRef.current) {
-                            setStatus({ success: true });
-                            setSubmitting(false);
+                            const authapi = new AuthApi();
+                            const admin = {
+                                account: values.account,
+                                nickName: values.nickName,
+                                aname: values.aname,
+                                password: sha1(values.password),
+                                avatar: base64
+                            };
+                            console.log(admin);
+                            authapi.adminRegister(admin).then((res) => {
+                                console.log(res);
+                                if (res.status === 200) {
+                                    window.location.href = '/login';
+                                    setStatus({ success: true });
+                                    setSubmitting(false);
+                                }
+                            });
                         }
                     } catch (err) {
                         console.error(err);
@@ -143,29 +163,58 @@ const FirebaseRegister = ({ ...others }) => {
             >
                 {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
                     <form noValidate onSubmit={handleSubmit} {...others}>
-                        <TextField
-                            fullWidth
-                            label="昵称"
-                            margin="normal"
-                            name="nickname"
-                            type="text"
-                            defaultValue=""
-                            sx={{ ...theme.typography.customInput }}
-                        />
-                        <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
-                            <InputLabel htmlFor="outlined-adornment-email-register">邮箱/用户名</InputLabel>
+                        <FormControl fullWidth error={Boolean(touched.account && errors.account)} sx={{ ...theme.typography.customInput }}>
+                            <InputLabel htmlFor="outlined-adornment-email-register">account</InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-email-register"
-                                type="email"
-                                value={values.email}
-                                name="email"
+                                type="account"
+                                value={values.account}
+                                name="account"
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 inputProps={{}}
                             />
-                            {touched.email && errors.email && (
+                            {touched.account && errors.account && (
                                 <FormHelperText error id="standard-weight-helper-text--register">
-                                    {errors.email}
+                                    {errors.account}
+                                </FormHelperText>
+                            )}
+                        </FormControl>
+                        <FormControl
+                            fullWidth
+                            error={Boolean(touched.nickName && errors.nickName)}
+                            sx={{ ...theme.typography.customInput }}
+                        >
+                            <InputLabel htmlFor="outlined-adornment-email-register">nickName</InputLabel>
+                            <OutlinedInput
+                                id="outlined-adornment-email-register"
+                                type="nickName"
+                                value={values.nickName}
+                                name="nickName"
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                inputProps={{}}
+                            />
+                            {touched.nickName && errors.nickName && (
+                                <FormHelperText error id="standard-weight-helper-text--register">
+                                    {errors.nickName}
+                                </FormHelperText>
+                            )}
+                        </FormControl>
+                        <FormControl fullWidth error={Boolean(touched.aname && errors.aname)} sx={{ ...theme.typography.customInput }}>
+                            <InputLabel htmlFor="outlined-adornment-email-register">name</InputLabel>
+                            <OutlinedInput
+                                id="outlined-adornment-email-register"
+                                type="aname"
+                                value={values.aname}
+                                name="aname"
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                inputProps={{}}
+                            />
+                            {touched.aname && errors.aname && (
+                                <FormHelperText error id="standard-weight-helper-text--register">
+                                    {errors.aname}
                                 </FormHelperText>
                             )}
                         </FormControl>
