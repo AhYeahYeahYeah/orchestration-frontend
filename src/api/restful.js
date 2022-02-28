@@ -3,6 +3,7 @@ import axios from 'axios';
 
 const baseUrl = 'http://conductor.rinne.top';
 const generalBackendPort = '10451';
+const servicesBackendPort = '10452';
 const conductorPort = '5000';
 const version = 'v1';
 
@@ -11,6 +12,19 @@ const authBase = `${generalBackendBase}/auth`;
 const entityBase = `${generalBackendBase}/entity`;
 
 const conductorBase = `${baseUrl}:${conductorPort}/api`;
+
+const servicesBackendBase = `${baseUrl}:${servicesBackendPort}/${version}`;
+export const interestRate = `${servicesBackendBase}/system/interestrate`;
+export const log = `${servicesBackendBase}/data/log`;
+export const tag = `${servicesBackendBase}/regulation/tag`;
+export const region = `${servicesBackendBase}/regulation/region`;
+export const blacklist = `${servicesBackendBase}/regulation/blacklist`;
+export const whitelist = `${servicesBackendBase}/regulation/whitelist`;
+export const credential = `${servicesBackendBase}/examine/credential`;
+export const profile = `${servicesBackendBase}/examine/profile`;
+export const lock = `${servicesBackendBase}/storage/lock`;
+export const unlock = `${servicesBackendBase}/storage/unlock`;
+export const update = `${servicesBackendBase}/storage/update`;
 
 function wait(ms = 500) {
     return new Promise((resolve) => {
@@ -259,10 +273,12 @@ export class EntityApi {
     }
 }
 
-export class QueryApi {
+export class ConductorApi {
     startQuery = async (id) => {
         const fetchReport = () => axios.get(`${conductorBase}/workflow/${id}`);
         const validate = (result) => result.data.status !== 'COMPLETED' && result.data.status !== 'FAILED';
         return poll(fetchReport, validate, 500);
     };
+
+    setWorkFlow = async (workflow) => axios.post(`${conductorBase}/metadata/workflow`, JSON.parse(workflow));
 }
