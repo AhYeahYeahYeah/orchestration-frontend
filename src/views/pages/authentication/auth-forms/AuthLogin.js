@@ -18,7 +18,9 @@ import {
     OutlinedInput,
     Stack,
     Typography,
-    useMediaQuery
+    useMediaQuery,
+    Alert,
+    Snackbar
 } from '@mui/material';
 
 // third party
@@ -34,7 +36,8 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 import Google from 'assets/images/icons/social-google.svg';
-
+import { AuthApi } from '../../../../api/restful';
+import sha1 from 'js-sha1';
 // ============================|| FIREBASE - LOGIN ||============================ //
 
 const FirebaseLogin = ({ ...others }) => {
@@ -43,7 +46,13 @@ const FirebaseLogin = ({ ...others }) => {
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
     const customization = useSelector((state) => state.customization);
     const [checked, setChecked] = useState(true);
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMsg, setSnackbarMsg] = useState('');
 
+    const handleSnackbarClose = () => {
+        setSnackbarOpen(false);
+        setSnackbarMsg('');
+    };
     const googleHandler = async () => {
         console.error('Login');
     };
@@ -56,7 +65,6 @@ const FirebaseLogin = ({ ...others }) => {
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
     };
-
     return (
         <>
             <Grid container direction="column" justifyContent="center" spacing={2}>
@@ -120,19 +128,32 @@ const FirebaseLogin = ({ ...others }) => {
 
             <Formik
                 initialValues={{
-                    email: 'info@codedthemes.com',
-                    password: '123456',
+                    email: '',
+                    password: '',
                     submit: null
                 }}
                 validationSchema={Yup.object().shape({
-                    email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
+                    email: Yup.string().max(255).required('Account is required'),
                     password: Yup.string().max(255).required('Password is required')
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                     try {
                         if (scriptedRef.current) {
-                            setStatus({ success: true });
-                            setSubmitting(false);
+                            const authapi = new AuthApi();
+                            authapi.adminLogin({ account: values.email, password: sha1(values.password) }).then((res) => {
+                                if (res.data.token) {
+                                    setStatus({ success: true });
+                                    setSubmitting(false);
+                                    // console.log(res.data);
+                                    localStorage.setItem('admin', JSON.stringify(res.data.admin));
+                                    localStorage.setItem('admin_token', res.data.token);
+                                    // console.log(localStorage.getItem('admin'));
+                                    window.location.href = '/dashboard';
+                                } else {
+                                    setSnackbarMsg('登陆失败！');
+                                    setSnackbarOpen(true);
+                                }
+                            });
                         }
                     } catch (err) {
                         console.error(err);
@@ -240,6 +261,16 @@ const FirebaseLogin = ({ ...others }) => {
                     </form>
                 )}
             </Formik>
+            <Snackbar
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                open={snackbarOpen}
+                autoHideDuration={6000}
+                onClose={handleSnackbarClose}
+            >
+                <Alert severity="warning" onClose={handleSnackbarClose}>
+                    {snackbarMsg}
+                </Alert>
+            </Snackbar>
         </>
     );
 };
