@@ -17,7 +17,6 @@ import { IconMenu2 } from '@tabler/icons';
 
 const Header = ({ handleLeftDrawerToggle }) => {
     const theme = useTheme();
-    const admin = JSON.parse(localStorage.getItem('admin'));
     return (
         <>
             {/* logo & toggler button */}
@@ -62,7 +61,7 @@ const Header = ({ handleLeftDrawerToggle }) => {
 
             {/* notification & profile */}
             <NotificationSection />
-            <ProfileSection admin={admin} />
+            <ProfileSection />
         </>
     );
 };
