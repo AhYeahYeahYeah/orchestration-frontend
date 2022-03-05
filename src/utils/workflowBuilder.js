@@ -90,6 +90,9 @@ export class SwitchNode {
     setNextNode = (nextNode) => {
         const taskIter = (node) => {
             if (node.nextNode === undefined && node.type !== 'Terminate') {
+                if (node.taskReferenceName === nextNode.taskReferenceName) {
+                    return;
+                }
                 nextNode.break = this.taskReferenceName;
                 node.setNextBreakNode(nextNode);
                 return;
