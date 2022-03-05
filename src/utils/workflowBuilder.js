@@ -131,6 +131,7 @@ export class HttpNode {
         this.url = url;
         this.method = method;
         this.optional = false;
+        this.taskReferenceName = '';
     }
 
     setBody = (data) => {
@@ -147,6 +148,8 @@ export class HttpNode {
         this.taskReferenceName = taskReferenceName;
         return this;
     };
+
+    getTaskReferenceName = () => this.taskReferenceName;
 
     setNextHttpNode = (url, method) => {
         this.nextNode = new HttpNode(url, method);

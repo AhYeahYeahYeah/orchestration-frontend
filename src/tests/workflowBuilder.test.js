@@ -3,7 +3,7 @@ import { blacklist, ConductorApi, interestRate, lock, log, tag, unlock, update }
 
 /* eslint-disable */
 test('workflow builder test', () => {
-    const builder = new WorkflowBuilder('TestWorkflow', 2, 'rinne@rinne.top');
+    const builder = new WorkflowBuilder('TestWorkflow', 11, 'rinne@rinne.top');
     builder.setDescription('Demo workflow for testing workflowBuilder library.');
     builder.setRuntimeInput(['cid', 'oid', 'pid']);
     builder.setBuildtimeInput({
@@ -39,10 +39,10 @@ test('workflow builder test', () => {
         .setName('switchTagNode1Node')
         .setTaskReferenceName('switch_tag_1');
 
-    const terminateNode1 = switchTagNode1Node.addTerminateCase('default', "FAILED", 0);
-    terminateNode1
-        .setName('terminate 1')
-        .setTaskReferenceName('terminate_1');
+    // const terminateNode1 = switchTagNode1Node.addTerminateCase('default', "FAILED", 0);
+    // terminateNode1
+    //     .setName('terminate 1')
+    //     .setTaskReferenceName('terminate_1');
 
     const logNode2 = switchTagNode1Node.addHttpCase(200, lock, 'POST');
     logNode2
@@ -62,9 +62,8 @@ test('workflow builder test', () => {
             pid: '${workflow.input.pid}'
         });
 
-    switchTagNode1Node.setNextNode(lockNode1);
 
-    const logNode1 = switchTagNode1Node.addHttpCase(204, log, 'POST');
+    const logNode1 = switchTagNode1Node.addHttpCase('default', log, 'POST');
     logNode1
         .setName('log 1')
         .setTaskReferenceName('log_1')
@@ -74,38 +73,39 @@ test('workflow builder test', () => {
                 'The user agent may update its cached headers for this resource with the new ones.'
         });
 
-    const updateNode1 = lockNode1.setNextHttpNode(update, 'POST');
-    updateNode1
-        .setName('update 1')
-        .setTaskReferenceName('update_1')
-        .setBody({
-            pid: '${workflow.input.pid}'
-        });
-
-    const unlockNode1 = updateNode1.setNextHttpNode(unlock, 'POST');
-    unlockNode1
-        .setName('unlock 1')
-        .setTaskReferenceName('unlock_1')
-        .setBody({
-            pid: '${workflow.input.pid}'
-        });
-
-    const interestNode1 = unlockNode1.setNextHttpNode(interestRate, 'POST');
-    interestNode1
-        .setName('interest 1')
-        .setTaskReferenceName('interest_1')
-        .setBody({
-            oid: '${workflow.input.oid}'
-        });
-
-    const logNode3 = interestNode1.setNextHttpNode(log, 'POST');
-    logNode3
-        .setName('log 3')
-        .setTaskReferenceName('log_3')
-        .setBody({
-            oid: '${workflow.input.oid}',
-            description: 'Succeed'
-        });
+    // switchTagNode1Node.setNextNode(lockNode1);
+    // const updateNode1 = lockNode1.setNextHttpNode(update, 'POST');
+    // updateNode1
+    //     .setName('update 1')
+    //     .setTaskReferenceName('update_1')
+    //     .setBody({
+    //         pid: '${workflow.input.pid}'
+    //     });
+    //
+    // const unlockNode1 = updateNode1.setNextHttpNode(unlock, 'POST');
+    // unlockNode1
+    //     .setName('unlock 1')
+    //     .setTaskReferenceName('unlock_1')
+    //     .setBody({
+    //         pid: '${workflow.input.pid}'
+    //     });
+    //
+    // const interestNode1 = unlockNode1.setNextHttpNode(interestRate, 'POST');
+    // interestNode1
+    //     .setName('interest 1')
+    //     .setTaskReferenceName('interest_1')
+    //     .setBody({
+    //         oid: '${workflow.input.oid}'
+    //     });
+    //
+    // const logNode3 = interestNode1.setNextHttpNode(log, 'POST');
+    // logNode3
+    //     .setName('log 3')
+    //     .setTaskReferenceName('log_3')
+    //     .setBody({
+    //         oid: '${workflow.input.oid}',
+    //         description: 'Succeed'
+    //     });
 
     builder.setInputNode(inputNode);
     const workflow = builder.build();

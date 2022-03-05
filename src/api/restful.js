@@ -1,7 +1,8 @@
 // eslint-disable-next-line max-classes-per-file
 import axios from 'axios';
 
-const baseUrl = 'http://conductor.rinne.top';
+const baseUrl = 'http://localhost';
+const baseUrl2 = 'http://conductor.rinne.top';
 const generalBackendPort = '10451';
 const servicesBackendPort = '10452';
 const conductorPort = '5000';
@@ -11,7 +12,7 @@ const generalBackendBase = `${baseUrl}:${generalBackendPort}/${version}`;
 const authBase = `${generalBackendBase}/auth`;
 const entityBase = `${generalBackendBase}/entity`;
 
-const conductorBase = `${baseUrl}:${conductorPort}/api`;
+const conductorBase = `http://8.141.159.53:12888/${baseUrl2}:${conductorPort}/api`;
 
 const servicesBackendBase = `${baseUrl}:${servicesBackendPort}/${version}`;
 export const interestRate = `${servicesBackendBase}/system/interestrate`;
