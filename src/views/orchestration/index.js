@@ -1216,8 +1216,8 @@ const Orchestration = () => {
             const workflow = builder.build();
             console.log(workflow);
             console.log(flow_all);
-            // const conductor = new ConductorApi();
-            // conductor.setWorkFlow(workflow).then((r) => console.log(r));
+            const conductor = new ConductorApi();
+            conductor.setWorkFlow(workflow).then((r) => console.log(r));
         }
     }, [reactFlowInstance]);
     // eslint-disable-next-line react-hooks/rules-of-hooks
