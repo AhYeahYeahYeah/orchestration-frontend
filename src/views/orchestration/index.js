@@ -14,7 +14,6 @@ import ReactFlow, {
 import Sidebar from './Sidebar';
 
 import './dnd.css';
-import ColorSelectorNode from './ColorSelectorNode';
 import { useTheme } from '@mui/material/styles';
 import { Grid } from '@mui/material';
 import { InputNode, WorkflowBuilder } from '../../utils/workflowBuilder';
@@ -49,7 +48,6 @@ import LogSelector from '../../ui-component/services/LogSelector';
 import SwitchSelector from '../../ui-component/caseCard/SwitchSelector';
 
 const nodeTypes = {
-    selectorNode: ColorSelectorNode,
     No: NoSelector,
     Yes: YesSelector,
     Black: BlackSelector,
@@ -100,17 +98,18 @@ const Orchestration = () => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [elements, setElements] = useState(initialElements);
 
-    const onConnect = (params) => {
-        setElements((elements) =>
-            addEdge({ ...params, animated: true }, elements).map((ele) => {
-                if (ele.id === params.source) {
-                    ele.next = params.target;
-                    return ele;
-                }
-                return ele;
-            })
-        );
-    };
+    const onConnect = (params) => setElements(() => addEdge({ ...params, animated: true }, elements));
+    // const onConnect = (params) => {
+    //     setElements((elements) =>
+    //         addEdge({ ...params, animated: true }, elements).map((ele) => {
+    //             if (ele.id === params.source) {
+    //                 ele.next = params.target;
+    //                 return ele;
+    //             }
+    //             return ele;
+    //         })
+    //     );
+    // };
 
     // TODO: null
     const onElementsRemove = (elementsToRemove) => setElements((els) => removeElements(elementsToRemove, els));
@@ -307,7 +306,7 @@ const Orchestration = () => {
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const onSave = useCallback(() => {
-        const builder = new WorkflowBuilder('test_cml', 19, 'rinne@rinne.top');
+        const builder = new WorkflowBuilder('test_cml', 36, 'rinne@rinne.top');
         builder.setDescription('Demo workflow for testing workflowBuilder library.');
         builder.setRuntimeInput(['pid', 'cid', 'oid', 'phone_num', 'password']);
         builder.setBuildtimeInput({
@@ -327,10 +326,406 @@ const Orchestration = () => {
             // localforage.setItem(flowKey, flow);
             console.log(flow.elements);
             // console.log(flow);
-            const input = [flow.elements[0]];
+            const input = flow.elements[0];
             // eslint-disable-next-line camelcase
             const flow_all = [];
             const queue = [];
+            const cardandtask = [];
+            const switchcard = [];
+            queue.push([input, inputNode]);
+            // console.log(queue.shift()[1]);
+            // cardandtask.push([input[0], inputNode]);
+            // console.log(cardandtask[0][0]);
+            while (queue.length !== 0) {
+                const data = queue.shift();
+                console.log(`data:${JSON.stringify(data[0])}`);
+                // eslint-disable-next-line camelcase
+                const next_nodes = getOutgoers(data[0], flow.elements);
+                console.log(`next_nodes:${JSON.stringify(next_nodes)}`);
+                // eslint-disable-next-line no-continue
+                if (next_nodes.length === 0) continue;
+                // eslint-disable-next-line no-continue
+                if (next_nodes[0].type === 'output') continue;
+                // eslint-disable-next-line no-plusplus
+                for (let m = 0; m < next_nodes.length; m++) {
+                    // eslint-disable-next-line no-plusplus
+                    for (let j = 0; j < flow.elements.length; j++) {
+                        if (JSON.stringify(next_nodes[m]) === JSON.stringify(flow.elements[j]) && flow.elements[j].visited === 0) {
+                            flow.elements[j].visited = 1;
+                            if (next_nodes[m].flag === 'Switch') {
+                                // eslint-disable-next-line no-template-curly-in-string,camelcase
+                                const task_node = data[1].setNextSwitchNode(
+                                    `${data[1].taskReferenceName}.output.response.body.statusCode}`
+                                );
+                                task_node
+                                    .setName(`switchTagNode${next_nodes[m].id}Node`)
+                                    .setTaskReferenceName(`switch_tag_${next_nodes[m].id}`);
+                                switchcard.push(task_node);
+                                // eslint-disable-next-line camelcase
+                                queue.push([next_nodes[m], task_node]);
+                                // eslint-disable-next-line camelcase
+                                cardandtask.push([next_nodes[m], task_node]);
+                            } else if (data[0].flag === 'Switch') {
+                                let cs = 200;
+                                // eslint-disable-next-line no-plusplus
+                                // eslint-disable-next-line no-use-before-define
+                                if (next_nodes[m].type === 'No') {
+                                    cs = 'default';
+                                    // if (getIncomers(getOutgoers(next_nodes[k], flow.elements)[0], flow.elements).length > 1) {
+                                    //     // eslint-disable-next-line no-continue
+                                    //     continue;
+                                    // }
+                                }
+                                // eslint-disable-next-line camelcase
+                                const case_next = getOutgoers(next_nodes[m], flow.elements);
+                                // eslint-disable-next-line camelcase
+                                let task_node_child = null;
+                                // eslint-disable-next-line no-plusplus
+                                for (let i = 0; i < flow.elements.length; i++) {
+                                    if (
+                                        JSON.stringify(case_next[0]) === JSON.stringify(flow.elements[i]) &&
+                                        flow.elements[i].visited === 0
+                                    ) {
+                                        flow.elements[i].visited = 1;
+                                        switch (case_next[0].type) {
+                                            case 'Black':
+                                                // eslint-disable-next-line camelcase
+                                                task_node_child = data[1].addHttpCase(`${cs}`, blacklist, 'POST');
+                                                task_node_child
+                                                    .setName(`${case_next[0].id}_Node`)
+                                                    .setTaskReferenceName(`${case_next[0].id}_Node`)
+                                                    .setBody({
+                                                        // eslint-disable-next-line no-template-curly-in-string
+                                                        bid: '${workflow.input.bid}'
+                                                    });
+                                                break;
+
+                                            case 'White':
+                                                // eslint-disable-next-line camelcase
+                                                task_node_child = data[1].addHttpCase(`${cs}`, whitelist, 'POST');
+                                                task_node_child
+                                                    .setName(`${case_next[0].id}_Node`)
+                                                    .setTaskReferenceName(`${case_next[0].id}_Node`)
+                                                    .setBody({
+                                                        // eslint-disable-next-line no-template-curly-in-string
+                                                        wid: '${workflow.input.wid}'
+                                                    });
+                                                break;
+
+                                            case 'Credential':
+                                                // eslint-disable-next-line camelcase
+                                                task_node_child = data[1].addHttpCase(`${cs}`, credential, 'POST');
+                                                task_node_child
+                                                    .setName(`${case_next[0].id}_Node`)
+                                                    .setTaskReferenceName(`${case_next[0].id}_Node`)
+                                                    .setBody({
+                                                        // eslint-disable-next-line no-template-curly-in-string
+                                                        cid: '${workflow.input.cid}'
+                                                    });
+                                                break;
+
+                                            case 'InterestRate':
+                                                // eslint-disable-next-line camelcase
+                                                task_node_child = data[1].addHttpCase(`${cs}`, interestRate, 'POST');
+                                                task_node_child
+                                                    .setName(`${case_next[0].id}_Node`)
+                                                    .setTaskReferenceName(`${case_next[0].id}_Node`)
+                                                    .setBody({
+                                                        // eslint-disable-next-line no-template-curly-in-string
+                                                        oid: '${workflow.input.oid}'
+                                                    });
+                                                break;
+
+                                            case 'Lock':
+                                                // eslint-disable-next-line camelcase
+                                                task_node_child = data[1].addHttpCase(`${cs}`, lock, 'POST');
+                                                task_node_child
+                                                    .setName(`${case_next[0].id}_Node`)
+                                                    .setTaskReferenceName(`${case_next[0].id}_Node`)
+                                                    .setBody({
+                                                        // eslint-disable-next-line no-template-curly-in-string
+                                                        oid: '${workflow.input.oid}',
+                                                        // eslint-disable-next-line no-template-curly-in-string
+                                                        pid: '${workflow.input.pid}'
+                                                    });
+                                                break;
+
+                                            case 'Log':
+                                                // eslint-disable-next-line camelcase
+                                                task_node_child = data[1].addHttpCase(`${cs}`, log, 'POST');
+                                                task_node_child
+                                                    .setName(`${case_next[0].id}_Node`)
+                                                    .setTaskReferenceName(`${case_next[0].id}_Node`)
+                                                    .setBody({
+                                                        // eslint-disable-next-line no-template-curly-in-string
+                                                        oid: '${workflow.input.oid}',
+                                                        description: '测试test'
+                                                    });
+                                                break;
+
+                                            case 'Profile':
+                                                // eslint-disable-next-line camelcase
+                                                task_node_child = data[1].addHttpCase(`${cs}`, profile, 'POST');
+                                                task_node_child
+                                                    .setName(`${case_next[0].id}_Node`)
+                                                    .setTaskReferenceName(`${case_next[0].id}_Node`)
+                                                    .setBody({
+                                                        // eslint-disable-next-line no-template-curly-in-string
+                                                        cid: '${workflow.input.cid}',
+                                                        // eslint-disable-next-line no-template-curly-in-string
+                                                        phone_num: '${workflow.input.phone_num}',
+                                                        // eslint-disable-next-line no-template-curly-in-string
+                                                        password: '${workflow.input.password}'
+                                                    });
+                                                break;
+
+                                            case 'Region':
+                                                // eslint-disable-next-line camelcase
+                                                task_node_child = data[1].addHttpCase(`${cs}`, region, 'POST');
+                                                task_node_child
+                                                    .setName(`${case_next[0].id}_Node`)
+                                                    .setTaskReferenceName(`${case_next[0].id}_Node`)
+                                                    .setBody({
+                                                        // eslint-disable-next-line no-template-curly-in-string
+                                                        cid: '${workflow.input.cid}',
+                                                        // eslint-disable-next-line no-template-curly-in-string
+                                                        address: '${workflow.input.address}'
+                                                    });
+                                                break;
+
+                                            case 'Tag':
+                                                // eslint-disable-next-line camelcase
+                                                task_node_child = data[1].addHttpCase(`${cs}`, tag, 'POST');
+                                                task_node_child
+                                                    .setName(`${case_next[0].id}_Node`)
+                                                    .setTaskReferenceName(`${case_next[0].id}_Node`)
+                                                    .setBody({
+                                                        // eslint-disable-next-line no-template-curly-in-string
+                                                        cid: '${workflow.input.cid}',
+                                                        // eslint-disable-next-line no-template-curly-in-string
+                                                        gid: '${workflow.input.gid}'
+                                                    });
+                                                break;
+
+                                            case 'Unlock':
+                                                // eslint-disable-next-line camelcase
+                                                task_node_child = data[1].addHttpCase(`${cs}`, unlock, 'POST');
+                                                task_node_child
+                                                    .setName(`${case_next[0].id}_Node`)
+                                                    .setTaskReferenceName(`${case_next[0].id}_Node`)
+                                                    .setBody({
+                                                        // eslint-disable-next-line no-template-curly-in-string
+                                                        pid: '${workflow.input.pid}'
+                                                    });
+                                                break;
+
+                                            case 'Update':
+                                                // eslint-disable-next-line camelcase
+                                                task_node_child = data[1].addHttpCase(`${cs}`, update, 'POST');
+                                                task_node_child
+                                                    .setName(`${case_next[0].id}_Node`)
+                                                    .setTaskReferenceName(`${case_next[0].id}_Node`)
+                                                    .setBody({
+                                                        // eslint-disable-next-line no-template-curly-in-string
+                                                        pid: '${workflow.input.pid}'
+                                                    });
+                                                break;
+                                            default:
+                                                console.log('Error');
+                                                break;
+                                        }
+                                        // eslint-disable-next-line camelcase
+                                        queue.push([case_next[0], task_node_child]);
+                                        // eslint-disable-next-line camelcase
+                                        cardandtask.push([case_next[0], task_node_child]);
+                                    }
+                                }
+                            } else {
+                                // eslint-disable-next-line camelcase
+                                // task_node_child = taskNode.setNextHttpNode(log, 'POST');
+                                // task_node_child.setName(`log ${getId()}`).setTaskReferenceName(`log_${getId()}`).setBody({
+                                //     // eslint-disable-next-line no-template-curly-in-string
+                                //     oid: '${workflow.input.oid}',
+                                //     description: 'Succeed'
+                                // });
+                                // eslint-disable-next-line camelcase
+                                let task_node_child = null;
+                                switch (next_nodes[m].type) {
+                                    case 'Black':
+                                        // eslint-disable-next-line camelcase
+                                        task_node_child = data[1].setNextHttpNode(blacklist, 'POST');
+                                        task_node_child
+                                            .setName(`${next_nodes[m].id}_Node`)
+                                            .setTaskReferenceName(`${next_nodes[m].id}_Node`)
+                                            .setBody({
+                                                // eslint-disable-next-line no-template-curly-in-string
+                                                bid: '${workflow.input.bid}'
+                                            });
+                                        break;
+
+                                    case 'White':
+                                        // eslint-disable-next-line camelcase
+                                        task_node_child = data[1].setNextHttpNode(whitelist, 'POST');
+                                        task_node_child
+                                            .setName(`${next_nodes[m].id}_Node`)
+                                            .setTaskReferenceName(`${next_nodes[m].id}_Node`)
+                                            .setBody({
+                                                // eslint-disable-next-line no-template-curly-in-string
+                                                wid: '${workflow.input.wid}'
+                                            });
+                                        break;
+
+                                    case 'Credential':
+                                        // eslint-disable-next-line camelcase
+                                        task_node_child = data[1].setNextHttpNode(credential, 'POST');
+                                        task_node_child
+                                            .setName(`${next_nodes[m].id}_Node`)
+                                            .setTaskReferenceName(`${next_nodes[m].id}_Node`)
+                                            .setBody({
+                                                // eslint-disable-next-line no-template-curly-in-string
+                                                cid: '${workflow.input.cid}'
+                                            });
+                                        break;
+
+                                    case 'InterestRate':
+                                        // eslint-disable-next-line camelcase
+                                        task_node_child = data[1].setNextHttpNode(interestRate, 'POST');
+                                        task_node_child
+                                            .setName(`${next_nodes[m].id}_Node`)
+                                            .setTaskReferenceName(`${next_nodes[m].id}_Node`)
+                                            .setBody({
+                                                // eslint-disable-next-line no-template-curly-in-string
+                                                oid: '${workflow.input.oid}'
+                                            });
+                                        break;
+
+                                    case 'Lock':
+                                        // eslint-disable-next-line camelcase
+                                        task_node_child = data[1].setNextHttpNode(lock, 'POST');
+                                        task_node_child
+                                            .setName(`${next_nodes[m].id}_Node`)
+                                            .setTaskReferenceName(`${next_nodes[m].id}_Node`)
+                                            .setBody({
+                                                // eslint-disable-next-line no-template-curly-in-string
+                                                oid: '${workflow.input.oid}',
+                                                // eslint-disable-next-line no-template-curly-in-string
+                                                pid: '${workflow.input.pid}'
+                                            });
+                                        break;
+
+                                    case 'Log':
+                                        // eslint-disable-next-line camelcase
+                                        task_node_child = data[1].setNextHttpNode(log, 'POST');
+                                        task_node_child
+                                            .setName(`${next_nodes[m].id}_Node`)
+                                            .setTaskReferenceName(`${next_nodes[m].id}_Node`)
+                                            .setBody({
+                                                // eslint-disable-next-line no-template-curly-in-string
+                                                oid: '${workflow.input.oid}',
+                                                description: '测试test'
+                                            });
+                                        break;
+
+                                    case 'Profile':
+                                        // eslint-disable-next-line camelcase
+                                        task_node_child = data[1].setNextHttpNode(profile, 'POST');
+                                        task_node_child
+                                            .setName(`${next_nodes[m].id}_Node`)
+                                            .setTaskReferenceName(`${next_nodes[m].id}_Node`)
+                                            .setBody({
+                                                // eslint-disable-next-line no-template-curly-in-string
+                                                cid: '${workflow.input.cid}',
+                                                // eslint-disable-next-line no-template-curly-in-string
+                                                phone_num: '${workflow.input.phone_num}',
+                                                // eslint-disable-next-line no-template-curly-in-string
+                                                password: '${workflow.input.password}'
+                                            });
+                                        break;
+
+                                    case 'Region':
+                                        // eslint-disable-next-line camelcase
+                                        task_node_child = data[1].setNextHttpNode(region, 'POST');
+                                        task_node_child
+                                            .setName(`${next_nodes[m].id}_Node`)
+                                            .setTaskReferenceName(`${next_nodes[m].id}_Node`)
+                                            .setBody({
+                                                // eslint-disable-next-line no-template-curly-in-string
+                                                cid: '${workflow.input.cid}',
+                                                // eslint-disable-next-line no-template-curly-in-string
+                                                address: '${workflow.input.address}'
+                                            });
+                                        break;
+
+                                    case 'Tag':
+                                        // eslint-disable-next-line camelcase
+                                        task_node_child = data[1].setNextHttpNode(tag, 'POST');
+                                        task_node_child
+                                            .setName(`${next_nodes[m].id}_Node`)
+                                            .setTaskReferenceName(`${next_nodes[m].id}_Node`)
+                                            .setBody({
+                                                // eslint-disable-next-line no-template-curly-in-string
+                                                cid: '${workflow.input.cid}',
+                                                // eslint-disable-next-line no-template-curly-in-string
+                                                gid: '${workflow.input.gid}'
+                                            });
+                                        break;
+
+                                    case 'Unlock':
+                                        // eslint-disable-next-line camelcase
+                                        task_node_child = data[1].setNextHttpNode(unlock, 'POST');
+                                        task_node_child
+                                            .setName(`${next_nodes[m].id}_Node`)
+                                            .setTaskReferenceName(`${next_nodes[m].id}_Node`)
+                                            .setBody({
+                                                // eslint-disable-next-line no-template-curly-in-string
+                                                pid: '${workflow.input.pid}'
+                                            });
+                                        break;
+
+                                    case 'Update':
+                                        // eslint-disable-next-line camelcase
+                                        task_node_child = data[1].setNextHttpNode(update, 'POST');
+                                        task_node_child
+                                            .setName(`${next_nodes[m].id}_Node`)
+                                            .setTaskReferenceName(`${next_nodes[m].id}_Node`)
+                                            .setBody({
+                                                // eslint-disable-next-line no-template-curly-in-string
+                                                pid: '${workflow.input.pid}'
+                                            });
+                                        break;
+                                    default:
+                                        console.log('Error');
+                                        break;
+                                }
+                                // eslint-disable-next-line camelcase
+                                queue.push([next_nodes[m], task_node_child]);
+                                // eslint-disable-next-line camelcase
+                                cardandtask.push([next_nodes[m], task_node_child]);
+                            }
+                            // flow_all.push(next_nodes[i]);
+                        } else if (
+                            switchcard.length > 0 &&
+                            JSON.stringify(next_nodes[m]) === JSON.stringify(flow.elements[j]) &&
+                            flow.elements[j].visited === 1
+                        ) {
+                            console.log('合并！');
+                            // eslint-disable-next-line no-plusplus
+                            for (let l = 0; l < cardandtask.length; l++) {
+                                if (JSON.stringify(next_nodes[m]) === JSON.stringify(cardandtask[l][0])) {
+                                    // eslint-disable-next-line no-plusplus
+                                    for (let i = 1; i < getIncomers(next_nodes[m], flow.elements).length; i++) {
+                                        // console.log(1);
+                                        // console.log(cardandtask[l][1]);
+                                        // const switchtask = switchcard.pop();
+                                        // console.log(switchtask);
+                                        switchcard.pop().setNextNode(cardandtask[l][1]);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             // eslint-disable-next-line camelcase
             // const queue_hebin = [];
             // const task = [];
@@ -388,408 +783,417 @@ const Orchestration = () => {
             //     }
             // }
             // eslint-disable-next-line consistent-return
-            const flowIter = (nodes, taskNode) => {
-                if (nodes === undefined) return undefined;
-                // console.log(getOutgoers(nodes[0],flow.elements))
-                // eslint-disable-next-line camelcase
-                const next_nodes = getOutgoers(nodes[0], flow.elements);
-                // eslint-disable-next-line camelcase
-                let case_next = null;
-                if (next_nodes[0].type === 'output') return undefined;
-                // eslint-disable-next-line camelcase
-                // let task_node = null;
-                // if (nodes[0].flag === 'switch') {
-                //     // eslint-disable-next-line no-template-curly-in-string,camelcase
-                //     task_node = taskNode.setNextSwitchNode(`${taskNode.getTaskReferenceName()}.output.response.body.statusCode}`);
-                //     task_node.setName(`switchTagNode${getId()}Node`).setTaskReferenceName(`switch_tag_${getId()}`);
-                //     queue.push(task_node);
-                // } else {
-                //     // eslint-disable-next-line camelcase
-                //     task_node = taskNode.setNextHttpNode(log, 'POST');
-                //     task_node.setName(`log ${getId()}`).setTaskReferenceName(`log_${getId()}`).setBody({
-                //         // eslint-disable-next-line no-template-curly-in-string
-                //         oid: '${workflow.input.oid}',
-                //         description: 'Succeed'
-                //     });
-                //     console.log(1);
-                // }
-                const len = next_nodes.length;
-                // eslint-disable-next-line no-plusplus
-                for (let i = 0; i < len; i++) {
-                    // eslint-disable-next-line no-plusplus
-                    for (let j = 0; j < flow.elements.length; j++) {
-                        if (JSON.stringify(next_nodes[i]) === JSON.stringify(flow.elements[j]) && flow.elements[j].visited === 0) {
-                            flow.elements[j].visited = 1;
-                            // queue.push([next_nodes[i]]);
-                            // eslint-disable-next-line no-useless-concat,camelcase
-                            let task_node_child = null;
-                            // eslint-disable-next-line camelcase
-                            let case_flag = 0;
-                            if (next_nodes[i].flag === 'Switch') {
-                                // eslint-disable-next-line no-template-curly-in-string,camelcase
-                                task_node_child = taskNode.setNextSwitchNode(
-                                    `${taskNode.taskReferenceName}.output.response.body.statusCode}`
-                                );
-                                task_node_child
-                                    .setName(`${next_nodes[i].id}_Node`)
-                                    .setTaskReferenceName(`switch_${taskNode.taskReferenceName}_${next_nodes[i].id}_`);
-                                queue.push(task_node_child);
-                            } else if (nodes[0].flag === 'Switch') {
-                                // eslint-disable-next-line camelcase
-                                case_flag = 1;
-                                let cs = '是';
-                                // eslint-disable-next-line no-use-before-define
-                                if (next_nodes[i].type === 'No') {
-                                    cs = 'default';
-                                    if (getIncomers(getOutgoers(next_nodes[i], flow.elements)[0], flow.elements).length > 1) {
-                                        // eslint-disable-next-line no-continue
-                                        continue;
-                                    }
-                                }
-                                // eslint-disable-next-line camelcase,no-use-before-define
-                                case_next = getOutgoers(next_nodes[i], flow.elements);
-                                // // eslint-disable-next-line camelcase
-                                // task_node_child = taskNode.addHttpCase(`${cs}`, `${next_nodes[0].type}`, 'POST');
-                                // task_node_child
-                                //     .setName(`${next_nodes[0].id}_Node`)
-                                //     .setTaskReferenceName(`${next_nodes[i].id}_Node`)
-                                //     .setBody({
-                                //         // eslint-disable-next-line no-template-curly-in-string
-                                //         oid: '${workflow.input.oid}',
-                                //         description:
-                                //             'There is no content to send for this request, but the headers may be useful. ' +
-                                //             'The user agent may update its cached headers for this resource with the new ones.'
-                                //     });
-                                switch (case_next[0].type) {
-                                    case 'Black':
-                                        // eslint-disable-next-line camelcase
-                                        task_node_child = taskNode.addHttpCase(`${cs}`, blacklist, 'POST');
-                                        task_node_child
-                                            .setName(`${case_next[0].id}_Node`)
-                                            .setTaskReferenceName(`${case_next[0].id}_Node`)
-                                            .setBody({
-                                                // eslint-disable-next-line no-template-curly-in-string
-                                                bid: '${workflow.input.bid}'
-                                            });
-                                        break;
-
-                                    case 'White':
-                                        // eslint-disable-next-line camelcase
-                                        task_node_child = taskNode.addHttpCase(`${cs}`, whitelist, 'POST');
-                                        task_node_child
-                                            .setName(`${case_next[0].id}_Node`)
-                                            .setTaskReferenceName(`${case_next[0].id}_Node`)
-                                            .setBody({
-                                                // eslint-disable-next-line no-template-curly-in-string
-                                                wid: '${workflow.input.wid}'
-                                            });
-                                        break;
-
-                                    case 'Credential':
-                                        // eslint-disable-next-line camelcase
-                                        task_node_child = taskNode.addHttpCase(`${cs}`, credential, 'POST');
-                                        task_node_child
-                                            .setName(`${case_next[0].id}_Node`)
-                                            .setTaskReferenceName(`${case_next[0].id}_Node`)
-                                            .setBody({
-                                                // eslint-disable-next-line no-template-curly-in-string
-                                                cid: '${workflow.input.cid}'
-                                            });
-                                        break;
-
-                                    case 'InterestRate':
-                                        // eslint-disable-next-line camelcase
-                                        task_node_child = taskNode.addHttpCase(`${cs}`, interestRate, 'POST');
-                                        task_node_child
-                                            .setName(`${case_next[0].id}_Node`)
-                                            .setTaskReferenceName(`${case_next[0].id}_Node`)
-                                            .setBody({
-                                                // eslint-disable-next-line no-template-curly-in-string
-                                                oid: '${workflow.input.oid}'
-                                            });
-                                        break;
-
-                                    case 'Lock':
-                                        // eslint-disable-next-line camelcase
-                                        task_node_child = taskNode.addHttpCase(`${cs}`, lock, 'POST');
-                                        task_node_child
-                                            .setName(`${case_next[0].id}_Node`)
-                                            .setTaskReferenceName(`${case_next[0].id}_Node`)
-                                            .setBody({
-                                                // eslint-disable-next-line no-template-curly-in-string
-                                                oid: '${workflow.input.oid}',
-                                                // eslint-disable-next-line no-template-curly-in-string
-                                                pid: '${workflow.input.pid}'
-                                            });
-                                        break;
-
-                                    case 'Log':
-                                        // eslint-disable-next-line camelcase
-                                        task_node_child = taskNode.addHttpCase(`${cs}`, log, 'POST');
-                                        task_node_child
-                                            .setName(`${case_next[0].id}_Node`)
-                                            .setTaskReferenceName(`${case_next[0].id}_Node`)
-                                            .setBody({
-                                                // eslint-disable-next-line no-template-curly-in-string
-                                                oid: '${workflow.input.oid}',
-                                                description: '测试test'
-                                            });
-                                        break;
-
-                                    case 'Profile':
-                                        // eslint-disable-next-line camelcase
-                                        task_node_child = taskNode.addHttpCase(`${cs}`, profile, 'POST');
-                                        task_node_child
-                                            .setName(`${case_next[0].id}_Node`)
-                                            .setTaskReferenceName(`${case_next[0].id}_Node`)
-                                            .setBody({
-                                                // eslint-disable-next-line no-template-curly-in-string
-                                                cid: '${workflow.input.oid}',
-                                                // eslint-disable-next-line no-template-curly-in-string
-                                                phone_num: '${workflow.input.phone_num}',
-                                                // eslint-disable-next-line no-template-curly-in-string
-                                                password: '${workflow.input.password}'
-                                            });
-                                        break;
-
-                                    case 'Region':
-                                        // eslint-disable-next-line camelcase
-                                        task_node_child = taskNode.addHttpCase(`${cs}`, region, 'POST');
-                                        task_node_child
-                                            .setName(`${case_next[0].id}_Node`)
-                                            .setTaskReferenceName(`${case_next[0].id}_Node`)
-                                            .setBody({
-                                                // eslint-disable-next-line no-template-curly-in-string
-                                                cid: '${workflow.input.oid}',
-                                                // eslint-disable-next-line no-template-curly-in-string
-                                                address: '${workflow.input.address}'
-                                            });
-                                        break;
-
-                                    case 'Tag':
-                                        // eslint-disable-next-line camelcase
-                                        task_node_child = taskNode.addHttpCase(`${cs}`, tag, 'POST');
-                                        task_node_child
-                                            .setName(`${case_next[0].id}_Node`)
-                                            .setTaskReferenceName(`${case_next[0].id}_Node`)
-                                            .setBody({
-                                                // eslint-disable-next-line no-template-curly-in-string
-                                                cid: '${workflow.input.oid}',
-                                                // eslint-disable-next-line no-template-curly-in-string
-                                                gid: '${workflow.input.gid}'
-                                            });
-                                        break;
-
-                                    case 'Unlock':
-                                        // eslint-disable-next-line camelcase
-                                        task_node_child = taskNode.addHttpCase(`${cs}`, unlock, 'POST');
-                                        task_node_child
-                                            .setName(`${case_next[0].id}_Node`)
-                                            .setTaskReferenceName(`${case_next[0].id}_Node`)
-                                            .setBody({
-                                                // eslint-disable-next-line no-template-curly-in-string
-                                                pid: '${workflow.input.pid}'
-                                            });
-                                        break;
-
-                                    case 'Update':
-                                        // eslint-disable-next-line camelcase
-                                        task_node_child = taskNode.addHttpCase(`${cs}`, update, 'POST');
-                                        task_node_child
-                                            .setName(`${case_next[0].id}_Node`)
-                                            .setTaskReferenceName(`${case_next[0].id}_Node`)
-                                            .setBody({
-                                                // eslint-disable-next-line no-template-curly-in-string
-                                                pid: '${workflow.input.pid}'
-                                            });
-                                        break;
-                                    default:
-                                        console.log('Error');
-                                        break;
-                                }
-                            } else {
-                                // eslint-disable-next-line camelcase
-                                // task_node_child = taskNode.setNextHttpNode(log, 'POST');
-                                // task_node_child.setName(`log ${getId()}`).setTaskReferenceName(`log_${getId()}`).setBody({
-                                //     // eslint-disable-next-line no-template-curly-in-string
-                                //     oid: '${workflow.input.oid}',
-                                //     description: 'Succeed'
-                                // });
-                                switch (next_nodes[i].type) {
-                                    case 'Black':
-                                        // eslint-disable-next-line camelcase
-                                        task_node_child = taskNode.setNextHttpNode(blacklist, 'POST');
-                                        task_node_child
-                                            .setName(`${next_nodes[0].id}_Node`)
-                                            .setTaskReferenceName(`${next_nodes[0].id}_Node`)
-                                            .setBody({
-                                                // eslint-disable-next-line no-template-curly-in-string
-                                                bid: '${workflow.input.bid}'
-                                            });
-                                        break;
-
-                                    case 'White':
-                                        // eslint-disable-next-line camelcase
-                                        task_node_child = taskNode.setNextHttpNode(whitelist, 'POST');
-                                        task_node_child
-                                            .setName(`${next_nodes[0].id}_Node`)
-                                            .setTaskReferenceName(`${next_nodes[0].id}_Node`)
-                                            .setBody({
-                                                // eslint-disable-next-line no-template-curly-in-string
-                                                wid: '${workflow.input.wid}'
-                                            });
-                                        break;
-
-                                    case 'Credential':
-                                        // eslint-disable-next-line camelcase
-                                        task_node_child = taskNode.setNextHttpNode(credential, 'POST');
-                                        task_node_child
-                                            .setName(`${next_nodes[i].id}_Node`)
-                                            .setTaskReferenceName(`${next_nodes[i].id}_Node`)
-                                            .setBody({
-                                                // eslint-disable-next-line no-template-curly-in-string
-                                                cid: '${workflow.input.cid}'
-                                            });
-                                        break;
-
-                                    case 'InterestRate':
-                                        // eslint-disable-next-line camelcase
-                                        task_node_child = taskNode.setNextHttpNode(interestRate, 'POST');
-                                        task_node_child
-                                            .setName(`${next_nodes[0].id}_Node`)
-                                            .setTaskReferenceName(`${next_nodes[0].id}_Node`)
-                                            .setBody({
-                                                // eslint-disable-next-line no-template-curly-in-string
-                                                oid: '${workflow.input.oid}'
-                                            });
-                                        break;
-
-                                    case 'Lock':
-                                        // eslint-disable-next-line camelcase
-                                        task_node_child = taskNode.setNextHttpNode(lock, 'POST');
-                                        task_node_child
-                                            .setName(`${next_nodes[0].id}_Node`)
-                                            .setTaskReferenceName(`${next_nodes[0].id}_Node`)
-                                            .setBody({
-                                                // eslint-disable-next-line no-template-curly-in-string
-                                                oid: '${workflow.input.oid}',
-                                                // eslint-disable-next-line no-template-curly-in-string
-                                                pid: '${workflow.input.pid}'
-                                            });
-                                        break;
-
-                                    case 'Log':
-                                        // eslint-disable-next-line camelcase
-                                        task_node_child = taskNode.setNextHttpNode(log, 'POST');
-                                        task_node_child
-                                            .setName(`${next_nodes[0].id}_Node`)
-                                            .setTaskReferenceName(`${next_nodes[0].id}_Node`)
-                                            .setBody({
-                                                // eslint-disable-next-line no-template-curly-in-string
-                                                oid: '${workflow.input.oid}',
-                                                description: '测试test'
-                                            });
-                                        break;
-
-                                    case 'Profile':
-                                        // eslint-disable-next-line camelcase
-                                        task_node_child = taskNode.setNextHttpNode(profile, 'POST');
-                                        task_node_child
-                                            .setName(`${next_nodes[0].id}_Node`)
-                                            .setTaskReferenceName(`${next_nodes[0].id}_Node`)
-                                            .setBody({
-                                                // eslint-disable-next-line no-template-curly-in-string
-                                                cid: '${workflow.input.oid}',
-                                                // eslint-disable-next-line no-template-curly-in-string
-                                                phone_num: '${workflow.input.phone_num}',
-                                                // eslint-disable-next-line no-template-curly-in-string
-                                                password: '${workflow.input.password}'
-                                            });
-                                        break;
-
-                                    case 'Region':
-                                        // eslint-disable-next-line camelcase
-                                        task_node_child = taskNode.setNextHttpNode(region, 'POST');
-                                        task_node_child
-                                            .setName(`${next_nodes[0].id}_Node`)
-                                            .setTaskReferenceName(`${next_nodes[0].id}_Node`)
-                                            .setBody({
-                                                // eslint-disable-next-line no-template-curly-in-string
-                                                cid: '${workflow.input.oid}',
-                                                // eslint-disable-next-line no-template-curly-in-string
-                                                address: '${workflow.input.address}'
-                                            });
-                                        break;
-
-                                    case 'Tag':
-                                        // eslint-disable-next-line camelcase
-                                        task_node_child = taskNode.setNextHttpNode(tag, 'POST');
-                                        task_node_child
-                                            .setName(`${next_nodes[0].id}_Node`)
-                                            .setTaskReferenceName(`${next_nodes[0].id}_Node`)
-                                            .setBody({
-                                                // eslint-disable-next-line no-template-curly-in-string
-                                                cid: '${workflow.input.oid}',
-                                                // eslint-disable-next-line no-template-curly-in-string
-                                                gid: '${workflow.input.gid}'
-                                            });
-                                        break;
-
-                                    case 'Unlock':
-                                        // eslint-disable-next-line camelcase
-                                        task_node_child = taskNode.setNextHttpNode(unlock, 'POST');
-                                        task_node_child
-                                            .setName(`${next_nodes[0].id}_Node`)
-                                            .setTaskReferenceName(`${next_nodes[0].id}_Node`)
-                                            .setBody({
-                                                // eslint-disable-next-line no-template-curly-in-string
-                                                pid: '${workflow.input.pid}'
-                                            });
-                                        break;
-
-                                    case 'Update':
-                                        // eslint-disable-next-line camelcase
-                                        task_node_child = taskNode.setNextHttpNode(update, 'POST');
-                                        task_node_child
-                                            .setName(`${next_nodes[0].id}_Node`)
-                                            .setTaskReferenceName(`${next_nodes[0].id}_Node`)
-                                            .setBody({
-                                                // eslint-disable-next-line no-template-curly-in-string
-                                                pid: '${workflow.input.pid}'
-                                            });
-                                        break;
-                                    default:
-                                        console.log('Error');
-                                        break;
-                                }
-                            }
-                            // eslint-disable-next-line camelcase
-                            if (case_flag === 0 && getIncomers(next_nodes[i], flow.elements).length > 1) {
-                                // eslint-disable-next-line no-plusplus
-                                // for (let k = 1; k < getIncomers(next_nodes[i], flow.elements).length; k++) {
-                                queue.pop().setNextNode(task_node_child);
-                                // }
-                                // console.log(`节点：${next_nodes[i]}`);
-                            }
-                            // eslint-disable-next-line no-useless-concat
-                            console.log(`子节点：${JSON.stringify(next_nodes[i])}` + `父节点 ${JSON.stringify(nodes[0])}`);
-                            flow_all.push(next_nodes[i]);
-                            // eslint-disable-next-line camelcase
-                            if (case_flag === 0) {
-                                flowIter([next_nodes[i]], task_node_child);
-                            } else {
-                                flowIter([case_next[0]], task_node_child);
-                            }
-                        }
-                        // } else if (JSON.stringify(next_nodes[i]) === JSON.stringify(flow.elements[j]) && flow.elements[j].visited === 1) {
-                        //     // eslint-disable-next-line no-useless-concat
-                        //     console.log(`合并 ${JSON.stringify(next_nodes[i])}！` + `${JSON.stringify(queue)}`);
-                        //     queue.pop().setNextNode(queue_hebin.shift());
-                        // }
-                    }
-                }
-            };
-            flowIter(input, inputNode);
+            // const flowIter = (nodes, taskNode) => {
+            //     if (nodes === undefined) return undefined;
+            //     // console.log(getOutgoers(nodes[0],flow.elements))
+            //     // eslint-disable-next-line camelcase
+            //     const next_nodes = getOutgoers(nodes[0], flow.elements);
+            //     // eslint-disable-next-line camelcase
+            //     let case_next = null;
+            //     if (next_nodes[0].type === 'output') return undefined;
+            //     // eslint-disable-next-line camelcase
+            //     // let task_node = null;
+            //     // if (nodes[0].flag === 'switch') {
+            //     //     // eslint-disable-next-line no-template-curly-in-string,camelcase
+            //     //     task_node = taskNode.setNextSwitchNode(`${taskNode.getTaskReferenceName()}.output.response.body.statusCode}`);
+            //     //     task_node.setName(`switchTagNode${getId()}Node`).setTaskReferenceName(`switch_tag_${getId()}`);
+            //     //     queue.push(task_node);
+            //     // } else {
+            //     //     // eslint-disable-next-line camelcase
+            //     //     task_node = taskNode.setNextHttpNode(log, 'POST');
+            //     //     task_node.setName(`log ${getId()}`).setTaskReferenceName(`log_${getId()}`).setBody({
+            //     //         // eslint-disable-next-line no-template-curly-in-string
+            //     //         oid: '${workflow.input.oid}',
+            //     //         description: 'Succeed'
+            //     //     });
+            //     //     console.log(1);
+            //     // }
+            //     // const len = next_nodes.length;
+            //     // eslint-disable-next-line no-plusplus
+            //     // for (let i = 0; i < len; i++) {
+            //     // eslint-disable-next-line no-plusplus
+            //     for (let j = 0; j < flow.elements.length; j++) {
+            //         if (JSON.stringify(next_nodes[0]) === JSON.stringify(flow.elements[j]) && flow.elements[j].visited === 0) {
+            //             flow.elements[j].visited = 1;
+            //             // queue.push([next_nodes[i]]);
+            //             // eslint-disable-next-line no-useless-concat,camelcase
+            //             let task_node_child = null;
+            //             // eslint-disable-next-line camelcase
+            //             let case_flag = 0;
+            //             if (next_nodes[0].flag === 'Switch') {
+            //                 // eslint-disable-next-line no-template-curly-in-string,camelcase
+            //                 task_node_child = taskNode.setNextSwitchNode(`${taskNode.taskReferenceName}.output.response.body.statusCode}`);
+            //                 task_node_child
+            //                     .setName(`${next_nodes[0].id}_Node`)
+            //                     .setTaskReferenceName(`switch_${taskNode.taskReferenceName}_${next_nodes[0].id}_`);
+            //                 queue.push(task_node_child);
+            //             } else if (nodes[0].flag === 'Switch') {
+            //                 // eslint-disable-next-line camelcase
+            //                 case_flag = 1;
+            //                 // eslint-disable-next-line no-plusplus
+            //                 for (let k = 0; k < 2; k++) {
+            //                     let cs = '是';
+            //                     // eslint-disable-next-line no-plusplus
+            //                     for (let l = 0; l < flow.elements.length; l++) {
+            //                         if (
+            //                             JSON.stringify(next_nodes[k]) === JSON.stringify(flow.elements[l]) &&
+            //                             flow.elements[l].visited === 0
+            //                         ) {
+            //                             flow.elements[l].visited = 1;
+            //                         }
+            //                     }
+            //                     // eslint-disable-next-line no-use-before-define
+            //                     if (next_nodes[k].type === 'No') {
+            //                         cs = 'default';
+            //                         // if (getIncomers(getOutgoers(next_nodes[k], flow.elements)[0], flow.elements).length > 1) {
+            //                         //     // eslint-disable-next-line no-continue
+            //                         //     continue;
+            //                         // }
+            //                     }
+            //                     // eslint-disable-next-line camelcase,no-use-before-define
+            //                     case_next = getOutgoers(next_nodes[k], flow.elements);
+            //                     // // eslint-disable-next-line camelcase
+            //                     // task_node_child = taskNode.addHttpCase(`${cs}`, `${next_nodes[0].type}`, 'POST');
+            //                     // task_node_child
+            //                     //     .setName(`${next_nodes[0].id}_Node`)
+            //                     //     .setTaskReferenceName(`${next_nodes[i].id}_Node`)
+            //                     //     .setBody({
+            //                     //         // eslint-disable-next-line no-template-curly-in-string
+            //                     //         oid: '${workflow.input.oid}',
+            //                     //         description:
+            //                     //             'There is no content to send for this request, but the headers may be useful. ' +
+            //                     //             'The user agent may update its cached headers for this resource with the new ones.'
+            //                     //     });
+            //                     switch (case_next[0].type) {
+            //                         case 'Black':
+            //                             // eslint-disable-next-line camelcase
+            //                             task_node_child = taskNode.addHttpCase(`${cs}`, blacklist, 'POST');
+            //                             task_node_child
+            //                                 .setName(`${case_next[0].id}_Node`)
+            //                                 .setTaskReferenceName(`${case_next[0].id}_Node`)
+            //                                 .setBody({
+            //                                     // eslint-disable-next-line no-template-curly-in-string
+            //                                     bid: '${workflow.input.bid}'
+            //                                 });
+            //                             break;
+            //
+            //                         case 'White':
+            //                             // eslint-disable-next-line camelcase
+            //                             task_node_child = taskNode.addHttpCase(`${cs}`, whitelist, 'POST');
+            //                             task_node_child
+            //                                 .setName(`${case_next[0].id}_Node`)
+            //                                 .setTaskReferenceName(`${case_next[0].id}_Node`)
+            //                                 .setBody({
+            //                                     // eslint-disable-next-line no-template-curly-in-string
+            //                                     wid: '${workflow.input.wid}'
+            //                                 });
+            //                             break;
+            //
+            //                         case 'Credential':
+            //                             // eslint-disable-next-line camelcase
+            //                             task_node_child = taskNode.addHttpCase(`${cs}`, credential, 'POST');
+            //                             task_node_child
+            //                                 .setName(`${case_next[0].id}_Node`)
+            //                                 .setTaskReferenceName(`${case_next[0].id}_Node`)
+            //                                 .setBody({
+            //                                     // eslint-disable-next-line no-template-curly-in-string
+            //                                     cid: '${workflow.input.cid}'
+            //                                 });
+            //                             break;
+            //
+            //                         case 'InterestRate':
+            //                             // eslint-disable-next-line camelcase
+            //                             task_node_child = taskNode.addHttpCase(`${cs}`, interestRate, 'POST');
+            //                             task_node_child
+            //                                 .setName(`${case_next[0].id}_Node`)
+            //                                 .setTaskReferenceName(`${case_next[0].id}_Node`)
+            //                                 .setBody({
+            //                                     // eslint-disable-next-line no-template-curly-in-string
+            //                                     oid: '${workflow.input.oid}'
+            //                                 });
+            //                             break;
+            //
+            //                         case 'Lock':
+            //                             // eslint-disable-next-line camelcase
+            //                             task_node_child = taskNode.addHttpCase(`${cs}`, lock, 'POST');
+            //                             task_node_child
+            //                                 .setName(`${case_next[0].id}_Node`)
+            //                                 .setTaskReferenceName(`${case_next[0].id}_Node`)
+            //                                 .setBody({
+            //                                     // eslint-disable-next-line no-template-curly-in-string
+            //                                     oid: '${workflow.input.oid}',
+            //                                     // eslint-disable-next-line no-template-curly-in-string
+            //                                     pid: '${workflow.input.pid}'
+            //                                 });
+            //                             break;
+            //
+            //                         case 'Log':
+            //                             // eslint-disable-next-line camelcase
+            //                             task_node_child = taskNode.addHttpCase(`${cs}`, log, 'POST');
+            //                             task_node_child
+            //                                 .setName(`${case_next[0].id}_Node`)
+            //                                 .setTaskReferenceName(`${case_next[0].id}_Node`)
+            //                                 .setBody({
+            //                                     // eslint-disable-next-line no-template-curly-in-string
+            //                                     oid: '${workflow.input.oid}',
+            //                                     description: '测试test'
+            //                                 });
+            //                             break;
+            //
+            //                         case 'Profile':
+            //                             // eslint-disable-next-line camelcase
+            //                             task_node_child = taskNode.addHttpCase(`${cs}`, profile, 'POST');
+            //                             task_node_child
+            //                                 .setName(`${case_next[0].id}_Node`)
+            //                                 .setTaskReferenceName(`${case_next[0].id}_Node`)
+            //                                 .setBody({
+            //                                     // eslint-disable-next-line no-template-curly-in-string
+            //                                     cid: '${workflow.input.oid}',
+            //                                     // eslint-disable-next-line no-template-curly-in-string
+            //                                     phone_num: '${workflow.input.phone_num}',
+            //                                     // eslint-disable-next-line no-template-curly-in-string
+            //                                     password: '${workflow.input.password}'
+            //                                 });
+            //                             break;
+            //
+            //                         case 'Region':
+            //                             // eslint-disable-next-line camelcase
+            //                             task_node_child = taskNode.addHttpCase(`${cs}`, region, 'POST');
+            //                             task_node_child
+            //                                 .setName(`${case_next[0].id}_Node`)
+            //                                 .setTaskReferenceName(`${case_next[0].id}_Node`)
+            //                                 .setBody({
+            //                                     // eslint-disable-next-line no-template-curly-in-string
+            //                                     cid: '${workflow.input.oid}',
+            //                                     // eslint-disable-next-line no-template-curly-in-string
+            //                                     address: '${workflow.input.address}'
+            //                                 });
+            //                             break;
+            //
+            //                         case 'Tag':
+            //                             // eslint-disable-next-line camelcase
+            //                             task_node_child = taskNode.addHttpCase(`${cs}`, tag, 'POST');
+            //                             task_node_child
+            //                                 .setName(`${case_next[0].id}_Node`)
+            //                                 .setTaskReferenceName(`${case_next[0].id}_Node`)
+            //                                 .setBody({
+            //                                     // eslint-disable-next-line no-template-curly-in-string
+            //                                     cid: '${workflow.input.oid}',
+            //                                     // eslint-disable-next-line no-template-curly-in-string
+            //                                     gid: '${workflow.input.gid}'
+            //                                 });
+            //                             break;
+            //
+            //                         case 'Unlock':
+            //                             // eslint-disable-next-line camelcase
+            //                             task_node_child = taskNode.addHttpCase(`${cs}`, unlock, 'POST');
+            //                             task_node_child
+            //                                 .setName(`${case_next[0].id}_Node`)
+            //                                 .setTaskReferenceName(`${case_next[0].id}_Node`)
+            //                                 .setBody({
+            //                                     // eslint-disable-next-line no-template-curly-in-string
+            //                                     pid: '${workflow.input.pid}'
+            //                                 });
+            //                             break;
+            //
+            //                         case 'Update':
+            //                             // eslint-disable-next-line camelcase
+            //                             task_node_child = taskNode.addHttpCase(`${cs}`, update, 'POST');
+            //                             task_node_child
+            //                                 .setName(`${case_next[0].id}_Node`)
+            //                                 .setTaskReferenceName(`${case_next[0].id}_Node`)
+            //                                 .setBody({
+            //                                     // eslint-disable-next-line no-template-curly-in-string
+            //                                     pid: '${workflow.input.pid}'
+            //                                 });
+            //                             break;
+            //                         default:
+            //                             console.log('Error');
+            //                             break;
+            //                     }
+            //                 }
+            //             } else {
+            //                 // eslint-disable-next-line camelcase
+            //                 // task_node_child = taskNode.setNextHttpNode(log, 'POST');
+            //                 // task_node_child.setName(`log ${getId()}`).setTaskReferenceName(`log_${getId()}`).setBody({
+            //                 //     // eslint-disable-next-line no-template-curly-in-string
+            //                 //     oid: '${workflow.input.oid}',
+            //                 //     description: 'Succeed'
+            //                 // });
+            //                 switch (next_nodes[0].type) {
+            //                     case 'Black':
+            //                         // eslint-disable-next-line camelcase
+            //                         task_node_child = taskNode.setNextHttpNode(blacklist, 'POST');
+            //                         task_node_child
+            //                             .setName(`${next_nodes[0].id}_Node`)
+            //                             .setTaskReferenceName(`${next_nodes[0].id}_Node`)
+            //                             .setBody({
+            //                                 // eslint-disable-next-line no-template-curly-in-string
+            //                                 bid: '${workflow.input.bid}'
+            //                             });
+            //                         break;
+            //
+            //                     case 'White':
+            //                         // eslint-disable-next-line camelcase
+            //                         task_node_child = taskNode.setNextHttpNode(whitelist, 'POST');
+            //                         task_node_child
+            //                             .setName(`${next_nodes[0].id}_Node`)
+            //                             .setTaskReferenceName(`${next_nodes[0].id}_Node`)
+            //                             .setBody({
+            //                                 // eslint-disable-next-line no-template-curly-in-string
+            //                                 wid: '${workflow.input.wid}'
+            //                             });
+            //                         break;
+            //
+            //                     case 'Credential':
+            //                         // eslint-disable-next-line camelcase
+            //                         task_node_child = taskNode.setNextHttpNode(credential, 'POST');
+            //                         task_node_child
+            //                             .setName(`${next_nodes[0].id}_Node`)
+            //                             .setTaskReferenceName(`${next_nodes[0].id}_Node`)
+            //                             .setBody({
+            //                                 // eslint-disable-next-line no-template-curly-in-string
+            //                                 cid: '${workflow.input.cid}'
+            //                             });
+            //                         break;
+            //
+            //                     case 'InterestRate':
+            //                         // eslint-disable-next-line camelcase
+            //                         task_node_child = taskNode.setNextHttpNode(interestRate, 'POST');
+            //                         task_node_child
+            //                             .setName(`${next_nodes[0].id}_Node`)
+            //                             .setTaskReferenceName(`${next_nodes[0].id}_Node`)
+            //                             .setBody({
+            //                                 // eslint-disable-next-line no-template-curly-in-string
+            //                                 oid: '${workflow.input.oid}'
+            //                             });
+            //                         break;
+            //
+            //                     case 'Lock':
+            //                         // eslint-disable-next-line camelcase
+            //                         task_node_child = taskNode.setNextHttpNode(lock, 'POST');
+            //                         task_node_child
+            //                             .setName(`${next_nodes[0].id}_Node`)
+            //                             .setTaskReferenceName(`${next_nodes[0].id}_Node`)
+            //                             .setBody({
+            //                                 // eslint-disable-next-line no-template-curly-in-string
+            //                                 oid: '${workflow.input.oid}',
+            //                                 // eslint-disable-next-line no-template-curly-in-string
+            //                                 pid: '${workflow.input.pid}'
+            //                             });
+            //                         break;
+            //
+            //                     case 'Log':
+            //                         // eslint-disable-next-line camelcase
+            //                         task_node_child = taskNode.setNextHttpNode(log, 'POST');
+            //                         task_node_child
+            //                             .setName(`${next_nodes[0].id}_Node`)
+            //                             .setTaskReferenceName(`${next_nodes[0].id}_Node`)
+            //                             .setBody({
+            //                                 // eslint-disable-next-line no-template-curly-in-string
+            //                                 oid: '${workflow.input.oid}',
+            //                                 description: '测试test'
+            //                             });
+            //                         break;
+            //
+            //                     case 'Profile':
+            //                         // eslint-disable-next-line camelcase
+            //                         task_node_child = taskNode.setNextHttpNode(profile, 'POST');
+            //                         task_node_child
+            //                             .setName(`${next_nodes[0].id}_Node`)
+            //                             .setTaskReferenceName(`${next_nodes[0].id}_Node`)
+            //                             .setBody({
+            //                                 // eslint-disable-next-line no-template-curly-in-string
+            //                                 cid: '${workflow.input.oid}',
+            //                                 // eslint-disable-next-line no-template-curly-in-string
+            //                                 phone_num: '${workflow.input.phone_num}',
+            //                                 // eslint-disable-next-line no-template-curly-in-string
+            //                                 password: '${workflow.input.password}'
+            //                             });
+            //                         break;
+            //
+            //                     case 'Region':
+            //                         // eslint-disable-next-line camelcase
+            //                         task_node_child = taskNode.setNextHttpNode(region, 'POST');
+            //                         task_node_child
+            //                             .setName(`${next_nodes[0].id}_Node`)
+            //                             .setTaskReferenceName(`${next_nodes[0].id}_Node`)
+            //                             .setBody({
+            //                                 // eslint-disable-next-line no-template-curly-in-string
+            //                                 cid: '${workflow.input.oid}',
+            //                                 // eslint-disable-next-line no-template-curly-in-string
+            //                                 address: '${workflow.input.address}'
+            //                             });
+            //                         break;
+            //
+            //                     case 'Tag':
+            //                         // eslint-disable-next-line camelcase
+            //                         task_node_child = taskNode.setNextHttpNode(tag, 'POST');
+            //                         task_node_child
+            //                             .setName(`${next_nodes[0].id}_Node`)
+            //                             .setTaskReferenceName(`${next_nodes[0].id}_Node`)
+            //                             .setBody({
+            //                                 // eslint-disable-next-line no-template-curly-in-string
+            //                                 cid: '${workflow.input.oid}',
+            //                                 // eslint-disable-next-line no-template-curly-in-string
+            //                                 gid: '${workflow.input.gid}'
+            //                             });
+            //                         break;
+            //
+            //                     case 'Unlock':
+            //                         // eslint-disable-next-line camelcase
+            //                         task_node_child = taskNode.setNextHttpNode(unlock, 'POST');
+            //                         task_node_child
+            //                             .setName(`${next_nodes[0].id}_Node`)
+            //                             .setTaskReferenceName(`${next_nodes[0].id}_Node`)
+            //                             .setBody({
+            //                                 // eslint-disable-next-line no-template-curly-in-string
+            //                                 pid: '${workflow.input.pid}'
+            //                             });
+            //                         break;
+            //
+            //                     case 'Update':
+            //                         // eslint-disable-next-line camelcase
+            //                         task_node_child = taskNode.setNextHttpNode(update, 'POST');
+            //                         task_node_child
+            //                             .setName(`${next_nodes[0].id}_Node`)
+            //                             .setTaskReferenceName(`${next_nodes[0].id}_Node`)
+            //                             .setBody({
+            //                                 // eslint-disable-next-line no-template-curly-in-string
+            //                                 pid: '${workflow.input.pid}'
+            //                             });
+            //                         break;
+            //                     default:
+            //                         console.log('Error');
+            //                         break;
+            //                 }
+            //             }
+            //             // eslint-disable-next-line camelcase
+            //             if (case_flag === 0 && getIncomers(next_nodes[0], flow.elements).length > 1) {
+            //                 // eslint-disable-next-line no-plusplus
+            //                 // for (let k = 1; k < getIncomers(next_nodes[i], flow.elements).length; k++) {
+            //                 queue.pop().setNextNode(task_node_child);
+            //                 // }
+            //             }
+            //             // eslint-disable-next-line no-useless-concat
+            //             console.log(`子节点：${JSON.stringify(next_nodes[0])}` + `父节点 ${JSON.stringify(nodes[0])}`);
+            //             flow_all.push(next_nodes[0]);
+            //             // eslint-disable-next-line camelcase
+            //             if (case_flag === 0) {
+            //                 flowIter([next_nodes[0]], task_node_child);
+            //             } else {
+            //                 flowIter([case_next[0]], task_node_child);
+            //             }
+            //         }
+            //         // } else if (JSON.stringify(next_nodes[i]) === JSON.stringify(flow.elements[j]) && flow.elements[j].visited === 1) {
+            //         //     // eslint-disable-next-line no-useless-concat
+            //         //     console.log(`合并 ${JSON.stringify(next_nodes[i])}！` + `${JSON.stringify(queue)}`);
+            //         //     queue.pop().setNextNode(queue_hebin.shift());
+            //         // }
+            //     }
+            //     // }
+            // };
+            // flowIter(input, inputNode);
             builder.setInputNode(inputNode);
             const workflow = builder.build();
             console.log(workflow);
