@@ -3,7 +3,7 @@ import { blacklist, ConductorApi, interestRate, lock, log, tag, unlock, update }
 
 /* eslint-disable */
 test('workflow builder test', () => {
-    const builder = new WorkflowBuilder('TestWorkflow', 11, 'rinne@rinne.top');
+    const builder = new WorkflowBuilder('TestWorkflow', 17, 'rinne@rinne.top');
     builder.setDescription('Demo workflow for testing workflowBuilder library.');
     builder.setRuntimeInput(['cid', 'oid', 'pid']);
     builder.setBuildtimeInput({
@@ -34,7 +34,7 @@ test('workflow builder test', () => {
             gid: '${workflow.input.gid}'
         });
 
-    const switchTagNode1Node = tagNode1.setNextSwitchNode('${tag_1.output.response.body.statusCode}');
+    const switchTagNode1Node = tagNode1.setNextSwitchNode('${tag_1.output.response.statusCode}');
     switchTagNode1Node
         .setName('switchTagNode1Node')
         .setTaskReferenceName('switch_tag_1');
@@ -43,6 +43,19 @@ test('workflow builder test', () => {
     // terminateNode1
     //     .setName('terminate 1')
     //     .setTaskReferenceName('terminate_1');
+
+
+
+
+    // const logNode1 = switchTagNode1Node.addHttpCase('default', log, 'POST');
+    // logNode1
+    //     .setName('log 1')
+    //     .setTaskReferenceName('log_1')
+    //     .setBody({
+    //         oid: '${workflow.input.oid}',
+    //         description: 'There is no content to send for this request, but the headers may be useful. ' +
+    //             'The user agent may update its cached headers for this resource with the new ones.'
+    //     });
 
     const logNode2 = switchTagNode1Node.addHttpCase(200, lock, 'POST');
     logNode2
@@ -53,7 +66,7 @@ test('workflow builder test', () => {
             description: '200'
         });
 
-    const lockNode1 = logNode2.setNextHttpNode(lock, 'POST');
+    const lockNode1 = switchTagNode1Node.addHttpCase('default', lock, 'POST');
     lockNode1
         .setName('lock 1')
         .setTaskReferenceName('lock_1')
@@ -61,19 +74,8 @@ test('workflow builder test', () => {
             oid: '${workflow.input.oid}',
             pid: '${workflow.input.pid}'
         });
+    switchTagNode1Node.setNextNode(lockNode1);
 
-
-    const logNode1 = switchTagNode1Node.addHttpCase('default', log, 'POST');
-    logNode1
-        .setName('log 1')
-        .setTaskReferenceName('log_1')
-        .setBody({
-            oid: '${workflow.input.oid}',
-            description: 'There is no content to send for this request, but the headers may be useful. ' +
-                'The user agent may update its cached headers for this resource with the new ones.'
-        });
-
-    // switchTagNode1Node.setNextNode(lockNode1);
     // const updateNode1 = lockNode1.setNextHttpNode(update, 'POST');
     // updateNode1
     //     .setName('update 1')

@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 // const baseUrl = 'http://localhost';
-const baseUrl = 'http://8.141.159.53';
+const baseUrl = 'http://conductor.rinne.top';
 const generalBackendPort = '10451';
 const servicesBackendPort = '10452';
 const conductorPort = '5000';

@@ -306,13 +306,13 @@ const Orchestration = () => {
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const onSave = useCallback(() => {
-        const builder = new WorkflowBuilder('szx_test_v2', 6, 'rinne@rinne.top');
+        const builder = new WorkflowBuilder('szx_test_v2', 10, 'rinne@rinne.top');
         builder.setDescription('Demo workflow for testing workflowBuilder library.');
-        builder.setRuntimeInput(['pid', 'cid', 'oid', 'phone_num', 'password']);
+        builder.setRuntimeInput(['pid', 'cid', 'oid', 'phoneNum', 'password']);
         builder.setBuildtimeInput({
-            wid: '123',
+            wid: '2',
             bid: '123',
-            address: '福建',
+            region: '福建',
             gid: '123'
         });
         builder.setOutput({
@@ -398,7 +398,9 @@ const Orchestration = () => {
                                                     .setTaskReferenceName(`${case_next[0].id}_Node`)
                                                     .setBody({
                                                         // eslint-disable-next-line no-template-curly-in-string
-                                                        bid: '${workflow.input.bid}'
+                                                        bid: '${workflow.input.bid}',
+                                                        // eslint-disable-next-line no-template-curly-in-string
+                                                        cid: '${workflow.input.cid}'
                                                     });
                                                 break;
 
@@ -410,7 +412,9 @@ const Orchestration = () => {
                                                     .setTaskReferenceName(`${case_next[0].id}_Node`)
                                                     .setBody({
                                                         // eslint-disable-next-line no-template-curly-in-string
-                                                        wid: '${workflow.input.wid}'
+                                                        wid: '${workflow.input.wid}',
+                                                        // eslint-disable-next-line no-template-curly-in-string
+                                                        cid: '${workflow.input.cid}'
                                                     });
                                                 break;
 
@@ -475,7 +479,7 @@ const Orchestration = () => {
                                                         // eslint-disable-next-line no-template-curly-in-string
                                                         cid: '${workflow.input.cid}',
                                                         // eslint-disable-next-line no-template-curly-in-string
-                                                        phone_num: '${workflow.input.phone_num}',
+                                                        phoneNum: '${workflow.input.phoneNum}',
                                                         // eslint-disable-next-line no-template-curly-in-string
                                                         password: '${workflow.input.password}'
                                                     });
@@ -491,7 +495,7 @@ const Orchestration = () => {
                                                         // eslint-disable-next-line no-template-curly-in-string
                                                         cid: '${workflow.input.cid}',
                                                         // eslint-disable-next-line no-template-curly-in-string
-                                                        address: '${workflow.input.address}'
+                                                        region: '${workflow.input.region}'
                                                     });
                                                 break;
 
@@ -565,7 +569,9 @@ const Orchestration = () => {
                                             .setTaskReferenceName(`${next_nodes[m].id}_Node`)
                                             .setBody({
                                                 // eslint-disable-next-line no-template-curly-in-string
-                                                bid: '${workflow.input.bid}'
+                                                bid: '${workflow.input.bid}',
+                                                // eslint-disable-next-line no-template-curly-in-string
+                                                cid: '${workflow.input.cid}'
                                             });
                                         break;
 
@@ -577,7 +583,9 @@ const Orchestration = () => {
                                             .setTaskReferenceName(`${next_nodes[m].id}_Node`)
                                             .setBody({
                                                 // eslint-disable-next-line no-template-curly-in-string
-                                                wid: '${workflow.input.wid}'
+                                                wid: '${workflow.input.wid}',
+                                                // eslint-disable-next-line no-template-curly-in-string
+                                                cid: '${workflow.input.cid}'
                                             });
                                         break;
 
@@ -642,7 +650,7 @@ const Orchestration = () => {
                                                 // eslint-disable-next-line no-template-curly-in-string
                                                 cid: '${workflow.input.cid}',
                                                 // eslint-disable-next-line no-template-curly-in-string
-                                                phone_num: '${workflow.input.phone_num}',
+                                                phoneNum: '${workflow.input.phoneNum}',
                                                 // eslint-disable-next-line no-template-curly-in-string
                                                 password: '${workflow.input.password}'
                                             });
@@ -658,7 +666,7 @@ const Orchestration = () => {
                                                 // eslint-disable-next-line no-template-curly-in-string
                                                 cid: '${workflow.input.cid}',
                                                 // eslint-disable-next-line no-template-curly-in-string
-                                                address: '${workflow.input.address}'
+                                                region: '${workflow.input.region}'
                                             });
                                         break;
 
@@ -1208,8 +1216,8 @@ const Orchestration = () => {
             const workflow = builder.build();
             console.log(workflow);
             console.log(flow_all);
-            const conductor = new ConductorApi();
-            conductor.setWorkFlow(workflow).then((r) => console.log(r));
+            // const conductor = new ConductorApi();
+            // conductor.setWorkFlow(workflow).then((r) => console.log(r));
         }
     }, [reactFlowInstance]);
     // eslint-disable-next-line react-hooks/rules-of-hooks
