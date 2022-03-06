@@ -306,7 +306,7 @@ const Orchestration = () => {
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const onSave = useCallback(() => {
-        const builder = new WorkflowBuilder('test_cml', 36, 'rinne@rinne.top');
+        const builder = new WorkflowBuilder('szx_test_v2', 6, 'rinne@rinne.top');
         builder.setDescription('Demo workflow for testing workflowBuilder library.');
         builder.setRuntimeInput(['pid', 'cid', 'oid', 'phone_num', 'password']);
         builder.setBuildtimeInput({
@@ -317,7 +317,7 @@ const Orchestration = () => {
         });
         builder.setOutput({
             // eslint-disable-next-line no-template-curly-in-string
-            interest: '${interest_1.output.response.body.interest}'
+            interest: '${InterestRate_Node.output.response.body.interest}'
         });
         builder.setRuntimeInput(['oid']);
         const inputNode = new InputNode();
@@ -353,10 +353,12 @@ const Orchestration = () => {
                         if (JSON.stringify(next_nodes[m]) === JSON.stringify(flow.elements[j]) && flow.elements[j].visited === 0) {
                             flow.elements[j].visited = 1;
                             if (next_nodes[m].flag === 'Switch') {
-                                // eslint-disable-next-line no-template-curly-in-string,camelcase
-                                const task_node = data[1].setNextSwitchNode(
-                                    `${data[1].taskReferenceName}.output.response.body.statusCode}`
-                                );
+                                // eslint-disable-next-line camelcase
+                                let response_string = `${data[1].taskReferenceName}.output.response.statusCode`;
+                                // eslint-disable-next-line camelcase
+                                response_string = `\${${response_string}}`;
+                                // eslint-disable-next-line camelcase,no-template-curly-in-string
+                                const task_node = data[1].setNextSwitchNode(response_string);
                                 task_node
                                     .setName(`switchTagNode${next_nodes[m].id}Node`)
                                     .setTaskReferenceName(`switch_tag_${next_nodes[m].id}`);
@@ -515,7 +517,9 @@ const Orchestration = () => {
                                                     .setTaskReferenceName(`${case_next[0].id}_Node`)
                                                     .setBody({
                                                         // eslint-disable-next-line no-template-curly-in-string
-                                                        pid: '${workflow.input.pid}'
+                                                        pid: '${workflow.input.pid}',
+                                                        // eslint-disable-next-line no-template-curly-in-string
+                                                        oid: '${workflow.input.oid}'
                                                     });
                                                 break;
 
@@ -527,7 +531,9 @@ const Orchestration = () => {
                                                     .setTaskReferenceName(`${case_next[0].id}_Node`)
                                                     .setBody({
                                                         // eslint-disable-next-line no-template-curly-in-string
-                                                        pid: '${workflow.input.pid}'
+                                                        pid: '${workflow.input.pid}',
+                                                        // eslint-disable-next-line no-template-curly-in-string
+                                                        oid: '${workflow.input.oid}'
                                                     });
                                                 break;
                                             default:
@@ -678,7 +684,9 @@ const Orchestration = () => {
                                             .setTaskReferenceName(`${next_nodes[m].id}_Node`)
                                             .setBody({
                                                 // eslint-disable-next-line no-template-curly-in-string
-                                                pid: '${workflow.input.pid}'
+                                                pid: '${workflow.input.pid}',
+                                                // eslint-disable-next-line no-template-curly-in-string
+                                                oid: '${workflow.input.oid}'
                                             });
                                         break;
 
@@ -690,7 +698,9 @@ const Orchestration = () => {
                                             .setTaskReferenceName(`${next_nodes[m].id}_Node`)
                                             .setBody({
                                                 // eslint-disable-next-line no-template-curly-in-string
-                                                pid: '${workflow.input.pid}'
+                                                pid: '${workflow.input.pid}',
+                                                // eslint-disable-next-line no-template-curly-in-string
+                                                oid: '${workflow.input.oid}'
                                             });
                                         break;
                                     default:
