@@ -79,7 +79,6 @@ export class EntityApi {
     constructor(token) {
         this.instance = axios.create({
             baseURL: `${entityBase}/`,
-            timeout: 1050,
             headers: {
                 Accept: 'application/json',
                 Authorization: token

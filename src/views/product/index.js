@@ -1,0 +1,118 @@
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import { Fab, Grid } from '@mui/material';
+import { Add, Edit } from '@mui/icons-material';
+import AddProductModel from './AddProductModel';
+import UpdateProductModel from './UpdateProductModel';
+import { EntityApi } from '../../api/restful';
+
+const card = (updatehandleOpen, value) => (
+    <>
+        <CardContent>
+            <Grid container spacing={2}>
+                <Grid item xs={10}>
+                    <Typography variant="h5" sx={{ fontSize: 18 }} gutterBottom>
+                        产品名字：{value.productName}
+                    </Typography>
+                </Grid>
+                <Grid item xs={2}>
+                    <Edit onClick={() => updatehandleOpen(value)} />
+                    {/* <SimpleDialog open={open} handleClose={handleClose}/> */}
+                </Grid>
+                <Grid item xs={6}>
+                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                        产品编号：{value.productNum}
+                    </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                        产品库存：{value.storage}
+                    </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                        年化利率：{value.annualRate}
+                    </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                        风险等级：{value.riskLevel}
+                    </Typography>
+                </Grid>
+            </Grid>
+        </CardContent>
+    </>
+);
+
+export default function Product() {
+    const [open, setOpen] = React.useState(false);
+    const [updateOpen, setUpdateOpen] = React.useState(false);
+    const [product, setProduct] = React.useState([]);
+    const [updateproduct, setUpdateproduct] = React.useState({});
+    const handleOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const updatehandleOpen = (value) => {
+        setUpdateproduct(value);
+        setUpdateOpen(true);
+    };
+
+    const updatehandleClose = () => {
+        setUpdateOpen(false);
+    };
+    function addProduct(value) {
+        const entityApi = new EntityApi(localStorage.getItem('admin_token'));
+        entityApi.addProduct(value).then((res) => {
+            console.log(res);
+        });
+    }
+
+    function updateProduct(value) {
+        const entityApi = new EntityApi(localStorage.getItem('admin_token'));
+        entityApi.updateProduct(value).then((res) => {
+            console.log(res);
+        });
+    }
+    React.useEffect(() => {
+        const entityApi = new EntityApi(localStorage.getItem('admin_token'));
+        entityApi.getProducts().then((res) => {
+            if (res.status === 200) {
+                setProduct(res.data);
+            }
+        });
+    });
+
+    return (
+        <Grid container spacing={3}>
+            {product.map((value) => (
+                <Grid item lg={4} sm={6} xs={12} key={value.pid}>
+                    <Box>
+                        <Card variant="outlined">{card(updatehandleOpen, value)}</Card>
+                    </Box>
+                </Grid>
+            ))}
+            <Fab color="primary" aria-label="add" sx={{ display: 'flex', position: 'fixed', left: '92.5%', top: '86%' }}>
+                <Add onClick={handleOpen} />
+            </Fab>
+            {/* eslint-disable-next-line react/jsx-no-bind */}
+            <AddProductModel open={open} handleClose={handleClose} addProduct={addProduct} />
+            {/* eslint-disable-next-line react/jsx-no-bind */}
+            <UpdateProductModel
+                updateOpen={updateOpen}
+                updatehandleClose={updatehandleClose}
+                /* eslint-disable-next-line react/jsx-no-bind */
+                updateProduct={updateProduct}
+                /* eslint-disable-next-line react/jsx-no-duplicate-props */
+                updateproduct={updateproduct}
+            />
+        </Grid>
+    );
+}

@@ -21,7 +21,7 @@ export default function Sidebar({ onSave, onRestore }) {
                         {/* eslint-disable-next-line react/destructuring-assignment */}
                         <Reply onClick={onRestore} />
                     </Grid>
-                    <Grid item xs={10}>
+                    <Grid item xs={8}>
                         <ControllableStates />
                     </Grid>
                 </Grid>
