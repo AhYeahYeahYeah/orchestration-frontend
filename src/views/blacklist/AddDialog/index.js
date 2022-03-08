@@ -39,12 +39,12 @@ export default function AddDialog({ open, handleClose, save }) {
     }
     const handleNext = () => {
         if (activeStep === steps.length - 1) {
-            const whitelist = {
+            const blacklist = {
                 name: blackName,
                 users: `[${selectionUser.toString()}]`,
                 description: blackDescription
             };
-            save(whitelist);
+            save(blacklist);
             setSelectionUser([]);
             setBlackName('');
             setBlackDescription('');

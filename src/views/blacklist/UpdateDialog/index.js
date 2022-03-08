@@ -38,14 +38,14 @@ export default function UpdateDialog({ open, handleClose, update, blacklistSingl
     }
     const handleNext = () => {
         if (activeStep === steps.length - 1) {
-            const whitelist = {
+            const blacklist = {
                 bid: blacklistSingle.bid,
                 name: blackName === '' ? blacklistSingle.name : blackName,
                 users: selectionUser.length === 0 ? `[${blacklistSingle.users.toString()}]` : `[${selectionUser.toString()}]`,
                 description: blackDescription === '' ? blacklistSingle.description : blackDescription
             };
             // console.log(whitelist);
-            update(whitelist);
+            update(blacklist);
             setSelectionUser([]);
             setBlackName('');
             setBlackDescription('');

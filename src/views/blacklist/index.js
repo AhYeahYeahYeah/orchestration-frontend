@@ -69,7 +69,7 @@ export default function Blacklist() {
         }
     ];
 
-    function saveWhiteList(value) {
+    function saveBlackList(value) {
         const entityApi = new EntityApi(localStorage.getItem('admin_token'));
         entityApi.addBlacklist(value).then((res) => {
             if (res.status === 200) {
@@ -84,7 +84,7 @@ export default function Blacklist() {
             }
         });
     }
-    function updateWhiteList(value) {
+    function updateBlackList(value) {
         // console.log(value);
         const entityApi = new EntityApi(localStorage.getItem('admin_token'));
         entityApi.updateBlacklist(value).then((res) => {
@@ -101,7 +101,7 @@ export default function Blacklist() {
             }
         });
     }
-    function deleteWhite() {
+    function deleteBlack() {
         const queue = [];
         const entityApi = new EntityApi(localStorage.getItem('admin_token'));
         // eslint-disable-next-line no-plusplus
@@ -111,7 +111,7 @@ export default function Blacklist() {
         Promise.all(queue)
             .then((res) => {
                 if (res) {
-                    entityApi.getWhitelists().then((res) => {
+                    entityApi.getBlacklists().then((res) => {
                         if (res.status === 200) {
                             // eslint-disable-next-line no-plusplus
                             for (let i = 0; i < res.data.length; i++) {
@@ -120,6 +120,7 @@ export default function Blacklist() {
                                 // console.log(res.data[i]);
                             }
                             setBlacklist(res.data);
+                            // console.log(blacklist);
                         }
                     });
                 }
@@ -180,13 +181,13 @@ export default function Blacklist() {
                 open={open}
                 handleClose={handleClose}
                 /* eslint-disable-next-line react/jsx-no-bind */
-                save={saveWhiteList}
+                save={saveBlackList}
             />
             <UpdateDialog
                 open={updateOpen}
                 handleClose={updateHandleClose}
                 /* eslint-disable-next-line react/jsx-no-bind */
-                update={updateWhiteList}
+                update={updateBlackList}
                 blacklistSingle={blacklistSingle}
                 selectionUser={selectionUser}
                 setSelectionUser={setSelectionUser}
@@ -196,7 +197,7 @@ export default function Blacklist() {
                     sx={{ position: 'fixed', marginTop: 5 }}
                     label={`${selectionModel.length} row selected`}
                     /* eslint-disable-next-line react/jsx-no-bind  */
-                    onDelete={deleteWhite}
+                    onDelete={deleteBlack}
                     deleteIcon={<DeleteIcon />}
                     variant="outlined"
                 />
