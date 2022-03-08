@@ -7,17 +7,17 @@ import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import UserForm from './UserForm';
-import WhiteListForm from './WhiteListForm';
+import BlackListForm from './BlackListForm';
 import { Dialog } from '@mui/material';
 import PropTypes from 'prop-types';
 import { EntityApi } from '../../../api/restful';
 
-const steps = ['更改用户名单', '更改白名单信息'];
+const steps = ['更改用户名单', '更改黑名单信息'];
 
-export default function UpdateDialog({ open, handleClose, update, whitelistSingle, selectionUser, setSelectionUser }) {
+export default function UpdateDialog({ open, handleClose, update, blacklistSingle, selectionUser, setSelectionUser }) {
     const [activeStep, setActiveStep] = React.useState(0);
-    const [whiteName, setWhiteName] = React.useState('');
-    const [whiteDescription, setWhiteDescription] = React.useState('');
+    const [blackName, setBlackName] = React.useState('');
+    const [blackDescription, setBlackDescription] = React.useState('');
     const [users, setUsers] = React.useState([]);
     function getStepContent(step) {
         switch (step) {
@@ -25,11 +25,11 @@ export default function UpdateDialog({ open, handleClose, update, whitelistSingl
                 return <UserForm users={users} selectionUser={selectionUser} setSelectionUser={setSelectionUser} />;
             case 1:
                 return (
-                    <WhiteListForm
-                        whiteName={whitelistSingle.name}
-                        whiteDescription={whitelistSingle.description}
-                        setWhiteName={setWhiteName}
-                        setWhiteDescription={setWhiteDescription}
+                    <BlackListForm
+                        blackName={blacklistSingle.name}
+                        blackDescription={blacklistSingle.description}
+                        setBlackName={setBlackName}
+                        setBlackDescription={setBlackDescription}
                     />
                 );
             default:
@@ -39,16 +39,16 @@ export default function UpdateDialog({ open, handleClose, update, whitelistSingl
     const handleNext = () => {
         if (activeStep === steps.length - 1) {
             const whitelist = {
-                wid: whitelistSingle.wid,
-                name: whiteName === '' ? whitelistSingle.name : whiteName,
-                users: selectionUser.length === 0 ? `[${whitelistSingle.users.toString()}]` : `[${selectionUser.toString()}]`,
-                description: whiteDescription === '' ? whitelistSingle.description : whiteDescription
+                bid: blacklistSingle.bid,
+                name: blackName === '' ? blacklistSingle.name : blackName,
+                users: selectionUser.length === 0 ? `[${blacklistSingle.users.toString()}]` : `[${selectionUser.toString()}]`,
+                description: blackDescription === '' ? blacklistSingle.description : blackDescription
             };
             // console.log(whitelist);
             update(whitelist);
             setSelectionUser([]);
-            setWhiteName('');
-            setWhiteDescription('');
+            setBlackName('');
+            setBlackDescription('');
             handleClose();
             setActiveStep(0);
         } else {
@@ -83,7 +83,7 @@ export default function UpdateDialog({ open, handleClose, update, whitelistSingl
         <Dialog open={open} fullWidth onClose={restore}>
             <Paper sx={{ my: { xs: 1, md: 2 }, p: { xs: 1, md: 1 } }}>
                 <Typography component="h1" variant="h4" align="center">
-                    白名单模板
+                    黑名单模板
                 </Typography>
                 <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
                     {steps.map((label) => (
@@ -117,7 +117,7 @@ UpdateDialog.propTypes = {
     // onClose: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
     update: PropTypes.func.isRequired,
-    whitelistSingle: PropTypes.object.isRequired,
+    blacklistSingle: PropTypes.object.isRequired,
     setSelectionUser: PropTypes.func.isRequired,
     selectionUser: PropTypes.array.isRequired
 };

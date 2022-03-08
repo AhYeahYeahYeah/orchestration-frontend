@@ -34,6 +34,7 @@ export default function Whitelist() {
     const handleOpen = () => {
         setOpen(true);
     };
+
     const handleClose = () => {
         setOpen(false);
     };

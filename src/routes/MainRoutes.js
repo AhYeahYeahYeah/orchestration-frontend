@@ -19,6 +19,7 @@ const SamplePage = Loadable(lazy(() => import('views/sample-page')));
 const Orchestration = Loadable(lazy(() => import('views/orchestration')));
 const Product = Loadable(lazy(() => import('views/product')));
 const Whitelist = Loadable(lazy(() => import('views/whitelist')));
+const Blacklist = Loadable(lazy(() => import('views/blacklist')));
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
@@ -47,7 +48,7 @@ const MainRoutes = {
         },
         {
             path: '/blacklist',
-            element: <Dashboard />
+            element: <Blacklist />
         },
         {
             path: '/group',
