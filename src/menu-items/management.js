@@ -28,6 +28,14 @@ const management = {
             breadcrumbs: false
         },
         {
+            id: 'admin-management',
+            title: '管理员管理',
+            type: 'item',
+            url: '/admin-management',
+            icon: icons.IconDashboard,
+            breadcrumbs: false
+        },
+        {
             id: 'customer-management',
             title: '客户管理',
             type: 'item',

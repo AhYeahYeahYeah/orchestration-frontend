@@ -20,6 +20,7 @@ const Orchestration = Loadable(lazy(() => import('views/orchestration')));
 const Product = Loadable(lazy(() => import('views/product')));
 const Whitelist = Loadable(lazy(() => import('views/whitelist')));
 const Blacklist = Loadable(lazy(() => import('views/blacklist')));
+const Group = Loadable(lazy(() => import('views/group')));
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
@@ -39,6 +40,10 @@ const MainRoutes = {
             element: <Orchestration />
         },
         {
+            path: '/admin-management',
+            element: <Dashboard />
+        },
+        {
             path: '/customer-management',
             element: <Dashboard />
         },
@@ -52,7 +57,7 @@ const MainRoutes = {
         },
         {
             path: '/group',
-            element: <Dashboard />
+            element: <Group />
         },
         {
             path: '/utils/util-typography',

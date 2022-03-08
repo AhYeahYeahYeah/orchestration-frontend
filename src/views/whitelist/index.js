@@ -15,6 +15,7 @@ import { EntityApi } from '../../api/restful';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddDialog from './AddDialog';
 import UpdateDialog from './UpdateDialog';
+import Typography from '@mui/material/Typography';
 
 function CustomPagination() {
     const apiRef = useGridApiContext();
@@ -152,7 +153,10 @@ export default function Whitelist() {
             {/*        <SearchSection/> */}
             {/*    </Grid> */}
             {/* </Grid> */}
-            <div style={{ marginTop: 10, height: `calc(100vh - 210px)`, width: '100%', background: theme.palette.background.default }}>
+            <Typography component="h1" variant="h3" align="center">
+                白名单模板
+            </Typography>
+            <div style={{ marginTop: 10, height: `calc(100vh - 220px)`, width: '100%', background: theme.palette.background.default }}>
                 <DataGrid
                     // autoHeight
                     autoPageSize
