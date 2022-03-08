@@ -78,7 +78,13 @@ export default function Product() {
     function updateProduct(value) {
         const entityApi = new EntityApi(localStorage.getItem('admin_token'));
         entityApi.updateProduct(value).then((res) => {
-            console.log(res);
+            if (res.status === 200) {
+                entityApi.getProducts().then((re) => {
+                    if (re.status === 200) {
+                        setProduct(re.data);
+                    }
+                });
+            }
         });
     }
     React.useEffect(() => {
@@ -88,7 +94,7 @@ export default function Product() {
                 setProduct(res.data);
             }
         });
-    });
+    }, []);
 
     return (
         <Grid container spacing={3}>

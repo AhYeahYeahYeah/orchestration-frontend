@@ -306,7 +306,7 @@ const Orchestration = () => {
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const onSave = useCallback(() => {
-        const builder = new WorkflowBuilder('szx_test_v2', 10, 'rinne@rinne.top');
+        const builder = new WorkflowBuilder('cml_test', 1, 'rinne@rinne.top');
         builder.setDescription('Demo workflow for testing workflowBuilder library.');
         builder.setRuntimeInput(['pid', 'cid', 'oid', 'phoneNum', 'password']);
         builder.setBuildtimeInput({

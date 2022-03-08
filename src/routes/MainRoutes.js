@@ -18,6 +18,7 @@ const UtilsTablerIcons = Loadable(lazy(() => import('views/utilities/TablerIcons
 const SamplePage = Loadable(lazy(() => import('views/sample-page')));
 const Orchestration = Loadable(lazy(() => import('views/orchestration')));
 const Product = Loadable(lazy(() => import('views/product')));
+const Whitelist = Loadable(lazy(() => import('views/whitelist')));
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
@@ -42,7 +43,7 @@ const MainRoutes = {
         },
         {
             path: '/whitelist',
-            element: <Dashboard />
+            element: <Whitelist />
         },
         {
             path: '/blacklist',
