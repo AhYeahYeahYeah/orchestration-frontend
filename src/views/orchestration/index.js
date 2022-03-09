@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import ReactFlow, {
     ReactFlowProvider,
     addEdge,
@@ -30,7 +30,8 @@ import {
     tag,
     unlock,
     update,
-    whitelist
+    whitelist,
+    EntityApi
 } from '../../api/restful';
 import NoSelector from '../../ui-component/caseCard/NoSelector';
 import YesSelector from '../../ui-component/caseCard/YesSelector';
@@ -1229,6 +1230,12 @@ const Orchestration = () => {
             setElements(flow.elements || []);
         }
     }, [reactFlowInstance]);
+    useEffect(() => {
+        const entityApi = new EntityApi(localStorage.getItem('admin_token'));
+        entityApi.getServiceInfos().then((res) => {
+            console.log(res);
+        });
+    });
     return (
         <Grid sx={{ position: 'relative', height: '100%', background: theme.palette.background.default }}>
             <div className="dndflow">

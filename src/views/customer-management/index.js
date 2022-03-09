@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { DataGrid, gridPageCountSelector, gridPageSelector, GridToolbar, useGridApiContext, useGridSelector } from '@mui/x-data-grid';
 import { useTheme } from '@mui/material/styles';
-import { Pagination } from '@mui/material';
+import { Alert, Pagination, Snackbar } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { EntityApi } from '../../api/restful';
 
@@ -16,6 +16,13 @@ function CustomPagination() {
 export default function CustomerManagement() {
     const theme = useTheme();
     const [customerInfo, setCustomerInfo] = React.useState([]);
+    const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+    const [snackbarMsg, setSnackbarMsg] = React.useState('');
+
+    const handleSnackbarClose = () => {
+        setSnackbarOpen(false);
+        setSnackbarMsg('');
+    };
     const columns = [
         { field: 'account', headerName: '用户账户', flex: 1, minWidth: 120 },
         { field: 'cname', headerName: '真实姓名', flex: 1, minWidth: 120 },
@@ -27,35 +34,41 @@ export default function CustomerManagement() {
     ];
     React.useEffect(() => {
         const entityApi = new EntityApi(localStorage.getItem('admin_token'));
-        entityApi.getCustomers().then((res) => {
-            if (res.status === 200) {
-                const queue = [];
-                // eslint-disable-next-line no-plusplus
-                for (let i = 0; i < res.data.length; i++) {
-                    res.data[i].id = res.data[i].cid;
-                    // console.log(res.data[i]);
-                    queue.push(entityApi.getCustomerProfile(res.data[i].cid));
-                }
-                Promise.all(queue)
-                    .then((re) => {
-                        // eslint-disable-next-line no-plusplus
-                        for (let i = 0; i < re.length; i++) {
-                            res.data[i].sid = re[i].data[0].sid;
-                            res.data[i].birthday = re[i].data[0].birthday;
-                            res.data[i].phoneNum = re[i].data[0].phoneNum;
-                            res.data[i].address = re[i].data[0].address;
-                            res.data[i].cardNum = re[i].data[0].cardNum;
-                        }
-                        // console.log(res.data);
-                        setCustomerInfo(res.data);
-                    })
-                    .catch((reason) => {
-                        console.log(reason);
-                    });
+        entityApi
+            .getCustomers()
+            .then((res) => {
+                if (res.status === 200) {
+                    const queue = [];
+                    // eslint-disable-next-line no-plusplus
+                    for (let i = 0; i < res.data.length; i++) {
+                        res.data[i].id = res.data[i].cid;
+                        // console.log(res.data[i]);
+                        queue.push(entityApi.getCustomerProfile(res.data[i].cid));
+                    }
+                    Promise.all(queue)
+                        .then((re) => {
+                            // eslint-disable-next-line no-plusplus
+                            for (let i = 0; i < re.length; i++) {
+                                res.data[i].sid = re[i].data[0].sid;
+                                res.data[i].birthday = re[i].data[0].birthday;
+                                res.data[i].phoneNum = re[i].data[0].phoneNum;
+                                res.data[i].address = re[i].data[0].address;
+                                res.data[i].cardNum = re[i].data[0].cardNum;
+                            }
+                            // console.log(res.data);
+                            setCustomerInfo(res.data);
+                        })
+                        .catch((reason) => {
+                            console.log(reason);
+                        });
 
-                // console.log(customerInfo);
-            }
-        });
+                    // console.log(customerInfo);
+                }
+            })
+            .catch(() => {
+                setSnackbarMsg('您无权限查看！');
+                setSnackbarOpen(true);
+            });
     }, []);
     return (
         <div>
@@ -75,6 +88,16 @@ export default function CustomerManagement() {
                     }}
                 />
             </div>
+            <Snackbar
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                open={snackbarOpen}
+                autoHideDuration={6000}
+                onClose={handleSnackbarClose}
+            >
+                <Alert severity="warning" open={snackbarOpen} onClose={handleSnackbarClose}>
+                    {snackbarMsg}
+                </Alert>
+            </Snackbar>
         </div>
     );
 }

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { DataGrid, gridPageCountSelector, gridPageSelector, GridToolbar, useGridApiContext, useGridSelector } from '@mui/x-data-grid';
 import { useTheme } from '@mui/material/styles';
-import { Pagination, Slide, Chip } from '@mui/material';
+import { Pagination, Slide, Chip, Snackbar, Alert } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { EntityApi } from '../../api/restful';
 import { Update } from '@mui/icons-material';
@@ -18,7 +18,13 @@ export default function AdminManagement() {
     const theme = useTheme();
     const [adminInfo, setAdminInfo] = React.useState([]);
     const [editRowsModel, setEditRowsModel] = React.useState({});
+    const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+    const [snackbarMsg, setSnackbarMsg] = React.useState('');
 
+    const handleSnackbarClose = () => {
+        setSnackbarOpen(false);
+        setSnackbarMsg('');
+    };
     const handleEditRowsModelChange = (model) => {
         setEditRowsModel(model);
         // const entityApi = new EntityApi(localStorage.getItem('admin_token'));
@@ -66,33 +72,39 @@ export default function AdminManagement() {
     }
     React.useEffect(() => {
         const entityApi = new EntityApi(localStorage.getItem('admin_token'));
-        entityApi.getAdmins().then((res) => {
-            if (res.status === 200) {
-                // eslint-disable-next-line no-plusplus
-                for (let i = 0; i < res.data.length; i++) {
-                    res.data[i].id = res.data[i].aid;
-                    res.data[i].service = false;
-                    res.data[i].customerManage = false;
-                    res.data[i].adminManage = false;
-                    res.data[i].productManage = false;
-                    res.data[i].groupManage = false;
-                    if (res.data[i].permissions.indexOf('0') !== -1) {
-                        res.data[i].service = true;
-                        res.data[i].customerManage = true;
-                        res.data[i].adminManage = true;
-                        res.data[i].productManage = true;
-                        res.data[i].groupManage = true;
+        entityApi
+            .getAdmins()
+            .then((res) => {
+                if (res.status === 200) {
+                    // eslint-disable-next-line no-plusplus
+                    for (let i = 0; i < res.data.length; i++) {
+                        res.data[i].id = res.data[i].aid;
+                        res.data[i].service = false;
+                        res.data[i].customerManage = false;
+                        res.data[i].adminManage = false;
+                        res.data[i].productManage = false;
+                        res.data[i].groupManage = false;
+                        if (res.data[i].permissions.indexOf('0') !== -1) {
+                            res.data[i].service = true;
+                            res.data[i].customerManage = true;
+                            res.data[i].adminManage = true;
+                            res.data[i].productManage = true;
+                            res.data[i].groupManage = true;
+                        }
+                        if (res.data[i].permissions.indexOf('1') !== -1) res.data[i].service = true;
+                        if (res.data[i].permissions.indexOf('2') !== -1) res.data[i].customerManage = true;
+                        if (res.data[i].permissions.indexOf('3') !== -1) res.data[i].adminManage = true;
+                        if (res.data[i].permissions.indexOf('4') !== -1) res.data[i].productManage = true;
+                        if (res.data[i].permissions.indexOf('5') !== -1) res.data[i].groupManage = true;
                     }
-                    if (res.data[i].permissions.indexOf('1') !== -1) res.data[i].service = true;
-                    if (res.data[i].permissions.indexOf('2') !== -1) res.data[i].customerManage = true;
-                    if (res.data[i].permissions.indexOf('3') !== -1) res.data[i].adminManage = true;
-                    if (res.data[i].permissions.indexOf('4') !== -1) res.data[i].productManage = true;
-                    if (res.data[i].permissions.indexOf('5') !== -1) res.data[i].groupManage = true;
+                    setAdminInfo(res.data);
+                    // console.log(customerInfo);
                 }
-                setAdminInfo(res.data);
-                // console.log(customerInfo);
-            }
-        });
+            })
+            .catch(() => {
+                setSnackbarMsg('您无权限查看！');
+                setSnackbarOpen(true);
+            });
     }, []);
     return (
         <div>
@@ -125,6 +137,16 @@ export default function AdminManagement() {
                     variant="outlined"
                 />
             </Slide>
+            <Snackbar
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                open={snackbarOpen}
+                autoHideDuration={6000}
+                onClose={handleSnackbarClose}
+            >
+                <Alert severity="warning" open={snackbarOpen} onClose={handleSnackbarClose}>
+                    {snackbarMsg}
+                </Alert>
+            </Snackbar>
         </div>
     );
 }

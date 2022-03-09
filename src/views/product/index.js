@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import { Fab, Grid } from '@mui/material';
+import { Alert, Fab, Grid, Snackbar } from '@mui/material';
 import { Add, Edit } from '@mui/icons-material';
 import AddProductModel from './AddProductModel';
 import UpdateProductModel from './UpdateProductModel';
@@ -52,6 +52,13 @@ export default function Product() {
     const [updateOpen, setUpdateOpen] = React.useState(false);
     const [product, setProduct] = React.useState([]);
     const [updateproduct, setUpdateproduct] = React.useState({});
+    const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+    const [snackbarMsg, setSnackbarMsg] = React.useState('');
+
+    const handleSnackbarClose = () => {
+        setSnackbarOpen(false);
+        setSnackbarMsg('');
+    };
     const handleOpen = () => {
         setOpen(true);
     };
@@ -89,11 +96,17 @@ export default function Product() {
     }
     React.useEffect(() => {
         const entityApi = new EntityApi(localStorage.getItem('admin_token'));
-        entityApi.getProducts().then((res) => {
-            if (res.status === 200) {
-                setProduct(res.data);
-            }
-        });
+        entityApi
+            .getProducts()
+            .then((res) => {
+                if (res.status === 200) {
+                    setProduct(res.data);
+                }
+            })
+            .catch(() => {
+                setSnackbarMsg('您无权限查看！');
+                setSnackbarOpen(true);
+            });
     }, []);
 
     return (
@@ -119,6 +132,16 @@ export default function Product() {
                 /* eslint-disable-next-line react/jsx-no-duplicate-props */
                 updateproduct={updateproduct}
             />
+            <Snackbar
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                open={snackbarOpen}
+                autoHideDuration={6000}
+                onClose={handleSnackbarClose}
+            >
+                <Alert severity="warning" open={snackbarOpen} onClose={handleSnackbarClose}>
+                    {snackbarMsg}
+                </Alert>
+            </Snackbar>
         </Grid>
     );
 }

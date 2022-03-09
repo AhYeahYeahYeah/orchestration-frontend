@@ -9,7 +9,7 @@ import {
     useGridSelector
 } from '@mui/x-data-grid';
 import { useTheme } from '@mui/material/styles';
-import { Chip, Fab, Slide, Pagination } from '@mui/material';
+import { Chip, Fab, Slide, Pagination, Snackbar, Alert } from '@mui/material';
 import { Add, Edit } from '@mui/icons-material';
 import { EntityApi } from '../../api/restful';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -32,6 +32,13 @@ export default function Blacklist() {
     const [selectionUser, setSelectionUser] = React.useState([]);
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
+    const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+    const [snackbarMsg, setSnackbarMsg] = React.useState('');
+
+    const handleSnackbarClose = () => {
+        setSnackbarOpen(false);
+        setSnackbarMsg('');
+    };
     const handleOpen = () => {
         setOpen(true);
     };
@@ -133,19 +140,25 @@ export default function Blacklist() {
     }
     React.useEffect(() => {
         const entityApi = new EntityApi(localStorage.getItem('admin_token'));
-        entityApi.getBlacklists().then((res) => {
-            if (res.status === 200) {
-                // console.log(res.data);
-                // eslint-disable-next-line no-plusplus
-                for (let i = 0; i < res.data.length; i++) {
-                    res.data[i].id = res.data[i].bid;
-                    res.data[i].users = res.data[i].users.substring(1, res.data[i].users.length - 1).split(',');
-                    // console.log(res.data[i]);
+        entityApi
+            .getBlacklists()
+            .then((res) => {
+                if (res.status === 200) {
+                    // console.log(res.data);
+                    // eslint-disable-next-line no-plusplus
+                    for (let i = 0; i < res.data.length; i++) {
+                        res.data[i].id = res.data[i].bid;
+                        res.data[i].users = res.data[i].users.substring(1, res.data[i].users.length - 1).split(',');
+                        // console.log(res.data[i]);
+                    }
+                    setBlacklist(res.data);
+                    // console.log(customer);
                 }
-                setBlacklist(res.data);
-                // console.log(customer);
-            }
-        });
+            })
+            .catch(() => {
+                setSnackbarMsg('您无权限查看！');
+                setSnackbarOpen(true);
+            });
     }, []);
     return (
         <div>
@@ -207,6 +220,16 @@ export default function Blacklist() {
                     variant="outlined"
                 />
             </Slide>
+            <Snackbar
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                open={snackbarOpen}
+                autoHideDuration={6000}
+                onClose={handleSnackbarClose}
+            >
+                <Alert severity="warning" open={snackbarOpen} onClose={handleSnackbarClose}>
+                    {snackbarMsg}
+                </Alert>
+            </Snackbar>
         </div>
     );
 }
