@@ -2,9 +2,9 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import PropTypes from 'prop-types';
 
 const columns = [
-    { field: 'account', headerName: '账户', width: 170 },
-    { field: 'cname', headerName: '真实姓名', width: 170 },
-    { field: 'nickName', headerName: '昵称', width: 170 }
+    { field: 'account', headerName: '账户', flex: 1, minWidth: 170 },
+    { field: 'cname', headerName: '真实姓名', flex: 1, minWidth: 170 },
+    { field: 'nickName', headerName: '昵称', flex: 1, minWidth: 170 }
 ];
 
 export default function UserForm({ users, selectionUser, setSelectionUser }) {

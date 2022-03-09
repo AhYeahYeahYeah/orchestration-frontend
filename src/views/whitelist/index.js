@@ -52,12 +52,13 @@ export default function Whitelist() {
         setUpdateOpen(false);
     };
     const columns = [
-        { field: 'name', headerName: '模板名字', width: 250 },
-        { field: 'description', headerName: '模板描述', width: 580 },
+        { field: 'name', headerName: '模板名字', flex: 1, minWidth: 250 },
+        { field: 'description', headerName: '模板描述', flex: 2.3, minWidth: 580 },
         {
             field: 'actions',
             type: 'actions',
-            width: 150,
+            flex: 0.65,
+            minWidth: 150,
             getActions: (params) => [
                 <GridActionsCellItem
                     icon={<Edit />}
