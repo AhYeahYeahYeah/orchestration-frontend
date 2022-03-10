@@ -1,8 +1,8 @@
 // eslint-disable-next-line max-classes-per-file
 import axios from 'axios';
 
-// const baseUrl = 'http://localhost';
-const baseUrl = 'http://conductor.rinne.top';
+const baseUrl = 'http://localhost';
+// const baseUrl = 'http://conductor.rinne.top';
 const generalBackendPort = '10451';
 const servicesBackendPort = '10452';
 const conductorPort = '5000';
@@ -53,7 +53,7 @@ export class AuthApi {
     constructor() {
         this.instance = axios.create({
             baseURL: `${authBase}/`,
-            timeout: 1050,
+            // timeout: 1050,
             headers: { Accept: 'application/json' }
         });
     }

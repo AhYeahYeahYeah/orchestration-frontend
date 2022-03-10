@@ -14,6 +14,7 @@ export default function UpdateProductModel({ updatehandleClose, updateOpen, upda
         for (let i = 0; i < workflows.length; i++) {
             if (workflows[i].name === value) {
                 setWorkflowid(workflows[i].fid);
+                console.log(workflows[i].fid);
             }
         }
     }

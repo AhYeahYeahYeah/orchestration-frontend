@@ -72,7 +72,7 @@ export default function Product() {
         // eslint-disable-next-line no-plusplus
         for (let i = 0; i < workflows.length; i++) {
             if (workflows[i].fid === value.fid) {
-                value.fid = workflows[i].name;
+                value.workName = workflows[i].name;
                 setUpdateproductsingle(value);
             }
         }
@@ -96,7 +96,9 @@ export default function Product() {
 
     function updateProduct(value) {
         const entityApi = new EntityApi(localStorage.getItem('admin_token'));
+        console.log(value);
         entityApi.updateProduct(value).then((res) => {
+            console.log(res);
             if (res.status === 200) {
                 entityApi.getProducts().then((re) => {
                     if (re.status === 200) {

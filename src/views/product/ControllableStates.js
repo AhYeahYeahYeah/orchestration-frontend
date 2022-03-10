@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 // eslint-disable-next-line react/prop-types
 export default function ControllableStates({ workName, updateFid, updateproductsingle }) {
     // eslint-disable-next-line react/prop-types
-    const [value, setValue] = React.useState(updateproductsingle === null ? null : updateproductsingle.fid);
+    const [value, setValue] = React.useState(updateproductsingle === null ? null : updateproductsingle.workName);
     const [inputValue, setInputValue] = React.useState('');
 
     return (
@@ -19,7 +19,7 @@ export default function ControllableStates({ workName, updateFid, updateproducts
                     setValue(newValue);
                     updateFid(newValue);
                     // eslint-disable-next-line react/prop-types
-                    if (updateproductsingle !== null) updateproductsingle.fid = newValue;
+                    if (updateproductsingle !== null) updateproductsingle.workName = newValue;
                 }}
                 inputValue={inputValue}
                 onInputChange={(event, newInputValue) => {
