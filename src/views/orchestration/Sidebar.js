@@ -1,12 +1,24 @@
 import { useTheme } from '@mui/material/styles';
-import { Fab, Box, Grid } from '@mui/material';
-import { Check, Reply } from '@mui/icons-material';
+import { Box, Grid } from '@mui/material';
+import { Reply } from '@mui/icons-material';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import ControllableStates from './ControllableStates';
 import PropTypes from 'prop-types';
+import ServiceInfoModel from './ServiceInfoModel';
+import { useState } from 'react';
 
-export default function Sidebar({ onSave, onRestore }) {
+export default function Sidebar({ onRestore, updateFlowinstance, workOptions, serviceInfo }) {
     const theme = useTheme();
+    const [open, setOpen] = useState(false);
+    const [serviceShow, setServiceShow] = useState({});
+    const handleClickOpen = (value) => {
+        setServiceShow(serviceInfo[value]);
+        // console.log(serviceInfo[value]);
+        setOpen(true);
+    };
+    const handleClose = () => {
+        setOpen(false);
+    };
     const onDragStart = (event, nodeType) => {
         // console.log(nodeType);
         event.dataTransfer.setData('application/reactflow', nodeType);
@@ -22,7 +34,7 @@ export default function Sidebar({ onSave, onRestore }) {
                         <Reply onClick={onRestore} />
                     </Grid>
                     <Grid item xs={8}>
-                        <ControllableStates />
+                        <ControllableStates updateFlowinstance={updateFlowinstance} workOptions={workOptions} />
                     </Grid>
                 </Grid>
             </Box>
@@ -56,57 +68,123 @@ export default function Sidebar({ onSave, onRestore }) {
                         </div>
                     </Grid>
                     <Grid item xs={12} sx={{ marginLeft: 2, marginRight: 2, marginTop: 1.5 }}>
-                        <div className="react-flow__node-default" onDragStart={(event) => onDragStart(event, 'Lock')} draggable>
+                        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                        <div
+                            onClick={() => handleClickOpen(0)}
+                            className="react-flow__node-default"
+                            onDragStart={(event) => onDragStart(event, 'Lock')}
+                            draggable
+                        >
                             库存锁定
                         </div>
                     </Grid>
                     <Grid item xs={12} sx={{ marginLeft: 2, marginRight: 2, marginTop: 1.5 }}>
-                        <div className="react-flow__node-default" onDragStart={(event) => onDragStart(event, 'Update')} draggable>
+                        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                        <div
+                            onClick={() => handleClickOpen(3)}
+                            className="react-flow__node-default"
+                            onDragStart={(event) => onDragStart(event, 'Update')}
+                            draggable
+                        >
                             库存更新
                         </div>
                     </Grid>
                     <Grid item xs={12} sx={{ marginLeft: 2, marginRight: 2, marginTop: 1.5 }}>
-                        <div className="react-flow__node-default" onDragStart={(event) => onDragStart(event, 'Unlock')} draggable>
+                        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                        <div
+                            onClick={() => handleClickOpen(4)}
+                            className="react-flow__node-default"
+                            onDragStart={(event) => onDragStart(event, 'Unlock')}
+                            draggable
+                        >
                             库存解锁
                         </div>
                     </Grid>
                     <Grid item xs={12} sx={{ marginLeft: 2, marginRight: 2, marginTop: 1.5 }}>
-                        <div className="react-flow__node-default" onDragStart={(event) => onDragStart(event, 'Credential')} draggable>
+                        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                        <div
+                            onClick={() => handleClickOpen(5)}
+                            className="react-flow__node-default"
+                            onDragStart={(event) => onDragStart(event, 'Credential')}
+                            draggable
+                        >
                             证件审查
                         </div>
                     </Grid>
                     <Grid item xs={12} sx={{ marginLeft: 2, marginRight: 2, marginTop: 1.5 }}>
-                        <div className="react-flow__node-default" onDragStart={(event) => onDragStart(event, 'Profile')} draggable>
+                        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                        <div
+                            onClick={() => handleClickOpen(6)}
+                            className="react-flow__node-default"
+                            onDragStart={(event) => onDragStart(event, 'Profile')}
+                            draggable
+                        >
                             用户信息校验
                         </div>
                     </Grid>
                     <Grid item xs={12} sx={{ marginLeft: 2, marginRight: 2, marginTop: 1.5 }}>
-                        <div className="react-flow__node-default" onDragStart={(event) => onDragStart(event, 'White')} draggable>
+                        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                        <div
+                            onClick={() => handleClickOpen(7)}
+                            className="react-flow__node-default"
+                            onDragStart={(event) => onDragStart(event, 'White')}
+                            draggable
+                        >
                             白名单控制
                         </div>
                     </Grid>
                     <Grid item xs={12} sx={{ marginLeft: 2, marginRight: 2, marginTop: 1.5 }}>
-                        <div className="react-flow__node-default" onDragStart={(event) => onDragStart(event, 'Black')} draggable>
+                        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                        <div
+                            onClick={() => handleClickOpen(8)}
+                            className="react-flow__node-default"
+                            onDragStart={(event) => onDragStart(event, 'Black')}
+                            draggable
+                        >
                             黑名单控制
                         </div>
                     </Grid>
                     <Grid item xs={12} sx={{ marginLeft: 2, marginRight: 2, marginTop: 1.5 }}>
-                        <div className="react-flow__node-default" onDragStart={(event) => onDragStart(event, 'Region')} draggable>
+                        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                        <div
+                            onClick={() => handleClickOpen(9)}
+                            className="react-flow__node-default"
+                            onDragStart={(event) => onDragStart(event, 'Region')}
+                            draggable
+                        >
                             地域控制
                         </div>
                     </Grid>
                     <Grid item xs={12} sx={{ marginLeft: 2, marginRight: 2, marginTop: 1.5 }}>
-                        <div className="react-flow__node-default" onDragStart={(event) => onDragStart(event, 'Tag')} draggable>
+                        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                        <div
+                            onClick={() => handleClickOpen(10)}
+                            className="react-flow__node-default"
+                            onDragStart={(event) => onDragStart(event, 'Tag')}
+                            draggable
+                        >
                             用户标签
                         </div>
                     </Grid>
                     <Grid item xs={12} sx={{ marginLeft: 2, marginRight: 2, marginTop: 1.5 }}>
-                        <div className="react-flow__node-default" onDragStart={(event) => onDragStart(event, 'Log')} draggable>
+                        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                        <div
+                            onClick={() => handleClickOpen(1)}
+                            className="react-flow__node-default"
+                            onDragStart={(event) => onDragStart(event, 'Log')}
+                            draggable
+                        >
                             日志录入
                         </div>
                     </Grid>
                     <Grid item xs={12} sx={{ marginLeft: 2, marginRight: 2, marginTop: 1.5 }}>
-                        <div className="react-flow__node-default" onDragStart={(event) => onDragStart(event, 'InterestRate')} draggable>
+                        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                        <div
+                            onClick={() => handleClickOpen(2)}
+                            className="react-flow__node-default"
+                            onDragStart={(event) => onDragStart(event, 'InterestRate')}
+                            draggable
+                        >
                             利息计算
                         </div>
                     </Grid>
@@ -115,16 +193,20 @@ export default function Sidebar({ onSave, onRestore }) {
                             Output Node
                         </div>
                     </Grid>
+                    <ServiceInfoModel
+                        open={open}
+                        handleClose={handleClose}
+                        serviceName={serviceShow.sname}
+                        serviceDescription={serviceShow.description}
+                    />
                 </PerfectScrollbar>
             </Box>
-            <Fab color="primary" aria-label="add" sx={{ display: 'flex', position: 'absolute', left: '92.5%', top: '86%' }}>
-                {/* eslint-disable-next-line react/destructuring-assignment */}
-                <Check onClick={onSave} />
-            </Fab>
         </Grid>
     );
 }
 Sidebar.propTypes = {
-    onSave: PropTypes.func,
-    onRestore: PropTypes.func
+    onRestore: PropTypes.func,
+    updateFlowinstance: PropTypes.func,
+    workOptions: PropTypes.array,
+    serviceInfo: PropTypes.array
 };

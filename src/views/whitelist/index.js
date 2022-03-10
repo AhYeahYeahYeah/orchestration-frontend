@@ -146,10 +146,10 @@ export default function Whitelist() {
                     for (let i = 0; i < res.data.length; i++) {
                         res.data[i].id = res.data[i].wid;
                         res.data[i].users = res.data[i].users.substring(1, res.data[i].users.length - 1).split(',');
-                        // console.log(res.data[i]);
+                        // res.data[i].users = JSON.parse(res.data[i].users);
+                        // console.log(res.data[i].users);
                     }
                     setWhitelist(res.data);
-                    // console.log(customer);
                 }
             })
             .catch(() => {

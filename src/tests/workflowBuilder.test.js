@@ -3,14 +3,23 @@ import { blacklist, ConductorApi, interestRate, lock, log, tag, unlock, update }
 
 /* eslint-disable */
 test('workflow builder test', () => {
-    const builder = new WorkflowBuilder('TestWorkflow', 17, 'rinne@rinne.top');
-    builder.setDescription('Demo workflow for testing workflowBuilder library.');
-    builder.setRuntimeInput(['cid', 'oid', 'pid']);
+    const workNew = {
+        name: 'test',
+        version: 1,
+        account: '123',
+        description: 'test'
+    }
+    const builder = new WorkflowBuilder(workNew.name, workNew.version, workNew.account);
+    builder.setDescription(workNew.description);
+    builder.setRuntimeInput(['pid', 'cid', 'oid', 'phoneNum', 'password']);
     builder.setBuildtimeInput({
-        bid: 'bid_dhfsgdfhshid',
-        gid: 'gid_sdfhisdhhflh'
+        wid: '',
+        bid: '',
+        region: '',
+        gid: ''
     });
     builder.setOutput({
+        // eslint-disable-next-line no-template-curly-in-string
         interest: '${interest_1.output.response.body.interest}'
     });
 

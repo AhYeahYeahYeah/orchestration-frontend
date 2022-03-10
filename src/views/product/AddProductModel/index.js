@@ -1,3 +1,4 @@
+import * as React from 'react';
 import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -6,7 +7,16 @@ import { DialogActions, DialogContent, Grid, TextField } from '@mui/material';
 import Box from '@mui/material/Box';
 import ControllableStates from '../ControllableStates';
 
-export default function AddProductModel({ handleClose, open, addProduct }) {
+export default function AddProductModel({ handleClose, open, addProduct, workflows, workName }) {
+    const [workflowid, setWorkflowid] = React.useState('');
+    function updateFid(value) {
+        // eslint-disable-next-line no-plusplus
+        for (let i = 0; i < workflows.length; i++) {
+            if (workflows[i].name === value) {
+                setWorkflowid(workflows[i].fid);
+            }
+        }
+    }
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -22,7 +32,8 @@ export default function AddProductModel({ handleClose, open, addProduct }) {
             singlePersonLimit: data.get('singlePersonLimit'), // 单人限额
             singleDayLimit: data.get('singleDayLimit'), // 单日限额
             riskLevel: data.get('riskLevel'), // 风险等级
-            settlementMethod: data.get('settlementMethod') // 结息方式
+            settlementMethod: data.get('settlementMethod'), // 结息方式
+            fid: workflowid
         };
         console.log(product_data);
         addProduct(product_data);
@@ -30,7 +41,7 @@ export default function AddProductModel({ handleClose, open, addProduct }) {
     };
     return (
         <Dialog open={open} onClose={handleClose}>
-            <DialogTitle>Subscribe</DialogTitle>
+            <DialogTitle>填写信息</DialogTitle>
             {/* eslint-disable-next-line react/jsx-no-bind */}
             <Box component="form" onSubmit={handleSubmit}>
                 <DialogContent>
@@ -117,7 +128,8 @@ export default function AddProductModel({ handleClose, open, addProduct }) {
                             />
                         </Grid>
                         <Grid item xs={6}>
-                            <ControllableStates />
+                            {/* eslint-disable-next-line react/jsx-no-bind */}
+                            <ControllableStates workName={workName} updateFid={updateFid} updateproductsingle={null} />
                         </Grid>
                     </Grid>
                 </DialogContent>
@@ -136,5 +148,7 @@ AddProductModel.propTypes = {
     handleClose: PropTypes.func.isRequired,
     // onClose: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
-    addProduct: PropTypes.func.isRequired
+    addProduct: PropTypes.func.isRequired,
+    workName: PropTypes.array,
+    workflows: PropTypes.array
 };

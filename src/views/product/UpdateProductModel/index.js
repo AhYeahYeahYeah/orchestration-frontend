@@ -5,14 +5,24 @@ import Dialog from '@mui/material/Dialog';
 import { DialogActions, DialogContent, Grid, TextField } from '@mui/material';
 import Box from '@mui/material/Box';
 import ControllableStates from '../ControllableStates';
+import * as React from 'react';
 
-export default function UpdateProductModel({ updatehandleClose, updateOpen, updateProduct, updateproduct }) {
+export default function UpdateProductModel({ updatehandleClose, updateOpen, updateProduct, updateproductsingle, workName, workflows }) {
+    const [workflowid, setWorkflowid] = React.useState('');
+    function updateFid(value) {
+        // eslint-disable-next-line no-plusplus
+        for (let i = 0; i < workflows.length; i++) {
+            if (workflows[i].name === value) {
+                setWorkflowid(workflows[i].fid);
+            }
+        }
+    }
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         // eslint-disable-next-line no-console,camelcase
         const product_data = {
-            pid: updateproduct.pid,
+            pid: updateproductsingle.pid,
             productNum: data.get('productNum'), // 产品编号
             validityPeriod: data.get('validityPeriod'), // 产品期限
             storage: data.get('storage'), // 产品库存（数量）
@@ -23,15 +33,16 @@ export default function UpdateProductModel({ updatehandleClose, updateOpen, upda
             singlePersonLimit: data.get('singlePersonLimit'), // 单人限额
             singleDayLimit: data.get('singleDayLimit'), // 单日限额
             riskLevel: data.get('riskLevel'), // 风险等级
-            settlementMethod: data.get('settlementMethod') // 结息方式
+            settlementMethod: data.get('settlementMethod'), // 结息方式
+            fid: workflowid === '' ? updateproductsingle.fid : workflowid
         };
-        console.log(product_data);
+        // console.log(product_data);
         updateProduct(product_data);
         updatehandleClose();
     };
     return (
         <Dialog open={updateOpen} onClose={updatehandleClose}>
-            <DialogTitle>Subscribe</DialogTitle>
+            <DialogTitle>填写信息</DialogTitle>
             {/* eslint-disable-next-line react/jsx-no-bind */}
             <Box component="form" onSubmit={handleSubmit}>
                 <DialogContent>
@@ -45,7 +56,7 @@ export default function UpdateProductModel({ updatehandleClose, updateOpen, upda
                                 name="productName"
                                 fullWidth
                                 variant="standard"
-                                defaultValue={updateproduct.productName}
+                                defaultValue={updateproductsingle.productName}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -57,7 +68,7 @@ export default function UpdateProductModel({ updatehandleClose, updateOpen, upda
                                 name="productNum"
                                 fullWidth
                                 variant="standard"
-                                defaultValue={updateproduct.productNum}
+                                defaultValue={updateproductsingle.productNum}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -69,7 +80,7 @@ export default function UpdateProductModel({ updatehandleClose, updateOpen, upda
                                 name="validityPeriod"
                                 fullWidth
                                 variant="standard"
-                                defaultValue={updateproduct.validityPeriod}
+                                defaultValue={updateproductsingle.validityPeriod}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -81,7 +92,7 @@ export default function UpdateProductModel({ updatehandleClose, updateOpen, upda
                                 name="storage"
                                 fullWidth
                                 variant="standard"
-                                defaultValue={updateproduct.storage}
+                                defaultValue={updateproductsingle.storage}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -93,7 +104,7 @@ export default function UpdateProductModel({ updatehandleClose, updateOpen, upda
                                 name="annualRate"
                                 fullWidth
                                 variant="standard"
-                                defaultValue={updateproduct.annualRate}
+                                defaultValue={updateproductsingle.annualRate}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -105,7 +116,7 @@ export default function UpdateProductModel({ updatehandleClose, updateOpen, upda
                                 name="minAmount"
                                 fullWidth
                                 variant="standard"
-                                defaultValue={updateproduct.minAmount}
+                                defaultValue={updateproductsingle.minAmount}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -117,7 +128,7 @@ export default function UpdateProductModel({ updatehandleClose, updateOpen, upda
                                 name="increAmount"
                                 fullWidth
                                 variant="standard"
-                                defaultValue={updateproduct.increAmount}
+                                defaultValue={updateproductsingle.increAmount}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -129,7 +140,7 @@ export default function UpdateProductModel({ updatehandleClose, updateOpen, upda
                                 name="singlePersonLimit"
                                 fullWidth
                                 variant="standard"
-                                defaultValue={updateproduct.singlePersonLimit}
+                                defaultValue={updateproductsingle.singlePersonLimit}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -141,7 +152,7 @@ export default function UpdateProductModel({ updatehandleClose, updateOpen, upda
                                 name="singleDayLimit"
                                 fullWidth
                                 variant="standard"
-                                defaultValue={updateproduct.singleDayLimit}
+                                defaultValue={updateproductsingle.singleDayLimit}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -153,7 +164,7 @@ export default function UpdateProductModel({ updatehandleClose, updateOpen, upda
                                 name="riskLevel"
                                 fullWidth
                                 variant="standard"
-                                defaultValue={updateproduct.riskLevel}
+                                defaultValue={updateproductsingle.riskLevel}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -165,11 +176,12 @@ export default function UpdateProductModel({ updatehandleClose, updateOpen, upda
                                 name="settlementMethod"
                                 fullWidth
                                 variant="standard"
-                                defaultValue={updateproduct.settlementMethod}
+                                defaultValue={updateproductsingle.settlementMethod}
                             />
                         </Grid>
                         <Grid item xs={6}>
-                            <ControllableStates />
+                            {/* eslint-disable-next-line react/jsx-no-bind */}
+                            <ControllableStates workName={workName} updateFid={updateFid} updateproductsingle={updateproductsingle} />
                         </Grid>
                     </Grid>
                 </DialogContent>
@@ -189,5 +201,7 @@ UpdateProductModel.propTypes = {
     // onClose: PropTypes.func.isRequired,
     updateOpen: PropTypes.bool.isRequired,
     updateProduct: PropTypes.func.isRequired,
-    updateproduct: PropTypes.object.isRequired
+    updateproductsingle: PropTypes.object.isRequired,
+    workName: PropTypes.array,
+    workflows: PropTypes.array
 };

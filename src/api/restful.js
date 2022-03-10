@@ -281,4 +281,9 @@ export class ConductorApi {
     };
 
     setWorkFlow = async (workflow) => axios.post(`${conductorBase}/metadata/workflow`, JSON.parse(workflow));
+
+    // eslint-disable-next-line class-methods-use-this
+    async getMetaDataWorkFlow(name) {
+        return axios.get(`${conductorBase}/metadata/workflow/${name}`);
+    }
 }

@@ -1,7 +1,9 @@
 import { Handle } from 'react-flow-renderer';
 import CardBlack from './card/CardBlack';
+import PropTypes from 'prop-types';
 
-export default function BlackSelector() {
+// eslint-disable-next-line react/prop-types
+export default function BlackSelector({ data }) {
     // const [user,setUser]=useState('');
     // function inputChange(e){
     //     props(e.target.value);
@@ -15,8 +17,13 @@ export default function BlackSelector() {
                 style={{ background: '#555' }}
                 // onConnect={(params) => console.log('handle onConnect', params)}
             />
-            <CardBlack />
+            {/* eslint-disable-next-line react/prop-types */}
+            <CardBlack setBid={data.updateBid} initName={data.blackName} />
             <Handle type="source" position="bottom" style={{ background: '#555' }} />
         </>
     );
 }
+
+BlackSelector.protoTypes = {
+    data: PropTypes.func
+};
