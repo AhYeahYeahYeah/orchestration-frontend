@@ -80,18 +80,18 @@ const initialElements = [
 // // eslint-disable-next-line no-plusplus
 // const getId = () => `dndnode_${id++}`;
 
-let NoId = 0;
-// eslint-disable-next-line no-plusplus
-const getNoId = () => `No_${NoId++}`;
-let YesId = 0;
-// eslint-disable-next-line no-plusplus
-const getYesId = () => `Yes_${YesId++}`;
-let SwitchId = 0;
-// eslint-disable-next-line no-plusplus
-const getSwitchId = () => `Switch_${SwitchId++}`;
-let LogId = 0;
-// eslint-disable-next-line no-plusplus
-const getLogId = () => `Log_${LogId++}`;
+// let NoId = 0;
+// // eslint-disable-next-line no-plusplus
+// const getNoId = () => `No_${NoId++}`;
+// let YesId = 0;
+// // eslint-disable-next-line no-plusplus
+// const getYesId = () => `Yes_${YesId++}`;
+// let SwitchId = 0;
+// // eslint-disable-next-line no-plusplus
+// const getSwitchId = () => `Switch_${SwitchId++}`;
+// let LogId = 0;
+// // eslint-disable-next-line no-plusplus
+// const getLogId = () => `Log_${LogId++}`;
 const Orchestration = () => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const theme = useTheme();
@@ -119,6 +119,9 @@ const Orchestration = () => {
     const [white, setWhite] = useState('');
     const [black, setBlack] = useState('');
     const [group, setGroup] = useState('');
+    function genID() {
+        return Number(Math.random().toString().substr(3, 6) + Date.now()).toString(36);
+    }
     const handleOpen = () => {
         setOpen(true);
     };
@@ -206,28 +209,28 @@ const Orchestration = () => {
                         // eslint-disable-next-line no-plusplus
                         for (let j = 0; j < flow.length; j++) {
                             if (flow[j].type === 'White') {
+                                flow[j].data.updateWid = updateWid;
                                 // eslint-disable-next-line no-plusplus
                                 for (let k = 0; k < white.length; k++) {
                                     if (flow[j].data.whiteName === white[k].wid) {
                                         flow[j].data.whiteName = white[k].name;
-                                        flow[j].data.updateWid = updateWid;
                                     }
                                 }
                             } else if (flow[j].type === 'Black') {
+                                flow[j].data.updateBid = updateBid;
                                 // eslint-disable-next-line no-plusplus
                                 for (let k = 0; k < black.length; k++) {
                                     if (flow[j].data.blackName === black[k].bid) {
                                         flow[j].data.blackName = black[k].name;
-                                        flow[j].data.updateBid = updateBid;
                                     }
                                 }
                             } else if (flow[j].type === 'Tag') {
+                                flow[j].data.updateGid = updateGid;
                                 // eslint-disable-next-line no-plusplus
                                 for (let k = 0; k < group.length; k++) {
                                     if (flow[j].data.groupName === group[k].gid) {
                                         console.log(1);
                                         flow[j].data.groupName = group[k].name;
-                                        flow[j].data.updateGid = updateGid;
                                     }
                                 }
                             } else if (flow[j].type === 'Region') {
@@ -263,7 +266,7 @@ const Orchestration = () => {
         switch (type) {
             case 'No':
                 newNode = {
-                    id: getNoId(),
+                    id: `${genID()}`,
                     type,
                     position,
                     data: { label: ` ${type} node ` },
@@ -274,7 +277,7 @@ const Orchestration = () => {
 
             case 'Yes':
                 newNode = {
-                    id: getYesId(),
+                    id: `${genID()}`,
                     type,
                     position,
                     data: { label: ` ${type} node ` },
@@ -285,7 +288,7 @@ const Orchestration = () => {
 
             case 'SwitchCard':
                 newNode = {
-                    id: getSwitchId(),
+                    id: `${genID()}`,
                     type,
                     position,
                     data: { label: ` ${type} node ` },
@@ -296,7 +299,7 @@ const Orchestration = () => {
 
             case 'Black':
                 newNode = {
-                    id: `${type}`,
+                    id: `${genID()}`,
                     type,
                     position,
                     data: { updateBid, blackName: '' },
@@ -307,7 +310,7 @@ const Orchestration = () => {
 
             case 'White':
                 newNode = {
-                    id: `${type}`,
+                    id: `${genID()}`,
                     type,
                     position,
                     data: { updateWid, whiteName: '' },
@@ -318,7 +321,7 @@ const Orchestration = () => {
 
             case 'Credential':
                 newNode = {
-                    id: `${type}`,
+                    id: `${genID()}`,
                     type,
                     position,
                     data: { label: ` ${type} node ` },
@@ -329,7 +332,7 @@ const Orchestration = () => {
 
             case 'InterestRate':
                 newNode = {
-                    id: `${type}`,
+                    id: `${genID()}`,
                     type,
                     position,
                     data: { label: ` ${type} node ` },
@@ -340,7 +343,7 @@ const Orchestration = () => {
 
             case 'Lock':
                 newNode = {
-                    id: `${type}`,
+                    id: `${genID()}`,
                     type,
                     position,
                     data: { label: ` ${type} node ` },
@@ -351,7 +354,7 @@ const Orchestration = () => {
 
             case 'Log':
                 newNode = {
-                    id: getLogId(),
+                    id: `${genID()}`,
                     type,
                     position,
                     data: { label: ` ${type} node ` },
@@ -362,7 +365,7 @@ const Orchestration = () => {
 
             case 'Profile':
                 newNode = {
-                    id: `${type}`,
+                    id: `${genID()}`,
                     type,
                     position,
                     data: { label: ` ${type} node ` },
@@ -373,7 +376,7 @@ const Orchestration = () => {
 
             case 'Region':
                 newNode = {
-                    id: `${type}`,
+                    id: `${genID()}`,
                     type,
                     position,
                     data: { updateRegions, regions: [] },
@@ -384,7 +387,7 @@ const Orchestration = () => {
 
             case 'Tag':
                 newNode = {
-                    id: `${type}`,
+                    id: `${genID()}`,
                     type,
                     position,
                     data: { updateGid, groupName: '' },
@@ -395,7 +398,7 @@ const Orchestration = () => {
 
             case 'Unlock':
                 newNode = {
-                    id: `${type}`,
+                    id: `${genID()}`,
                     type,
                     position,
                     data: { label: ` ${type} node ` },
@@ -406,7 +409,7 @@ const Orchestration = () => {
 
             case 'Update':
                 newNode = {
-                    id: `${type}`,
+                    id: `${genID()}`,
                     type,
                     position,
                     data: { label: ` ${type} node ` },
@@ -417,7 +420,7 @@ const Orchestration = () => {
 
             case 'output':
                 newNode = {
-                    id: `${type}`,
+                    id: `${genID()}`,
                     type,
                     position,
                     data: { label: ` ${type} node ` },
@@ -427,7 +430,7 @@ const Orchestration = () => {
                 break;
             case 'input':
                 newNode = {
-                    id: `${type}`,
+                    id: `${genID()}`,
                     type,
                     position,
                     data: { label: ` ${type} node ` },
@@ -578,8 +581,8 @@ const Orchestration = () => {
                                                     // eslint-disable-next-line camelcase
                                                     task_node_child = data[1].addHttpCase(`${cs}`, blacklist, 'POST');
                                                     task_node_child
-                                                        .setName(`${case_next[0].id}_Node`)
-                                                        .setTaskReferenceName(`${case_next[0].id}_Node`)
+                                                        .setName(`Black_${case_next[0].id}_Node`)
+                                                        .setTaskReferenceName(`Black_${case_next[0].id}_Node`)
                                                         .setBody({
                                                             // eslint-disable-next-line no-template-curly-in-string
                                                             bid: '${workflow.input.bid}',
@@ -592,8 +595,8 @@ const Orchestration = () => {
                                                     // eslint-disable-next-line camelcase
                                                     task_node_child = data[1].addHttpCase(`${cs}`, whitelist, 'POST');
                                                     task_node_child
-                                                        .setName(`${case_next[0].id}_Node`)
-                                                        .setTaskReferenceName(`${case_next[0].id}_Node`)
+                                                        .setName(`White_${case_next[0].id}_Node`)
+                                                        .setTaskReferenceName(`White_${case_next[0].id}_Node`)
                                                         .setBody({
                                                             // eslint-disable-next-line no-template-curly-in-string
                                                             wid: '${workflow.input.wid}',
@@ -606,8 +609,8 @@ const Orchestration = () => {
                                                     // eslint-disable-next-line camelcase
                                                     task_node_child = data[1].addHttpCase(`${cs}`, credential, 'POST');
                                                     task_node_child
-                                                        .setName(`${case_next[0].id}_Node`)
-                                                        .setTaskReferenceName(`${case_next[0].id}_Node`)
+                                                        .setName(`Credential_${case_next[0].id}_Node`)
+                                                        .setTaskReferenceName(`Credential_${case_next[0].id}_Node`)
                                                         .setBody({
                                                             // eslint-disable-next-line no-template-curly-in-string
                                                             cid: '${workflow.input.cid}'
@@ -618,8 +621,8 @@ const Orchestration = () => {
                                                     // eslint-disable-next-line camelcase
                                                     task_node_child = data[1].addHttpCase(`${cs}`, interestRate, 'POST');
                                                     task_node_child
-                                                        .setName(`${case_next[0].id}_Node`)
-                                                        .setTaskReferenceName(`${case_next[0].id}_Node`)
+                                                        .setName(`InterestRate_${case_next[0].id}_Node`)
+                                                        .setTaskReferenceName(`InterestRate_${case_next[0].id}_Node`)
                                                         .setBody({
                                                             // eslint-disable-next-line no-template-curly-in-string
                                                             oid: '${workflow.input.oid}'
@@ -630,8 +633,8 @@ const Orchestration = () => {
                                                     // eslint-disable-next-line camelcase
                                                     task_node_child = data[1].addHttpCase(`${cs}`, lock, 'POST');
                                                     task_node_child
-                                                        .setName(`${case_next[0].id}_Node`)
-                                                        .setTaskReferenceName(`${case_next[0].id}_Node`)
+                                                        .setName(`Lock_${case_next[0].id}_Node`)
+                                                        .setTaskReferenceName(`Lock_${case_next[0].id}_Node`)
                                                         .setBody({
                                                             // eslint-disable-next-line no-template-curly-in-string
                                                             oid: '${workflow.input.oid}',
@@ -644,8 +647,8 @@ const Orchestration = () => {
                                                     // eslint-disable-next-line camelcase
                                                     task_node_child = data[1].addHttpCase(`${cs}`, log, 'POST');
                                                     task_node_child
-                                                        .setName(`${case_next[0].id}_Node`)
-                                                        .setTaskReferenceName(`${case_next[0].id}_Node`)
+                                                        .setName(`Log_${case_next[0].id}_Node`)
+                                                        .setTaskReferenceName(`Log_${case_next[0].id}_Node`)
                                                         .setBody({
                                                             // eslint-disable-next-line no-template-curly-in-string
                                                             oid: '${workflow.input.oid}',
@@ -657,8 +660,8 @@ const Orchestration = () => {
                                                     // eslint-disable-next-line camelcase
                                                     task_node_child = data[1].addHttpCase(`${cs}`, profile, 'POST');
                                                     task_node_child
-                                                        .setName(`${case_next[0].id}_Node`)
-                                                        .setTaskReferenceName(`${case_next[0].id}_Node`)
+                                                        .setName(`Profile_${case_next[0].id}_Node`)
+                                                        .setTaskReferenceName(`Profile_${case_next[0].id}_Node`)
                                                         .setBody({
                                                             // eslint-disable-next-line no-template-curly-in-string
                                                             cid: '${workflow.input.cid}',
@@ -673,8 +676,8 @@ const Orchestration = () => {
                                                     // eslint-disable-next-line camelcase
                                                     task_node_child = data[1].addHttpCase(`${cs}`, region, 'POST');
                                                     task_node_child
-                                                        .setName(`${case_next[0].id}_Node`)
-                                                        .setTaskReferenceName(`${case_next[0].id}_Node`)
+                                                        .setName(`Region_${case_next[0].id}_Node`)
+                                                        .setTaskReferenceName(`Region_${case_next[0].id}_Node`)
                                                         .setBody({
                                                             // eslint-disable-next-line no-template-curly-in-string
                                                             cid: '${workflow.input.cid}',
@@ -687,8 +690,8 @@ const Orchestration = () => {
                                                     // eslint-disable-next-line camelcase
                                                     task_node_child = data[1].addHttpCase(`${cs}`, tag, 'POST');
                                                     task_node_child
-                                                        .setName(`${case_next[0].id}_Node`)
-                                                        .setTaskReferenceName(`${case_next[0].id}_Node`)
+                                                        .setName(`Tag_${case_next[0].id}_Node`)
+                                                        .setTaskReferenceName(`Tag_${case_next[0].id}_Node`)
                                                         .setBody({
                                                             // eslint-disable-next-line no-template-curly-in-string
                                                             cid: '${workflow.input.cid}',
@@ -701,8 +704,8 @@ const Orchestration = () => {
                                                     // eslint-disable-next-line camelcase
                                                     task_node_child = data[1].addHttpCase(`${cs}`, unlock, 'POST');
                                                     task_node_child
-                                                        .setName(`${case_next[0].id}_Node`)
-                                                        .setTaskReferenceName(`${case_next[0].id}_Node`)
+                                                        .setName(`Unlock_${case_next[0].id}_Node`)
+                                                        .setTaskReferenceName(`Unlock_${case_next[0].id}_Node`)
                                                         .setBody({
                                                             // eslint-disable-next-line no-template-curly-in-string
                                                             pid: '${workflow.input.pid}',
@@ -715,8 +718,8 @@ const Orchestration = () => {
                                                     // eslint-disable-next-line camelcase
                                                     task_node_child = data[1].addHttpCase(`${cs}`, update, 'POST');
                                                     task_node_child
-                                                        .setName(`${case_next[0].id}_Node`)
-                                                        .setTaskReferenceName(`${case_next[0].id}_Node`)
+                                                        .setName(`Update_${case_next[0].id}_Node`)
+                                                        .setTaskReferenceName(`Update_${case_next[0].id}_Node`)
                                                         .setBody({
                                                             // eslint-disable-next-line no-template-curly-in-string
                                                             pid: '${workflow.input.pid}',
@@ -749,7 +752,7 @@ const Orchestration = () => {
                                             // eslint-disable-next-line camelcase
                                             task_node_child = data[1].setNextHttpNode(blacklist, 'POST');
                                             task_node_child
-                                                .setName(`${next_nodes[m].id}_Node`)
+                                                .setName(`Black_${next_nodes[m].id}_Node`)
                                                 .setTaskReferenceName(`${next_nodes[m].id}_Node`)
                                                 .setBody({
                                                     // eslint-disable-next-line no-template-curly-in-string
@@ -763,8 +766,8 @@ const Orchestration = () => {
                                             // eslint-disable-next-line camelcase
                                             task_node_child = data[1].setNextHttpNode(whitelist, 'POST');
                                             task_node_child
-                                                .setName(`${next_nodes[m].id}_Node`)
-                                                .setTaskReferenceName(`${next_nodes[m].id}_Node`)
+                                                .setName(`White_${next_nodes[m].id}_Node`)
+                                                .setTaskReferenceName(`White_${next_nodes[m].id}_Node`)
                                                 .setBody({
                                                     // eslint-disable-next-line no-template-curly-in-string
                                                     wid: '${workflow.input.wid}',
@@ -777,8 +780,8 @@ const Orchestration = () => {
                                             // eslint-disable-next-line camelcase
                                             task_node_child = data[1].setNextHttpNode(credential, 'POST');
                                             task_node_child
-                                                .setName(`${next_nodes[m].id}_Node`)
-                                                .setTaskReferenceName(`${next_nodes[m].id}_Node`)
+                                                .setName(`Credential_${next_nodes[m].id}_Node`)
+                                                .setTaskReferenceName(`Credential_${next_nodes[m].id}_Node`)
                                                 .setBody({
                                                     // eslint-disable-next-line no-template-curly-in-string
                                                     cid: '${workflow.input.cid}'
@@ -789,8 +792,8 @@ const Orchestration = () => {
                                             // eslint-disable-next-line camelcase
                                             task_node_child = data[1].setNextHttpNode(interestRate, 'POST');
                                             task_node_child
-                                                .setName(`${next_nodes[m].id}_Node`)
-                                                .setTaskReferenceName(`${next_nodes[m].id}_Node`)
+                                                .setName(`InterestRate_${next_nodes[m].id}_Node`)
+                                                .setTaskReferenceName(`InterestRate_${next_nodes[m].id}_Node`)
                                                 .setBody({
                                                     // eslint-disable-next-line no-template-curly-in-string
                                                     oid: '${workflow.input.oid}'
@@ -801,8 +804,8 @@ const Orchestration = () => {
                                             // eslint-disable-next-line camelcase
                                             task_node_child = data[1].setNextHttpNode(lock, 'POST');
                                             task_node_child
-                                                .setName(`${next_nodes[m].id}_Node`)
-                                                .setTaskReferenceName(`${next_nodes[m].id}_Node`)
+                                                .setName(`Lock_${next_nodes[m].id}_Node`)
+                                                .setTaskReferenceName(`Lock_${next_nodes[m].id}_Node`)
                                                 .setBody({
                                                     // eslint-disable-next-line no-template-curly-in-string
                                                     oid: '${workflow.input.oid}',
@@ -815,8 +818,8 @@ const Orchestration = () => {
                                             // eslint-disable-next-line camelcase
                                             task_node_child = data[1].setNextHttpNode(log, 'POST');
                                             task_node_child
-                                                .setName(`${next_nodes[m].id}_Node`)
-                                                .setTaskReferenceName(`${next_nodes[m].id}_Node`)
+                                                .setName(`Log_${next_nodes[m].id}_Node`)
+                                                .setTaskReferenceName(`Log_${next_nodes[m].id}_Node`)
                                                 .setBody({
                                                     // eslint-disable-next-line no-template-curly-in-string
                                                     oid: '${workflow.input.oid}',
@@ -828,8 +831,8 @@ const Orchestration = () => {
                                             // eslint-disable-next-line camelcase
                                             task_node_child = data[1].setNextHttpNode(profile, 'POST');
                                             task_node_child
-                                                .setName(`${next_nodes[m].id}_Node`)
-                                                .setTaskReferenceName(`${next_nodes[m].id}_Node`)
+                                                .setName(`Profile_${next_nodes[m].id}_Node`)
+                                                .setTaskReferenceName(`Profile_${next_nodes[m].id}_Node`)
                                                 .setBody({
                                                     // eslint-disable-next-line no-template-curly-in-string
                                                     cid: '${workflow.input.cid}',
@@ -844,8 +847,8 @@ const Orchestration = () => {
                                             // eslint-disable-next-line camelcase
                                             task_node_child = data[1].setNextHttpNode(region, 'POST');
                                             task_node_child
-                                                .setName(`${next_nodes[m].id}_Node`)
-                                                .setTaskReferenceName(`${next_nodes[m].id}_Node`)
+                                                .setName(`Region_${next_nodes[m].id}_Node`)
+                                                .setTaskReferenceName(`Region_${next_nodes[m].id}_Node`)
                                                 .setBody({
                                                     // eslint-disable-next-line no-template-curly-in-string
                                                     cid: '${workflow.input.cid}',
@@ -858,8 +861,8 @@ const Orchestration = () => {
                                             // eslint-disable-next-line camelcase
                                             task_node_child = data[1].setNextHttpNode(tag, 'POST');
                                             task_node_child
-                                                .setName(`${next_nodes[m].id}_Node`)
-                                                .setTaskReferenceName(`${next_nodes[m].id}_Node`)
+                                                .setName(`Tag_${next_nodes[m].id}_Node`)
+                                                .setTaskReferenceName(`Tag_${next_nodes[m].id}_Node`)
                                                 .setBody({
                                                     // eslint-disable-next-line no-template-curly-in-string
                                                     cid: '${workflow.input.cid}',
@@ -872,8 +875,8 @@ const Orchestration = () => {
                                             // eslint-disable-next-line camelcase
                                             task_node_child = data[1].setNextHttpNode(unlock, 'POST');
                                             task_node_child
-                                                .setName(`${next_nodes[m].id}_Node`)
-                                                .setTaskReferenceName(`${next_nodes[m].id}_Node`)
+                                                .setName(`Unlock_${next_nodes[m].id}_Node`)
+                                                .setTaskReferenceName(`Unlock_${next_nodes[m].id}_Node`)
                                                 .setBody({
                                                     // eslint-disable-next-line no-template-curly-in-string
                                                     pid: '${workflow.input.pid}',
@@ -886,8 +889,8 @@ const Orchestration = () => {
                                             // eslint-disable-next-line camelcase
                                             task_node_child = data[1].setNextHttpNode(update, 'POST');
                                             task_node_child
-                                                .setName(`${next_nodes[m].id}_Node`)
-                                                .setTaskReferenceName(`${next_nodes[m].id}_Node`)
+                                                .setName(`Update_${next_nodes[m].id}_Node`)
+                                                .setTaskReferenceName(`Update_${next_nodes[m].id}_Node`)
                                                 .setBody({
                                                     // eslint-disable-next-line no-template-curly-in-string
                                                     pid: '${workflow.input.pid}',
@@ -950,6 +953,8 @@ const Orchestration = () => {
                             console.log(queue);
                         });
                     });
+                    setElements(initialElements);
+                    setWorkInstance([]);
                 } else {
                     entityApi.updateWorkFlow(workflowSave).then((res) => {
                         console.log(res);
@@ -966,8 +971,6 @@ const Orchestration = () => {
                         });
                     });
                 }
-                setElements(initialElements);
-                setWorkInstance([]);
                 // const conductor = new ConductorApi();
                 // conductor.setWorkFlow(workflow).then((r) => console.log(r));
             }
