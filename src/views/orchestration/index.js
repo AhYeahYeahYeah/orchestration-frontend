@@ -925,6 +925,8 @@ const Orchestration = () => {
                         });
                     });
                 }
+                setElements(initialElements);
+                setWorkInstance([]);
                 // const conductor = new ConductorApi();
                 // conductor.setWorkFlow(workflow).then((r) => console.log(r));
             }
