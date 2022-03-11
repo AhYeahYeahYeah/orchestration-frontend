@@ -1,6 +1,17 @@
 import { useTheme } from '@mui/material/styles';
 import { Box, Grid } from '@mui/material';
-import { Reply } from '@mui/icons-material';
+import {
+    Calculate,
+    CheckCircle,
+    DoNotDisturbOn,
+    FactCheck,
+    Lock,
+    LockOpen,
+    RateReview,
+    Reply,
+    SwitchCamera,
+    Warehouse
+} from '@mui/icons-material';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import ControllableStates from './ControllableStates';
 import PropTypes from 'prop-types';
@@ -55,16 +66,25 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                     </Grid>
                     <Grid item xs={12} sx={{ marginLeft: 2, marginRight: 2, marginTop: 1.5 }}>
                         <div className="react-flow__node-default" onDragStart={(event) => onDragStart(event, 'SwitchCard')} draggable>
+                            <Box sx={{ position: 'absolute', left: '15%' }}>
+                                <SwitchCamera />
+                            </Box>
                             分支
                         </div>
                     </Grid>
                     <Grid item xs={12} sx={{ marginLeft: 2, marginRight: 2, marginTop: 1.5 }}>
                         <div className="react-flow__node-default" onDragStart={(event) => onDragStart(event, 'Yes')} draggable>
+                            <Box sx={{ position: 'absolute', left: '15%' }}>
+                                <CheckCircle />
+                            </Box>
                             Case--是
                         </div>
                     </Grid>
                     <Grid item xs={12} sx={{ marginLeft: 2, marginRight: 2, marginTop: 1.5 }}>
                         <div className="react-flow__node-default" onDragStart={(event) => onDragStart(event, 'No')} draggable>
+                            <Box sx={{ position: 'absolute', left: '15%' }}>
+                                <DoNotDisturbOn />
+                            </Box>
                             Case--否
                         </div>
                     </Grid>
@@ -76,6 +96,9 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                             onDragStart={(event) => onDragStart(event, 'Lock')}
                             draggable
                         >
+                            <Box sx={{ position: 'absolute', left: '15%' }}>
+                                <Lock />
+                            </Box>
                             库存锁定
                         </div>
                     </Grid>
@@ -87,6 +110,9 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                             onDragStart={(event) => onDragStart(event, 'Update')}
                             draggable
                         >
+                            <Box sx={{ position: 'absolute', left: '15%' }}>
+                                <Warehouse />
+                            </Box>
                             库存更新
                         </div>
                     </Grid>
@@ -98,6 +124,9 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                             onDragStart={(event) => onDragStart(event, 'Unlock')}
                             draggable
                         >
+                            <Box sx={{ position: 'absolute', left: '15%' }}>
+                                <LockOpen />
+                            </Box>
                             库存解锁
                         </div>
                     </Grid>
@@ -109,6 +138,9 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                             onDragStart={(event) => onDragStart(event, 'Credential')}
                             draggable
                         >
+                            <Box sx={{ position: 'absolute', left: '15%' }}>
+                                <FactCheck />
+                            </Box>
                             证件审查
                         </div>
                     </Grid>
@@ -120,6 +152,9 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                             onDragStart={(event) => onDragStart(event, 'Profile')}
                             draggable
                         >
+                            <Box sx={{ position: 'absolute', left: '15%' }}>
+                                <FactCheck />
+                            </Box>
                             用户信息校验
                         </div>
                     </Grid>
@@ -131,6 +166,9 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                             onDragStart={(event) => onDragStart(event, 'White')}
                             draggable
                         >
+                            <Box sx={{ position: 'absolute', left: '15%' }}>
+                                <FactCheck />
+                            </Box>
                             白名单控制
                         </div>
                     </Grid>
@@ -142,6 +180,9 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                             onDragStart={(event) => onDragStart(event, 'Black')}
                             draggable
                         >
+                            <Box sx={{ position: 'absolute', left: '15%' }}>
+                                <FactCheck />
+                            </Box>
                             黑名单控制
                         </div>
                     </Grid>
@@ -153,6 +194,9 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                             onDragStart={(event) => onDragStart(event, 'Region')}
                             draggable
                         >
+                            <Box sx={{ position: 'absolute', left: '15%' }}>
+                                <FactCheck />
+                            </Box>
                             地域控制
                         </div>
                     </Grid>
@@ -164,6 +208,9 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                             onDragStart={(event) => onDragStart(event, 'Tag')}
                             draggable
                         >
+                            <Box sx={{ position: 'absolute', left: '15%' }}>
+                                <FactCheck />
+                            </Box>
                             用户标签
                         </div>
                     </Grid>
@@ -175,6 +222,9 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                             onDragStart={(event) => onDragStart(event, 'Log')}
                             draggable
                         >
+                            <Box sx={{ position: 'absolute', left: '15%' }}>
+                                <RateReview />
+                            </Box>
                             日志录入
                         </div>
                     </Grid>
@@ -186,6 +236,9 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                             onDragStart={(event) => onDragStart(event, 'InterestRate')}
                             draggable
                         >
+                            <Box sx={{ position: 'absolute', left: '15%' }}>
+                                <Calculate />
+                            </Box>
                             利息计算
                         </div>
                     </Grid>

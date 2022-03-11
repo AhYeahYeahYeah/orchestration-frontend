@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback, useEffect, forwardRef } from 'react';
 import ReactFlow, {
     ReactFlowProvider,
     addEdge,
@@ -16,9 +16,8 @@ import Sidebar from './Sidebar';
 
 import './dnd.css';
 import { useTheme } from '@mui/material/styles';
-import { Alert, Fab, Grid, Snackbar } from '@mui/material';
+import { Alert, Chip, Dialog, Fab, Grid, Slide, Snackbar } from '@mui/material';
 import { InputNode, WorkflowBuilder } from '../../utils/workflowBuilder';
-// eslint-disable-next-line no-unused-vars,import/named
 import {
     log,
     blacklist,
@@ -48,8 +47,9 @@ import UpdateSelector from '../../ui-component/services/UpdateSelector';
 import WhiteSelector from '../../ui-component/services/WhiteSelector';
 import LogSelector from '../../ui-component/services/LogSelector';
 import SwitchSelector from '../../ui-component/caseCard/SwitchSelector';
-import { Check } from '@mui/icons-material';
+import { Check, CloseOutlined, FullscreenExitOutlined } from '@mui/icons-material';
 import AddModel from './AddModel';
+import { GridActionsCellItem } from '@mui/x-data-grid';
 
 const nodeTypes = {
     No: NoSelector,
@@ -79,7 +79,7 @@ const initialElements = [
 // let id = 0;
 // // eslint-disable-next-line no-plusplus
 // const getId = () => `dndnode_${id++}`;
-
+const Transition = forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 // let NoId = 0;
 // // eslint-disable-next-line no-plusplus
 // const getNoId = () => `No_${NoId++}`;
@@ -91,12 +91,15 @@ const initialElements = [
 // const getSwitchId = () => `Switch_${SwitchId++}`;
 // let LogId = 0;
 // // eslint-disable-next-line no-plusplus
+
 // const getLogId = () => `Log_${LogId++}`;
 const Orchestration = () => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const theme = useTheme();
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const reactFlowWrapper = useRef(null);
+    const reactFlowWrapperOpen = useRef(null);
+    const [openFull, setOpenFull] = useState(false);
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -255,8 +258,12 @@ const Orchestration = () => {
 
     const onDrop = (event) => {
         event.preventDefault();
-
-        const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
+        let reactFlowBounds;
+        if (openFull) {
+            reactFlowBounds = reactFlowWrapperOpen.current.getBoundingClientRect();
+        } else {
+            reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
+        }
         const type = event.dataTransfer.getData('application/reactflow');
         const position = reactFlowInstance.project({
             x: event.clientX - reactFlowBounds.left,
@@ -1023,53 +1030,127 @@ const Orchestration = () => {
                 setSnackbarOpen(true);
             });
     }, []);
+
+    const handleClickOpenFull = () => {
+        setOpenFull(true);
+    };
+
+    const handleFullClose = () => {
+        setOpenFull(false);
+    };
     return (
-        <Grid sx={{ position: 'relative', height: '100%', background: theme.palette.background.default }}>
-            <div className="dndflow">
-                <ReactFlowProvider>
-                    <div className="reactflow-wrapper" ref={reactFlowWrapper}>
-                        <ReactFlow
-                            elements={elements}
-                            snapToGrid
-                            onEdgeUpdate={onEdgeUpdate}
-                            defaultZoom={1.35}
-                            onElementsRemove={onElementsRemove}
-                            onConnect={onConnect}
-                            onLoad={onLoad}
-                            onDrop={onDrop}
-                            onDragOver={onDragOver}
-                            nodeTypes={nodeTypes}
-                        >
-                            <MiniMap />
-                            <Controls />
-                            <Background />
-                        </ReactFlow>
+        <>
+            <Dialog fullScreen open={openFull} onClose={handleFullClose} TransitionComponent={Transition}>
+                <GridActionsCellItem
+                    sx={{ position: 'fixed', left: '0.5%', top: '0.5%', zIndex: 999 }}
+                    icon={<CloseOutlined />}
+                    onClick={handleFullClose}
+                />
+                <Grid sx={{ position: 'relative', height: '100%', background: theme.palette.background.default }}>
+                    <div className="dndflow">
+                        <ReactFlowProvider>
+                            <div className="reactflow-wrapper" ref={reactFlowWrapperOpen}>
+                                <ReactFlow
+                                    elements={elements}
+                                    snapToGrid
+                                    onEdgeUpdate={onEdgeUpdate}
+                                    defaultZoom={1.35}
+                                    onElementsRemove={onElementsRemove}
+                                    onConnect={onConnect}
+                                    onLoad={onLoad}
+                                    onDrop={onDrop}
+                                    onDragOver={onDragOver}
+                                    nodeTypes={nodeTypes}
+                                >
+                                    <MiniMap />
+                                    <Controls />
+                                    <Background />
+                                </ReactFlow>
+                            </div>
+                            <Sidebar
+                                onRestore={onRestore}
+                                /* eslint-disable-next-line react/jsx-no-bind */
+                                updateFlowinstance={updateFlowinstance}
+                                workOptions={workOptions}
+                                serviceInfo={serviceInfo}
+                            />
+                            <Fab color="primary" aria-label="add" sx={{ display: 'flex', position: 'fixed', left: '94%', top: '90%' }}>
+                                {/* eslint-disable-next-line react/destructuring-assignment */}
+                                <Check onClick={handleOpen} />
+                            </Fab>
+                            <AddModel open={open} handleClose={handleClose} workInstance={workInstance} onSave={onSave} />
+                        </ReactFlowProvider>
                     </div>
-                    <Sidebar
-                        onRestore={onRestore}
-                        /* eslint-disable-next-line react/jsx-no-bind */
-                        updateFlowinstance={updateFlowinstance}
-                        workOptions={workOptions}
-                        serviceInfo={serviceInfo}
-                    />
-                    <Fab color="primary" aria-label="add" sx={{ display: 'flex', position: 'fixed', left: '94%', top: '90%' }}>
-                        {/* eslint-disable-next-line react/destructuring-assignment */}
-                        <Check onClick={handleOpen} />
-                    </Fab>
-                    <AddModel open={open} handleClose={handleClose} workInstance={workInstance} onSave={onSave} />
-                </ReactFlowProvider>
-            </div>
-            <Snackbar
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-                open={snackbarOpen}
-                autoHideDuration={6000}
-                onClose={handleSnackbarClose}
-            >
-                <Alert severity="warning" open={snackbarOpen} onClose={handleSnackbarClose}>
-                    {snackbarMsg}
-                </Alert>
-            </Snackbar>
-        </Grid>
+                    <Snackbar
+                        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                        open={snackbarOpen}
+                        autoHideDuration={6000}
+                        onClose={handleSnackbarClose}
+                    >
+                        <Alert severity="warning" open={snackbarOpen} onClose={handleSnackbarClose}>
+                            {snackbarMsg}
+                        </Alert>
+                    </Snackbar>
+                </Grid>
+            </Dialog>
+            {openFull === true ? (
+                ''
+            ) : (
+                <Grid sx={{ position: 'relative', height: '100%', background: theme.palette.background.default }}>
+                    <div className="dndflow">
+                        <ReactFlowProvider>
+                            <div className="reactflow-wrapper" ref={reactFlowWrapper}>
+                                <ReactFlow
+                                    elements={elements}
+                                    snapToGrid
+                                    onEdgeUpdate={onEdgeUpdate}
+                                    defaultZoom={1.35}
+                                    onElementsRemove={onElementsRemove}
+                                    onConnect={onConnect}
+                                    onLoad={onLoad}
+                                    onDrop={onDrop}
+                                    onDragOver={onDragOver}
+                                    nodeTypes={nodeTypes}
+                                >
+                                    <MiniMap />
+                                    <Controls />
+                                    <Background />
+                                </ReactFlow>
+                            </div>
+                            <Sidebar
+                                onRestore={onRestore}
+                                /* eslint-disable-next-line react/jsx-no-bind */
+                                updateFlowinstance={updateFlowinstance}
+                                workOptions={workOptions}
+                                serviceInfo={serviceInfo}
+                            />
+                            <Fab color="primary" aria-label="add" sx={{ display: 'flex', position: 'fixed', left: '94%', top: '90%' }}>
+                                {/* eslint-disable-next-line react/destructuring-assignment */}
+                                <Check onClick={handleOpen} />
+                            </Fab>
+                            <AddModel open={open} handleClose={handleClose} workInstance={workInstance} onSave={onSave} />
+                        </ReactFlowProvider>
+                    </div>
+                    <Snackbar
+                        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                        open={snackbarOpen}
+                        autoHideDuration={6000}
+                        onClose={handleSnackbarClose}
+                    >
+                        <Alert severity="warning" open={snackbarOpen} onClose={handleSnackbarClose}>
+                            {snackbarMsg}
+                        </Alert>
+                    </Snackbar>
+                </Grid>
+            )}
+            <Chip
+                sx={{ position: 'fixed', left: '84%', top: '91.7%', zIndex: 999 }}
+                label="全屏"
+                onClick={handleClickOpenFull}
+                icon={<FullscreenExitOutlined />}
+                variant="outlined"
+            />
+        </>
     );
 };
 
