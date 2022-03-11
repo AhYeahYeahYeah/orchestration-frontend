@@ -8,6 +8,7 @@ import { Add, Edit } from '@mui/icons-material';
 import AddProductModel from './AddProductModel';
 import UpdateProductModel from './UpdateProductModel';
 import { EntityApi } from '../../api/restful';
+import { GridActionsCellItem } from '@mui/x-data-grid';
 
 const card = (updatehandleOpen, value) => (
     <>
@@ -19,7 +20,7 @@ const card = (updatehandleOpen, value) => (
                     </Typography>
                 </Grid>
                 <Grid item xs={2}>
-                    <Edit onClick={() => updatehandleOpen(value)} />
+                    <GridActionsCellItem icon={<Edit />} onClick={() => updatehandleOpen(value)} />
                     {/* <SimpleDialog open={open} handleClose={handleClose}/> */}
                 </Grid>
                 <Grid item xs={6}>
@@ -56,11 +57,17 @@ export default function Product() {
     const [snackbarMsg, setSnackbarMsg] = React.useState('');
     const [workflows, setWorkflows] = React.useState([]);
     const [workName, setWorkName] = React.useState([]);
+    const [perm, setPerm] = React.useState(false);
     const handleSnackbarClose = () => {
         setSnackbarOpen(false);
         setSnackbarMsg('');
     };
     const handleOpen = () => {
+        if (perm === false) {
+            setSnackbarMsg('您无权限查看！');
+            setSnackbarOpen(true);
+            return;
+        }
         setOpen(true);
     };
 
@@ -115,6 +122,7 @@ export default function Product() {
             .then((res) => {
                 if (res.status === 200) {
                     setProduct(res.data);
+                    setPerm(true);
                     entityApi.getWorkFlows().then((re) => {
                         if (re.status === 200) {
                             setWorkflows(re.data);
@@ -129,6 +137,7 @@ export default function Product() {
                 }
             })
             .catch(() => {
+                setPerm(false);
                 setSnackbarMsg('您无权限查看！');
                 setSnackbarOpen(true);
             });

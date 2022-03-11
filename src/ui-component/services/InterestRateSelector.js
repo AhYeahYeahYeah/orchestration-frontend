@@ -12,11 +12,11 @@ export default function InterestRateSelector() {
             <Handle
                 type="target"
                 position="top"
-                style={{ background: '#555' }}
+                style={{ background: '#555', width: 10, height: 10 }}
                 // onConnect={(params) => console.log('handle onConnect', params)}
             />
             <CardInterestRate />
-            <Handle type="source" position="bottom" style={{ background: '#555' }} />
+            <Handle type="source" position="bottom" style={{ background: '#555', width: 10, height: 10 }} />
         </>
     );
 }

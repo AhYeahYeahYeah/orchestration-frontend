@@ -34,12 +34,17 @@ export default function Whitelist() {
     const [open, setOpen] = React.useState(false);
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [snackbarMsg, setSnackbarMsg] = React.useState('');
-
+    const [perm, setPerm] = React.useState(false);
     const handleSnackbarClose = () => {
         setSnackbarOpen(false);
         setSnackbarMsg('');
     };
     const handleOpen = () => {
+        if (perm === false) {
+            setSnackbarMsg('您无权限查看！');
+            setSnackbarOpen(true);
+            return;
+        }
         setOpen(true);
     };
 
@@ -142,6 +147,7 @@ export default function Whitelist() {
             .then((res) => {
                 if (res.status === 200) {
                     // console.log(res.data);
+                    setPerm(true);
                     // eslint-disable-next-line no-plusplus
                     for (let i = 0; i < res.data.length; i++) {
                         res.data[i].id = res.data[i].wid;
@@ -153,6 +159,7 @@ export default function Whitelist() {
                 }
             })
             .catch(() => {
+                setPerm(false);
                 setSnackbarMsg('您无权限查看！');
                 setSnackbarOpen(true);
             });
@@ -188,7 +195,7 @@ export default function Whitelist() {
                     selectionModel={selectionModel}
                 />
             </div>
-            <Fab color="primary" aria-label="add" sx={{ display: 'flex', position: 'absolute', left: '92.5%', top: '88%' }}>
+            <Fab color="primary" aria-label="add" sx={{ display: 'flex', position: 'fixed', left: '93%', top: '90%' }}>
                 {/* eslint-disable-next-line react/jsx-no-bind */}
                 <Add onClick={() => handleOpen()} />
             </Fab>
@@ -209,7 +216,7 @@ export default function Whitelist() {
             />
             <Slide direction="up" in={selectionModel.length > 0} mountOnEnter unmountOnExit>
                 <Chip
-                    sx={{ position: 'fixed', marginTop: 5 }}
+                    sx={{ position: 'fixed', marginTop: 3.5, background: '#f44336' }}
                     label={`${selectionModel.length} row selected`}
                     /* eslint-disable-next-line react/jsx-no-bind  */
                     onDelete={deleteWhite}

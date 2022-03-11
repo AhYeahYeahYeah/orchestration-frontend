@@ -6,6 +6,7 @@ import ControllableStates from './ControllableStates';
 import PropTypes from 'prop-types';
 import ServiceInfoModel from './ServiceInfoModel';
 import { useState } from 'react';
+import { GridActionsCellItem } from '@mui/x-data-grid';
 
 export default function Sidebar({ onRestore, updateFlowinstance, workOptions, serviceInfo }) {
     const theme = useTheme();
@@ -31,7 +32,7 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                 <Grid container>
                     <Grid item xs={2}>
                         {/* eslint-disable-next-line react/destructuring-assignment */}
-                        <Reply onClick={onRestore} />
+                        <GridActionsCellItem icon={<Reply />} onClick={onRestore} />
                     </Grid>
                     <Grid item xs={8}>
                         <ControllableStates updateFlowinstance={updateFlowinstance} workOptions={workOptions} />

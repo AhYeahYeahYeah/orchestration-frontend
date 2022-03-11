@@ -14,12 +14,12 @@ export default function WhiteSelector({ data }) {
             <Handle
                 type="target"
                 position="top"
-                style={{ background: '#555' }}
+                style={{ background: '#555', width: 10, height: 10 }}
                 // onConnect={(params) => console.log('handle onConnect', params)}
             />
             {/* eslint-disable-next-line react/jsx-no-bind,react/prop-types */}
             <CardWhite setWid={data.updateWid} initName={data.whiteName} />
-            <Handle type="source" position="bottom" style={{ background: '#555' }} />
+            <Handle type="source" position="bottom" style={{ background: '#555', width: 10, height: 10 }} />
         </>
     );
 }

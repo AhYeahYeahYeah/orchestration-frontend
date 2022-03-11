@@ -8,7 +8,8 @@ import ReactFlow, {
     MiniMap,
     Background,
     getOutgoers,
-    getIncomers
+    getIncomers,
+    isEdge
 } from 'react-flow-renderer';
 
 import Sidebar from './Sidebar';
@@ -138,7 +139,38 @@ const Orchestration = () => {
     function updateRegions(value) {
         setRegions(value);
     }
-    const onConnect = (params) => setElements(() => addEdge({ ...params, animated: true }, elements));
+    const onConnect = (params) => {
+        const res = addEdge({ ...params, animated: true, style: { strokeWidth: 4 } }, elements);
+        let flag = 0;
+        const judge = (node) => {
+            if (node.type === 'output') {
+                flag = 1;
+            }
+            const child = getOutgoers(node, res);
+            if (child.length === 0) return;
+            // eslint-disable-next-line no-plusplus
+            for (let i = 0; i < child.length; i++) {
+                judge(child[i]);
+            }
+        };
+        judge(res[0]);
+        if (flag) {
+            // eslint-disable-next-line no-plusplus
+            for (let i = 0; i < res.length; i++) {
+                if (isEdge(res[i])) {
+                    res[i].animated = false;
+                }
+            }
+        } else {
+            // eslint-disable-next-line no-plusplus
+            for (let i = 0; i < res.length; i++) {
+                if (isEdge(res[i])) {
+                    res[i].animated = true;
+                }
+            }
+        }
+        setElements(res);
+    };
     // const onConnect = (params) => {
     //     setElements((elements) =>
     //         addEdge({ ...params, animated: true }, elements).map((ele) => {
@@ -393,7 +425,16 @@ const Orchestration = () => {
                     visited: 0
                 };
                 break;
-
+            case 'input':
+                newNode = {
+                    id: `${type}`,
+                    type,
+                    position,
+                    data: { label: ` ${type} node ` },
+                    flag: `${type}`,
+                    visited: 0
+                };
+                break;
             default:
                 console.log('Error');
                 break;
@@ -1008,7 +1049,7 @@ const Orchestration = () => {
                         workOptions={workOptions}
                         serviceInfo={serviceInfo}
                     />
-                    <Fab color="primary" aria-label="add" sx={{ display: 'flex', position: 'absolute', left: '92.5%', top: '86%' }}>
+                    <Fab color="primary" aria-label="add" sx={{ display: 'flex', position: 'fixed', left: '94%', top: '90%' }}>
                         {/* eslint-disable-next-line react/destructuring-assignment */}
                         <Check onClick={handleOpen} />
                     </Fab>

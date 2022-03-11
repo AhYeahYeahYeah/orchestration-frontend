@@ -67,6 +67,7 @@ export default function AdminManagement() {
             aid: id,
             permissions: `[${queue.toString()}]`
         };
+        console.log(admin);
         const entityApi = new EntityApi(localStorage.getItem('admin_token'));
         entityApi.updateAdmin(admin).then();
     }
@@ -129,7 +130,7 @@ export default function AdminManagement() {
             </div>
             <Slide direction="up" in={JSON.stringify(editRowsModel) !== '{}'} mountOnEnter unmountOnExit>
                 <Chip
-                    sx={{ position: 'fixed', marginTop: 3 }}
+                    sx={{ position: 'fixed', marginTop: 3, right: '3.7%', background: '#ffb74d' }}
                     label="确定更改"
                     /* eslint-disable-next-line react/jsx-no-bind  */
                     onClick={updateAdmin}
