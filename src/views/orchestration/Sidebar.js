@@ -3,6 +3,7 @@ import { Box, Grid } from '@mui/material';
 import {
     Calculate,
     CheckCircle,
+    Close,
     DoNotDisturbOn,
     FactCheck,
     Lock,
@@ -86,6 +87,14 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                                 <DoNotDisturbOn fontSize="small" sx={{ color: '#616161' }} />
                             </Box>
                             Case--否
+                        </div>
+                    </Grid>
+                    <Grid item xs={12} sx={{ marginLeft: 2, marginRight: 2, marginTop: 1.5 }}>
+                        <div className="react-flow__node-default" onDragStart={(event) => onDragStart(event, 'Terminate')} draggable>
+                            <Box sx={{ position: 'absolute', left: '15%' }}>
+                                <Close fontSize="small" sx={{ color: '#616161' }} />
+                            </Box>
+                            终 止
                         </div>
                     </Grid>
                     <Grid item xs={12} sx={{ marginLeft: 2, marginRight: 2, marginTop: 1.5 }}>

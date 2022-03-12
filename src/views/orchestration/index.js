@@ -50,6 +50,7 @@ import SwitchSelector from '../../ui-component/caseCard/SwitchSelector';
 import { Check, CloseOutlined, FullscreenExitOutlined } from '@mui/icons-material';
 import AddModel from './AddModel';
 import { GridActionsCellItem } from '@mui/x-data-grid';
+import TerminateSelector from '../../ui-component/services/TerminateSelector';
 
 const nodeTypes = {
     No: NoSelector,
@@ -65,7 +66,8 @@ const nodeTypes = {
     Update: UpdateSelector,
     White: WhiteSelector,
     Log: LogSelector,
-    SwitchCard: SwitchSelector
+    SwitchCard: SwitchSelector,
+    Terminate: TerminateSelector
 };
 const initialElements = [
     {
@@ -446,6 +448,16 @@ const Orchestration = () => {
                     visited: 0
                 };
                 break;
+            case 'Terminate':
+                newNode = {
+                    id: `${genID()}`,
+                    type,
+                    position,
+                    data: { label: ` ${type} node ` },
+                    flag: `${type}`,
+                    visited: 0
+                };
+                break;
             default:
                 console.log('Error');
                 break;
@@ -735,6 +747,13 @@ const Orchestration = () => {
                                                             oid: '${workflow.input.oid}'
                                                         });
                                                     break;
+                                                case 'Terminate':
+                                                    // eslint-disable-next-line camelcase
+                                                    task_node_child = data[1].addTerminateCase('default', 'FAILED', 0);
+                                                    task_node_child
+                                                        .setName(`terminate_${case_next[0].id}_Node`)
+                                                        .setTaskReferenceName(`terminate_${case_next[0].id}_Node`);
+                                                    break;
                                                 default:
                                                     console.log('Error');
                                                     break;
@@ -905,6 +924,13 @@ const Orchestration = () => {
                                                     // eslint-disable-next-line no-template-curly-in-string
                                                     oid: '${workflow.input.oid}'
                                                 });
+                                            break;
+                                        case 'Terminate':
+                                            // eslint-disable-next-line camelcase
+                                            task_node_child = data[1].setNextTerminateNode('FAILED', 0);
+                                            task_node_child
+                                                .setName(`terminate_${next_nodes[m].id}_Node`)
+                                                .setTaskReferenceName(`terminate_${next_nodes[m].id}_Node`);
                                             break;
                                         default:
                                             console.log('Error');

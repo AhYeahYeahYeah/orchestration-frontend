@@ -4,13 +4,13 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { Alert, Fab, Grid, Snackbar } from '@mui/material';
-import { Add, Edit } from '@mui/icons-material';
+import { Add, Delete, Edit } from '@mui/icons-material';
 import AddProductModel from './AddProductModel';
 import UpdateProductModel from './UpdateProductModel';
 import { EntityApi } from '../../api/restful';
 import { GridActionsCellItem } from '@mui/x-data-grid';
 
-const card = (updatehandleOpen, value) => (
+const card = (updatehandleOpen, value, deleteProduct) => (
     <>
         <CardContent>
             <Grid container spacing={2}>
@@ -19,8 +19,12 @@ const card = (updatehandleOpen, value) => (
                         产品名字：{value.productName}
                     </Typography>
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item xs={1}>
                     <GridActionsCellItem icon={<Edit />} onClick={() => updatehandleOpen(value)} />
+                    {/* <SimpleDialog open={open} handleClose={handleClose}/> */}
+                </Grid>
+                <Grid item xs={1}>
+                    <GridActionsCellItem icon={<Delete />} onClick={() => deleteProduct(value)} />
                     {/* <SimpleDialog open={open} handleClose={handleClose}/> */}
                 </Grid>
                 <Grid item xs={6}>
@@ -103,13 +107,25 @@ export default function Product() {
 
     function updateProduct(value) {
         const entityApi = new EntityApi(localStorage.getItem('admin_token'));
-        console.log(value);
         entityApi.updateProduct(value).then((res) => {
-            console.log(res);
             if (res.status === 200) {
                 entityApi.getProducts().then((re) => {
                     if (re.status === 200) {
                         setProduct(re.data);
+                    }
+                });
+            }
+        });
+    }
+    function deleteProduct(value) {
+        const entityApi = new EntityApi(localStorage.getItem('admin_token'));
+        entityApi.deleteProduct(value.pid).then((res) => {
+            if (res.status === 200) {
+                entityApi.getProducts().then((re) => {
+                    if (re.status === 200) {
+                        setProduct(re.data);
+                        setSnackbarMsg('删除成功！');
+                        setSnackbarOpen(true);
                     }
                 });
             }
@@ -148,7 +164,7 @@ export default function Product() {
             {product.map((value) => (
                 <Grid item lg={4} sm={6} xs={12} key={value.pid}>
                     <Box>
-                        <Card variant="outlined">{card(updatehandleOpen, value)}</Card>
+                        <Card variant="outlined">{card(updatehandleOpen, value, deleteProduct)}</Card>
                     </Box>
                 </Grid>
             ))}
