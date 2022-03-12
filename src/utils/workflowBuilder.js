@@ -158,6 +158,11 @@ export class HttpNode {
         return this.nextNode;
     };
 
+    setNextTerminateNode = (status, output) => {
+        this.nextNode = new TerminateNode(status, output);
+        return this.nextNode;
+    };
+
     setNextBreakNode = (node) => {
         this.nextNode = node;
     };
