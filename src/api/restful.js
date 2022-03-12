@@ -1,7 +1,8 @@
 // eslint-disable-next-line max-classes-per-file
 import axios from 'axios';
 
-const baseUrl = 'http://conductor.rinne.top';
+const baseUrl = 'http://localhost';
+// const baseUrl = 'http://conductor.rinne.top';
 const generalBackendPort = '10451';
 const servicesBackendPort = '10452';
 const conductorPort = '5000';
@@ -11,11 +12,11 @@ const generalBackendBase = `${baseUrl}:${generalBackendPort}/${version}`;
 const authBase = `${generalBackendBase}/auth`;
 const entityBase = `${generalBackendBase}/entity`;
 
-const conductorBase = `${baseUrl}:${conductorPort}/api`;
+const conductorBase = `http://8.141.159.53:12888/${baseUrl}:${conductorPort}/api`;
 
 const servicesBackendBase = `${baseUrl}:${servicesBackendPort}/${version}`;
-export const interestRate = `${servicesBackendBase}/system/interestrate`;
-export const log = `${servicesBackendBase}/data/log`;
+export const interestRate = `${servicesBackendBase}/data/interestrate`;
+export const log = `${servicesBackendBase}/system/log`;
 export const tag = `${servicesBackendBase}/regulation/tag`;
 export const region = `${servicesBackendBase}/regulation/region`;
 export const blacklist = `${servicesBackendBase}/regulation/blacklist`;
@@ -52,7 +53,7 @@ export class AuthApi {
     constructor() {
         this.instance = axios.create({
             baseURL: `${authBase}/`,
-            timeout: 1050,
+            // timeout: 1050,
             headers: { Accept: 'application/json' }
         });
     }
@@ -78,7 +79,6 @@ export class EntityApi {
     constructor(token) {
         this.instance = axios.create({
             baseURL: `${entityBase}/`,
-            timeout: 1050,
             headers: {
                 Accept: 'application/json',
                 Authorization: token
@@ -271,6 +271,10 @@ export class EntityApi {
     async updateWorkFlow(data) {
         return this.instance.put('/workflow', data);
     }
+
+    async getLogs() {
+        return this.instance.get('/log');
+    }
 }
 
 export class ConductorApi {
@@ -281,4 +285,9 @@ export class ConductorApi {
     };
 
     setWorkFlow = async (workflow) => axios.post(`${conductorBase}/metadata/workflow`, JSON.parse(workflow));
+
+    // eslint-disable-next-line class-methods-use-this
+    async getMetaDataWorkFlow(name) {
+        return axios.get(`${conductorBase}/metadata/workflow/${name}`);
+    }
 }

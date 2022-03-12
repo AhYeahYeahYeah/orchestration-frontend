@@ -16,7 +16,14 @@ const UtilsTablerIcons = Loadable(lazy(() => import('views/utilities/TablerIcons
 
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('views/sample-page')));
-
+const Orchestration = Loadable(lazy(() => import('views/orchestration')));
+const Product = Loadable(lazy(() => import('views/product')));
+const Whitelist = Loadable(lazy(() => import('views/whitelist')));
+const Blacklist = Loadable(lazy(() => import('views/blacklist')));
+const Group = Loadable(lazy(() => import('views/group')));
+const CustomerManagement = Loadable(lazy(() => import('views/customer-management')));
+const AdminManagement = Loadable(lazy(() => import('views/admin-management')));
+const LogManagement = Loadable(lazy(() => import('views/log-management')));
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
@@ -29,27 +36,35 @@ const MainRoutes = {
         },
         {
             path: '/product',
-            element: <Dashboard />
+            element: <Product />
         },
         {
             path: '/orchestration',
-            element: <Dashboard />
+            element: <Orchestration />
+        },
+        {
+            path: '/admin-management',
+            element: <AdminManagement />
         },
         {
             path: '/customer-management',
-            element: <Dashboard />
+            element: <CustomerManagement />
+        },
+        {
+            path: '/log-management',
+            element: <LogManagement />
         },
         {
             path: '/whitelist',
-            element: <Dashboard />
+            element: <Whitelist />
         },
         {
             path: '/blacklist',
-            element: <Dashboard />
+            element: <Blacklist />
         },
         {
             path: '/group',
-            element: <Dashboard />
+            element: <Group />
         },
         {
             path: '/utils/util-typography',
