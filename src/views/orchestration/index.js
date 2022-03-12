@@ -73,7 +73,8 @@ const initialElements = [
         type: 'input',
         data: { label: 'input node' },
         position: { x: 250, y: 5 },
-        flag: null
+        flag: null,
+        selectable: false
     }
 ];
 // let id = 0;

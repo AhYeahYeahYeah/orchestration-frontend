@@ -271,6 +271,10 @@ export class EntityApi {
     async updateWorkFlow(data) {
         return this.instance.put('/workflow', data);
     }
+
+    async getLogs() {
+        return this.instance.get('/log');
+    }
 }
 
 export class ConductorApi {

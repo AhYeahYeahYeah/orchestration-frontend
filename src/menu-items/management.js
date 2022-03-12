@@ -42,6 +42,14 @@ const management = {
             url: '/customer-management',
             icon: icons.IconDashboard,
             breadcrumbs: false
+        },
+        {
+            id: 'log-management',
+            title: '日志管理',
+            type: 'item',
+            url: '/log-management',
+            icon: icons.IconDashboard,
+            breadcrumbs: false
         }
     ]
 };

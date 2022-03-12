@@ -67,7 +67,7 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                     <Grid item xs={12} sx={{ marginLeft: 2, marginRight: 2, marginTop: 1.5 }}>
                         <div className="react-flow__node-default" onDragStart={(event) => onDragStart(event, 'SwitchCard')} draggable>
                             <Box sx={{ position: 'absolute', left: '15%' }}>
-                                <SwitchCamera />
+                                <SwitchCamera fontSize="small" sx={{ color: '#616161' }} />
                             </Box>
                             分支
                         </div>
@@ -75,7 +75,7 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                     <Grid item xs={12} sx={{ marginLeft: 2, marginRight: 2, marginTop: 1.5 }}>
                         <div className="react-flow__node-default" onDragStart={(event) => onDragStart(event, 'Yes')} draggable>
                             <Box sx={{ position: 'absolute', left: '15%' }}>
-                                <CheckCircle />
+                                <CheckCircle fontSize="small" sx={{ color: '#616161' }} />
                             </Box>
                             Case--是
                         </div>
@@ -83,7 +83,7 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                     <Grid item xs={12} sx={{ marginLeft: 2, marginRight: 2, marginTop: 1.5 }}>
                         <div className="react-flow__node-default" onDragStart={(event) => onDragStart(event, 'No')} draggable>
                             <Box sx={{ position: 'absolute', left: '15%' }}>
-                                <DoNotDisturbOn />
+                                <DoNotDisturbOn fontSize="small" sx={{ color: '#616161' }} />
                             </Box>
                             Case--否
                         </div>
@@ -97,7 +97,7 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                             draggable
                         >
                             <Box sx={{ position: 'absolute', left: '15%' }}>
-                                <Lock />
+                                <Lock fontSize="small" sx={{ color: '#616161' }} />
                             </Box>
                             库存锁定
                         </div>
@@ -111,7 +111,7 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                             draggable
                         >
                             <Box sx={{ position: 'absolute', left: '15%' }}>
-                                <Warehouse />
+                                <Warehouse fontSize="small" sx={{ color: '#616161' }} />
                             </Box>
                             库存更新
                         </div>
@@ -125,7 +125,7 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                             draggable
                         >
                             <Box sx={{ position: 'absolute', left: '15%' }}>
-                                <LockOpen />
+                                <LockOpen fontSize="small" sx={{ color: '#616161' }} />
                             </Box>
                             库存解锁
                         </div>
@@ -139,7 +139,7 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                             draggable
                         >
                             <Box sx={{ position: 'absolute', left: '15%' }}>
-                                <FactCheck />
+                                <FactCheck fontSize="small" sx={{ color: '#616161' }} />
                             </Box>
                             证件审查
                         </div>
@@ -153,7 +153,7 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                             draggable
                         >
                             <Box sx={{ position: 'absolute', left: '15%' }}>
-                                <FactCheck />
+                                <FactCheck fontSize="small" sx={{ color: '#616161' }} />
                             </Box>
                             用户信息校验
                         </div>
@@ -167,7 +167,7 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                             draggable
                         >
                             <Box sx={{ position: 'absolute', left: '15%' }}>
-                                <FactCheck />
+                                <FactCheck fontSize="small" sx={{ color: '#616161' }} />
                             </Box>
                             白名单控制
                         </div>
@@ -181,7 +181,7 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                             draggable
                         >
                             <Box sx={{ position: 'absolute', left: '15%' }}>
-                                <FactCheck />
+                                <FactCheck fontSize="small" sx={{ color: '#616161' }} />
                             </Box>
                             黑名单控制
                         </div>
@@ -195,7 +195,7 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                             draggable
                         >
                             <Box sx={{ position: 'absolute', left: '15%' }}>
-                                <FactCheck />
+                                <FactCheck fontSize="small" sx={{ color: '#616161' }} />
                             </Box>
                             地域控制
                         </div>
@@ -209,7 +209,7 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                             draggable
                         >
                             <Box sx={{ position: 'absolute', left: '15%' }}>
-                                <FactCheck />
+                                <FactCheck fontSize="small" sx={{ color: '#616161' }} />
                             </Box>
                             用户标签
                         </div>
@@ -223,7 +223,7 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                             draggable
                         >
                             <Box sx={{ position: 'absolute', left: '15%' }}>
-                                <RateReview />
+                                <RateReview fontSize="small" sx={{ color: '#616161' }} />
                             </Box>
                             日志录入
                         </div>
@@ -237,7 +237,7 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                             draggable
                         >
                             <Box sx={{ position: 'absolute', left: '15%' }}>
-                                <Calculate />
+                                <Calculate fontSize="small" sx={{ color: '#616161' }} />
                             </Box>
                             利息计算
                         </div>

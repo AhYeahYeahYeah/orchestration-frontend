@@ -23,6 +23,7 @@ const Blacklist = Loadable(lazy(() => import('views/blacklist')));
 const Group = Loadable(lazy(() => import('views/group')));
 const CustomerManagement = Loadable(lazy(() => import('views/customer-management')));
 const AdminManagement = Loadable(lazy(() => import('views/admin-management')));
+const LogManagement = Loadable(lazy(() => import('views/log-management')));
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
@@ -48,6 +49,10 @@ const MainRoutes = {
         {
             path: '/customer-management',
             element: <CustomerManagement />
+        },
+        {
+            path: '/log-management',
+            element: <LogManagement />
         },
         {
             path: '/whitelist',
