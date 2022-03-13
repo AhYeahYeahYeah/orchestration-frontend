@@ -52,7 +52,7 @@ export default function RootPage() {
                         }}
                     >
                         <Typography component="h1" variant="h5">
-                            H e l l o
+                            H e l l o W o r l d !
                         </Typography>
                         <Grid container sx={{ mt: 30 }}>
                             <LoadingButton

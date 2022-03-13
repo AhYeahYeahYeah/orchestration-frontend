@@ -83,7 +83,7 @@ test('workflow builder test', () => {
             oid: '${workflow.input.oid}',
             pid: '${workflow.input.pid}'
         });
-    switchTagNode1Node.setNextNode(lockNode1);
+    switchTagNode1Node.setNextNode(logNode2);
 
     // const updateNode1 = lockNode1.setNextHttpNode(update, 'POST');
     // updateNode1
