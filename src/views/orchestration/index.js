@@ -47,10 +47,13 @@ import UpdateSelector from '../../ui-component/services/UpdateSelector';
 import WhiteSelector from '../../ui-component/services/WhiteSelector';
 import LogSelector from '../../ui-component/services/LogSelector';
 import SwitchSelector from '../../ui-component/caseCard/SwitchSelector';
-import { Check, CloseOutlined, FullscreenExitOutlined } from '@mui/icons-material';
+import { Check, CloseOutlined, FlagCircle, FullscreenExitOutlined } from '@mui/icons-material';
 import AddModel from './AddModel';
 import { GridActionsCellItem } from '@mui/x-data-grid';
 import TerminateSelector from '../../ui-component/services/TerminateSelector';
+import Box from '@mui/material/Box';
+import Draggable from 'react-draggable';
+import Paper from '@mui/material/Paper';
 
 const nodeTypes = {
     No: NoSelector,
@@ -102,6 +105,7 @@ const Orchestration = () => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const reactFlowWrapper = useRef(null);
     const reactFlowWrapperOpen = useRef(null);
+    const reactFlowWrapperLook = useRef(null);
     const [openFull, setOpenFull] = useState(false);
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
@@ -125,6 +129,15 @@ const Orchestration = () => {
     const [white, setWhite] = useState('');
     const [black, setBlack] = useState('');
     const [group, setGroup] = useState('');
+    const [lookFlag, setLookFlag] = useState(false);
+    const [lookInstance, setLookInstance] = useState(initialElements);
+    function handleOpenLook() {
+        setLookInstance(elements);
+        setLookFlag(true);
+    }
+    function handleCloseLook() {
+        setLookFlag(false);
+    }
     function genID() {
         return Number(Math.random().toString().substr(3, 6) + Date.now()).toString(36);
     }
@@ -196,7 +209,6 @@ const Orchestration = () => {
     const onElementsRemove = (elementsToRemove) => setElements((els) => removeElements(elementsToRemove, els));
     const onEdgeUpdate = (oldEdge, newConnection) => setElements((els) => updateEdge(oldEdge, newConnection, els));
     const onLoad = (_reactFlowInstance) => setReactFlowInstance(_reactFlowInstance);
-
     function updateFlowinstance(value) {
         console.log(value);
         if (value === '新建') {
@@ -245,7 +257,7 @@ const Orchestration = () => {
                                 flow[j].data.updateRegions = updateRegions;
                             }
                         }
-                        console.log(flow);
+                        // console.log(flow);
                         setElements(flow);
                         setWorkInstance([workflowlist[i].fid, workflowlist[i].name, workflowlist[i].description, workflowlist[i].version]);
                     });
@@ -264,6 +276,8 @@ const Orchestration = () => {
         let reactFlowBounds;
         if (openFull) {
             reactFlowBounds = reactFlowWrapperOpen.current.getBoundingClientRect();
+        } else if (lookFlag) {
+            reactFlowBounds = reactFlowWrapperLook.current.getBoundingClientRect();
         } else {
             reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
         }
@@ -1171,12 +1185,68 @@ const Orchestration = () => {
                 </Grid>
             )}
             <Chip
-                sx={{ position: 'fixed', left: '84%', top: '91.7%', zIndex: 999 }}
+                sx={{ position: 'fixed', left: '82%', top: '91.7%', zIndex: 999 }}
                 label="全屏"
                 onClick={handleClickOpenFull}
                 icon={<FullscreenExitOutlined />}
                 variant="outlined"
             />
+            <Chip
+                sx={{ position: 'fixed', left: '88%', top: '91.7%', zIndex: 999 }}
+                label="悬浮"
+                /* eslint-disable-next-line react/jsx-no-bind */
+                onClick={handleOpenLook}
+                icon={<FlagCircle />}
+                variant="outlined"
+            />
+            {lookFlag === true ? (
+                <Box
+                    sx={{
+                        position: 'fixed',
+                        '& > :not(style)': {
+                            m: 1,
+                            width: 500,
+                            height: 500
+                        },
+                        zIndex: 9999,
+                        top: '5%'
+                    }}
+                >
+                    <Draggable>
+                        <Paper variant="outlined" elevation={20}>
+                            <GridActionsCellItem
+                                sx={{ position: 'fixed', left: '0.5%', top: '0.5%', zIndex: 999 }}
+                                icon={<CloseOutlined />}
+                                /* eslint-disable-next-line react/jsx-no-bind */
+                                onClick={handleCloseLook}
+                            />
+                            <div className="dndflow">
+                                <ReactFlowProvider>
+                                    <div className="reactflow-wrapper" ref={reactFlowWrapperLook}>
+                                        <ReactFlow
+                                            elements={lookInstance}
+                                            // snapToGrid
+                                            // onEdgeUpdate={onEdgeUpdate}
+                                            // defaultZoom={1.35}
+                                            // onElementsRemove={onElementsRemove}
+                                            // onConnect={onConnect}
+                                            // onLoad={onLoad}
+                                            // onDrop={onDrop}
+                                            // onDragOver={onDragOver}
+                                            nodeTypes={nodeTypes}
+                                        >
+                                            <Controls />
+                                            <Background variant="dots" gap={6} size={2} color="#e3f2fd" />
+                                        </ReactFlow>
+                                    </div>
+                                </ReactFlowProvider>
+                            </div>
+                        </Paper>
+                    </Draggable>
+                </Box>
+            ) : (
+                ''
+            )}
         </>
     );
 };
