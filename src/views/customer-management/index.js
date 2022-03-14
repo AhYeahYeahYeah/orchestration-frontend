@@ -47,6 +47,7 @@ export default function CustomerManagement() {
                     }
                     Promise.all(queue)
                         .then((re) => {
+                            // console.log(re);
                             // eslint-disable-next-line no-plusplus
                             for (let i = 0; i < re.length; i++) {
                                 res.data[i].sid = re[i].data[0].sid;

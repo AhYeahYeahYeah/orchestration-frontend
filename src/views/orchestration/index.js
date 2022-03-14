@@ -54,6 +54,7 @@ import TerminateSelector from '../../ui-component/services/TerminateSelector';
 import Box from '@mui/material/Box';
 import Draggable from 'react-draggable';
 import Paper from '@mui/material/Paper';
+import WorkFlowSelector from '../../ui-component/services/WorkFlowSelector';
 
 const nodeTypes = {
     No: NoSelector,
@@ -70,7 +71,8 @@ const nodeTypes = {
     White: WhiteSelector,
     Log: LogSelector,
     SwitchCard: SwitchSelector,
-    Terminate: TerminateSelector
+    Terminate: TerminateSelector,
+    WorkFlow: WorkFlowSelector
 };
 const initialElements = [
     {
@@ -131,6 +133,7 @@ const Orchestration = () => {
     const [group, setGroup] = useState('');
     const [lookFlag, setLookFlag] = useState(false);
     const [lookInstance, setLookInstance] = useState(initialElements);
+    const [fid, setFid] = useState('');
     function handleOpenLook() {
         setLookInstance(elements);
         setLookFlag(true);
@@ -160,6 +163,9 @@ const Orchestration = () => {
     }
     function updateRegions(value) {
         setRegions(value);
+    }
+    function updateFid(value) {
+        setFid(value);
     }
     const onConnect = (params) => {
         const res = addEdge({ ...params, animated: true, style: { strokeWidth: 4 } }, elements);
@@ -247,7 +253,6 @@ const Orchestration = () => {
                                 // eslint-disable-next-line no-plusplus
                                 for (let k = 0; k < group.length; k++) {
                                     if (flow[j].data.groupName === group[k].gid) {
-                                        console.log(1);
                                         flow[j].data.groupName = group[k].name;
                                     }
                                 }
@@ -255,6 +260,14 @@ const Orchestration = () => {
                                 // eslint-disable-next-line no-plusplus
                                 flow[j].data.regions = res.data.inputTemplate.region;
                                 flow[j].data.updateRegions = updateRegions;
+                            } else if (flow[j].type === 'WorkFlow') {
+                                flow[j].data.updateFid = updateFid;
+                                // eslint-disable-next-line no-plusplus
+                                for (let k = 0; k < workflowlist.length; k++) {
+                                    if (flow[j].data.workFlowName === workflowlist[k].fid) {
+                                        flow[j].data.workFlowName = workflowlist[k].name;
+                                    }
+                                }
                             }
                         }
                         // console.log(flow);
@@ -343,6 +356,16 @@ const Orchestration = () => {
                 };
                 break;
 
+            case 'WorkFlow':
+                newNode = {
+                    id: `${genID()}`,
+                    type,
+                    position,
+                    data: { updateFid, workFlowName: '' },
+                    flag: `${type}`,
+                    visited: 0
+                };
+                break;
             case 'Credential':
                 newNode = {
                     id: `${genID()}`,
@@ -522,6 +545,8 @@ const Orchestration = () => {
                             // eslint-disable-next-line no-template-curly-in-string
                             interest: '${InterestRate_Node.output.response.body.interest}'
                         });
+                    } else if (flow.elements[i].type === 'WorkFlow') {
+                        flow.elements[i].data.workFlowName = fid;
                     }
                     flow_queue.push(JSON.stringify(flow.elements[i]));
                     console.log(flow.elements[i].data);
@@ -1023,7 +1048,7 @@ const Orchestration = () => {
                 // conductor.setWorkFlow(workflow).then((r) => console.log(r));
             }
         },
-        [workInstance, perm, whiteId, bid, gid, regions, reactFlowInstance]
+        [workInstance, perm, whiteId, bid, gid, regions, reactFlowInstance, fid]
     );
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const onRestore = useCallback(() => {

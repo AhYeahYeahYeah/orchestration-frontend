@@ -11,6 +11,7 @@ import {
     RateReview,
     Reply,
     SwitchCamera,
+    ViewList,
     Warehouse
 } from '@mui/icons-material';
 import PerfectScrollbar from 'react-perfect-scrollbar';
@@ -249,6 +250,20 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                                 <Calculate fontSize="small" sx={{ color: '#616161' }} />
                             </Box>
                             利息计算
+                        </div>
+                    </Grid>
+                    <Grid item xs={12} sx={{ marginLeft: 2, marginRight: 2, marginTop: 1.5 }}>
+                        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                        <div
+                            onClick={() => handleClickOpen(7)}
+                            className="react-flow__node-default"
+                            onDragStart={(event) => onDragStart(event, 'WorkFlow')}
+                            draggable
+                        >
+                            <Box sx={{ position: 'absolute', left: '15%' }}>
+                                <ViewList fontSize="small" sx={{ color: '#616161' }} />
+                            </Box>
+                            编排模板选择
                         </div>
                     </Grid>
                     <Grid item xs={12} sx={{ marginLeft: 2, marginRight: 2, marginTop: 1.5 }}>
