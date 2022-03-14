@@ -13,7 +13,7 @@ import ReactFlow, {
 } from 'react-flow-renderer';
 
 import Sidebar from './Sidebar';
-
+import SidebarOpen from './SidebarOpen';
 import './dnd.css';
 import { useTheme } from '@mui/material/styles';
 import { Alert, Chip, Dialog, Fab, Grid, Slide, Snackbar } from '@mui/material';
@@ -1108,7 +1108,7 @@ const Orchestration = () => {
                                     <Background />
                                 </ReactFlow>
                             </div>
-                            <Sidebar
+                            <SidebarOpen
                                 onRestore={onRestore}
                                 /* eslint-disable-next-line react/jsx-no-bind */
                                 updateFlowinstance={updateFlowinstance}
@@ -1133,57 +1133,61 @@ const Orchestration = () => {
                         </Alert>
                     </Snackbar>
                 </Grid>
+                <Chip
+                    sx={{ position: 'fixed', left: '88%', top: '91.7%', zIndex: 999 }}
+                    label="悬浮"
+                    /* eslint-disable-next-line react/jsx-no-bind */
+                    onClick={handleOpenLook}
+                    icon={<FlagCircle />}
+                    variant="outlined"
+                />
             </Dialog>
-            {openFull === true ? (
-                ''
-            ) : (
-                <Grid sx={{ position: 'relative', height: '100%', background: theme.palette.background.default }}>
-                    <div className="dndflow">
-                        <ReactFlowProvider>
-                            <div className="reactflow-wrapper" ref={reactFlowWrapper}>
-                                <ReactFlow
-                                    elements={elements}
-                                    snapToGrid
-                                    onEdgeUpdate={onEdgeUpdate}
-                                    defaultZoom={1.35}
-                                    onElementsRemove={onElementsRemove}
-                                    onConnect={onConnect}
-                                    onLoad={onLoad}
-                                    onDrop={onDrop}
-                                    onDragOver={onDragOver}
-                                    nodeTypes={nodeTypes}
-                                >
-                                    <MiniMap />
-                                    <Controls />
-                                    <Background />
-                                </ReactFlow>
-                            </div>
-                            <Sidebar
-                                onRestore={onRestore}
-                                /* eslint-disable-next-line react/jsx-no-bind */
-                                updateFlowinstance={updateFlowinstance}
-                                workOptions={workOptions}
-                                serviceInfo={serviceInfo}
-                            />
-                            <Fab color="primary" aria-label="add" sx={{ display: 'flex', position: 'fixed', left: '94%', top: '90%' }}>
-                                {/* eslint-disable-next-line react/destructuring-assignment */}
-                                <Check onClick={handleOpen} />
-                            </Fab>
-                            <AddModel open={open} handleClose={handleClose} workInstance={workInstance} onSave={onSave} />
-                        </ReactFlowProvider>
-                    </div>
-                    <Snackbar
-                        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-                        open={snackbarOpen}
-                        autoHideDuration={6000}
-                        onClose={handleSnackbarClose}
-                    >
-                        <Alert severity="warning" open={snackbarOpen} onClose={handleSnackbarClose}>
-                            {snackbarMsg}
-                        </Alert>
-                    </Snackbar>
-                </Grid>
-            )}
+            <Grid sx={{ position: 'relative', height: '100%', background: theme.palette.background.default }}>
+                <div className="dndflow">
+                    <ReactFlowProvider>
+                        <div className="reactflow-wrapper" ref={reactFlowWrapper}>
+                            <ReactFlow
+                                elements={elements}
+                                snapToGrid
+                                onEdgeUpdate={onEdgeUpdate}
+                                defaultZoom={1.35}
+                                onElementsRemove={onElementsRemove}
+                                onConnect={onConnect}
+                                onLoad={onLoad}
+                                onDrop={onDrop}
+                                onDragOver={onDragOver}
+                                nodeTypes={nodeTypes}
+                            >
+                                <MiniMap />
+                                <Controls />
+                                <Background />
+                            </ReactFlow>
+                        </div>
+                        <Sidebar
+                            onRestore={onRestore}
+                            /* eslint-disable-next-line react/jsx-no-bind */
+                            updateFlowinstance={updateFlowinstance}
+                            workOptions={workOptions}
+                            serviceInfo={serviceInfo}
+                        />
+                        <Fab color="primary" aria-label="add" sx={{ display: 'flex', position: 'fixed', left: '94%', top: '90%' }}>
+                            {/* eslint-disable-next-line react/destructuring-assignment */}
+                            <Check onClick={handleOpen} />
+                        </Fab>
+                        <AddModel open={open} handleClose={handleClose} workInstance={workInstance} onSave={onSave} />
+                    </ReactFlowProvider>
+                </div>
+                <Snackbar
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                    open={snackbarOpen}
+                    autoHideDuration={6000}
+                    onClose={handleSnackbarClose}
+                >
+                    <Alert severity="warning" open={snackbarOpen} onClose={handleSnackbarClose}>
+                        {snackbarMsg}
+                    </Alert>
+                </Snackbar>
+            </Grid>
             <Chip
                 sx={{ position: 'fixed', left: '82%', top: '91.7%', zIndex: 999 }}
                 label="全屏"
@@ -1204,11 +1208,10 @@ const Orchestration = () => {
                     sx={{
                         position: 'fixed',
                         '& > :not(style)': {
-                            m: 1,
-                            width: 500,
-                            height: 500
+                            width: 400,
+                            height: 400
                         },
-                        zIndex: 9999,
+                        zIndex: 2000,
                         top: '5%'
                     }}
                 >
