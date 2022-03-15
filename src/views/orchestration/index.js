@@ -516,6 +516,7 @@ const Orchestration = () => {
         setCameraOpen(true);
     }
     function handleCameraClose() {
+        mediaStream.getTracks()[0].stop();
         setCameraOpen(false);
     }
     const onSave = useCallback(
