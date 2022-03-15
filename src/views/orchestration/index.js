@@ -55,6 +55,7 @@ import Box from '@mui/material/Box';
 import Draggable from 'react-draggable';
 import Paper from '@mui/material/Paper';
 import WorkFlowSelector from '../../ui-component/services/WorkFlowSelector';
+import CameraInstance from './CameraInstance';
 
 const nodeTypes = {
     No: NoSelector,
@@ -289,8 +290,6 @@ const Orchestration = () => {
         let reactFlowBounds;
         if (openFull) {
             reactFlowBounds = reactFlowWrapperOpen.current.getBoundingClientRect();
-        } else if (lookFlag) {
-            reactFlowBounds = reactFlowWrapperLook.current.getBoundingClientRect();
         } else {
             reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
         }
@@ -501,7 +500,14 @@ const Orchestration = () => {
         }
         setElements((es) => es.concat(newNode));
     };
-
+    // const [camera, setCamera] = useState(null);
+    const [cameraOpen, setCameraOpen] = useState(false);
+    function handleCameraOpen() {
+        setCameraOpen(true);
+    }
+    function handleCameraClose() {
+        setCameraOpen(false);
+    }
     const onSave = useCallback(
         (workNew) => {
             if (perm === false) {
@@ -1106,6 +1112,14 @@ const Orchestration = () => {
     };
     return (
         <>
+            <CameraInstance
+                cameraOpen={cameraOpen}
+                /* eslint-disable-next-line react/jsx-no-bind */
+                handleCameraClose={handleCameraClose}
+                handleOpen={handleOpen}
+                setSnackbarMsg={setSnackbarMsg}
+                setSnackbarOpen={setSnackbarOpen}
+            />
             <Dialog fullScreen open={openFull} onClose={handleFullClose} TransitionComponent={Transition}>
                 <GridActionsCellItem
                     sx={{ position: 'fixed', left: '0.5%', top: '0.5%', zIndex: 999 }}
@@ -1141,8 +1155,8 @@ const Orchestration = () => {
                                 serviceInfo={serviceInfo}
                             />
                             <Fab color="primary" aria-label="add" sx={{ display: 'flex', position: 'fixed', left: '94%', top: '90%' }}>
-                                {/* eslint-disable-next-line react/destructuring-assignment */}
-                                <Check onClick={handleOpen} />
+                                {/* eslint-disable-next-line react/destructuring-assignment,react/jsx-no-bind */}
+                                <Check onClick={handleCameraOpen} />
                             </Fab>
                             <AddModel open={open} handleClose={handleClose} workInstance={workInstance} onSave={onSave} />
                         </ReactFlowProvider>
@@ -1153,7 +1167,7 @@ const Orchestration = () => {
                         autoHideDuration={6000}
                         onClose={handleSnackbarClose}
                     >
-                        <Alert severity="warning" open={snackbarOpen} onClose={handleSnackbarClose}>
+                        <Alert severity="warning" open={snackbarOpen} onClose={() => handleSnackbarClose}>
                             {snackbarMsg}
                         </Alert>
                     </Snackbar>
@@ -1196,8 +1210,8 @@ const Orchestration = () => {
                             serviceInfo={serviceInfo}
                         />
                         <Fab color="primary" aria-label="add" sx={{ display: 'flex', position: 'fixed', left: '94%', top: '90%' }}>
-                            {/* eslint-disable-next-line react/destructuring-assignment */}
-                            <Check onClick={handleOpen} />
+                            {/* eslint-disable-next-line react/destructuring-assignment,react/jsx-no-bind */}
+                            <Check onClick={handleCameraOpen} />
                         </Fab>
                         <AddModel open={open} handleClose={handleClose} workInstance={workInstance} onSave={onSave} />
                     </ReactFlowProvider>
@@ -1236,12 +1250,12 @@ const Orchestration = () => {
                             width: 400,
                             height: 400
                         },
-                        zIndex: 2000,
+                        zIndex: 1500,
                         top: '5%'
                     }}
                 >
                     <Draggable>
-                        <Paper variant="outlined" elevation={20}>
+                        <Paper variant="outlined">
                             <GridActionsCellItem
                                 sx={{ position: 'fixed', left: '0.5%', top: '0.5%', zIndex: 999 }}
                                 icon={<CloseOutlined />}

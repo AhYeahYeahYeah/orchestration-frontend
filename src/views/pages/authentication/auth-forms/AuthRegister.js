@@ -71,6 +71,7 @@ const FirebaseRegister = ({ ...others }) => {
     const [files, setFiles] = useState([]);
     const [base64, setBase64] = useState('');
     const handleAddFile = (err, file) => {
+        console.log(file?.getFileEncodeDataURL());
         setBase64(file?.getFileEncodeDataURL());
         // console.log(base64);
     };
