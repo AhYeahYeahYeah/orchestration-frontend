@@ -30,8 +30,7 @@ import {
     unlock,
     update,
     whitelist,
-    EntityApi,
-    ConductorApi
+    EntityApi
 } from '../../api/restful';
 import NoSelector from '../../ui-component/caseCard/NoSelector';
 import YesSelector from '../../ui-component/caseCard/YesSelector';
@@ -58,6 +57,7 @@ import WorkFlowSelector from '../../ui-component/services/WorkFlowSelector';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import axios from 'axios';
+import CooperationApi from '../../api/CooperationApi';
 
 const nodeTypes = {
     No: NoSelector,
@@ -104,7 +104,7 @@ const Transition = forwardRef((props, ref) => <Slide direction="up" ref={ref} {.
 // // eslint-disable-next-line no-plusplus
 
 // const getLogId = () => `Log_${LogId++}`;
-const Orchestration = () => {
+const CooperationFlow = () => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const theme = useTheme();
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -120,7 +120,7 @@ const Orchestration = () => {
     // const [black, setBlack] = useState([]);
     // const [group, setGroup] = useState([]);
     const [serviceInfo, setServiceInfo] = useState([]);
-    const [workflowlist, setWorkflowlist] = useState([]);
+    // const [workflowlist, setWorkflowlist] = useState([]);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMsg, setSnackbarMsg] = useState('');
     const [perm, setPerm] = useState(false);
@@ -130,10 +130,10 @@ const Orchestration = () => {
     const [regions, setRegions] = useState([]);
     const [workInstance, setWorkInstance] = useState([]);
     const [open, setOpen] = useState(false);
-    const [workOptions, setWorkOptions] = useState([]);
-    const [white, setWhite] = useState('');
-    const [black, setBlack] = useState('');
-    const [group, setGroup] = useState('');
+    // const [workOptions, setWorkOptions] = useState([]);
+    // const [white, setWhite] = useState('');
+    // const [black, setBlack] = useState('');
+    // const [group, setGroup] = useState('');
     const [lookFlag, setLookFlag] = useState(false);
     const [lookInstance, setLookInstance] = useState(initialElements);
     const [fid, setFid] = useState('');
@@ -200,6 +200,16 @@ const Orchestration = () => {
                 }
             }
         }
+        const data = {
+            account: JSON.parse(localStorage.getItem('admin')).account,
+            token: localStorage.getItem('admin_token'),
+            timeStamp: Date.now(),
+            flow: res,
+            room: {
+                id: localStorage.getItem('roomId')
+            }
+        };
+        CooperationApi.EditData(data);
         setElements(res);
     };
     // const onConnect = (params) => {
@@ -247,75 +257,36 @@ const Orchestration = () => {
                 }
             }
         }
-        setElements(res);
-        // setElements((els) => removeElements(elementsToRemove, els));
-        // setElements(anonymous(elements));
-    };
-    const onEdgeUpdate = (oldEdge, newConnection) => setElements((els) => updateEdge(oldEdge, newConnection, els));
-    const onLoad = (_reactFlowInstance) => setReactFlowInstance(_reactFlowInstance);
-    function updateFlowinstance(value) {
-        console.log(value);
-        if (value === '新建') {
-            setElements(initialElements);
-            setWorkInstance([]);
-        } else {
-            // eslint-disable-next-line no-plusplus
-            for (let i = 0; i < workflowlist.length; i++) {
-                if (value === workflowlist[i].name) {
-                    // console.log(JSON.parse(workflowlist[i].flow));
-                    const flow = JSON.parse(workflowlist[i].flow);
-                    const conductor = new ConductorApi();
-                    // eslint-disable-next-line no-loop-func
-                    conductor.getMetaDataWorkFlow(workflowlist[i].name).then((res) => {
-                        console.log(res.data.inputTemplate);
-                        // eslint-disable-next-line no-plusplus
-                        for (let j = 0; j < flow.length; j++) {
-                            if (flow[j].type === 'White') {
-                                flow[j].data.updateWid = updateWid;
-                                // eslint-disable-next-line no-plusplus
-                                for (let k = 0; k < white.length; k++) {
-                                    if (flow[j].data.whiteName === white[k].wid) {
-                                        flow[j].data.whiteName = white[k].name;
-                                    }
-                                }
-                            } else if (flow[j].type === 'Black') {
-                                flow[j].data.updateBid = updateBid;
-                                // eslint-disable-next-line no-plusplus
-                                for (let k = 0; k < black.length; k++) {
-                                    if (flow[j].data.blackName === black[k].bid) {
-                                        flow[j].data.blackName = black[k].name;
-                                    }
-                                }
-                            } else if (flow[j].type === 'Tag') {
-                                flow[j].data.updateGid = updateGid;
-                                // eslint-disable-next-line no-plusplus
-                                for (let k = 0; k < group.length; k++) {
-                                    if (flow[j].data.groupName === group[k].gid) {
-                                        flow[j].data.groupName = group[k].name;
-                                    }
-                                }
-                            } else if (flow[j].type === 'Region') {
-                                // eslint-disable-next-line no-plusplus
-                                flow[j].data.regions = res.data.inputTemplate.region;
-                                flow[j].data.updateRegions = updateRegions;
-                            } else if (flow[j].type === 'WorkFlow') {
-                                flow[j].data.updateFid = updateFid;
-                                // eslint-disable-next-line no-plusplus
-                                for (let k = 0; k < workflowlist.length; k++) {
-                                    if (flow[j].data.workFlowName === workflowlist[k].fid) {
-                                        flow[j].data.workFlowName = workflowlist[k].name;
-                                    }
-                                }
-                            }
-                        }
-                        // console.log(flow);
-                        setElements(flow);
-                        setWorkInstance([workflowlist[i].fid, workflowlist[i].name, workflowlist[i].description, workflowlist[i].version]);
-                    });
-                }
+        // console.log(anonymous(elements));
+        const data = {
+            account: JSON.parse(localStorage.getItem('admin')).account,
+            token: localStorage.getItem('admin_token'),
+            timeStamp: Date.now(),
+            flow: res,
+            room: {
+                id: localStorage.getItem('roomId')
             }
-        }
-    }
+        };
+        CooperationApi.EditData(data);
+        // setElements((els) => removeElements(elementsToRemove, els));
+        setElements(res);
+    };
+    const onEdgeUpdate = (oldEdge, newConnection) => {
+        const anonymous = (els) => updateEdge(oldEdge, newConnection, els);
+        const data = {
+            account: JSON.parse(localStorage.getItem('admin')).account,
+            token: localStorage.getItem('admin_token'),
+            timeStamp: Date.now(),
+            flow: anonymous(elements),
+            room: {
+                id: localStorage.getItem('roomId')
+            }
+        };
+        CooperationApi.EditData(data);
+        // setElements((els) => removeElements(elementsToRemove, els));
+        setElements(anonymous(elements));
+    };
+    const onLoad = (_reactFlowInstance) => setReactFlowInstance(_reactFlowInstance);
 
     const onDragOver = (event) => {
         event.preventDefault();
@@ -535,6 +506,16 @@ const Orchestration = () => {
                 console.log('Error');
                 break;
         }
+        const data = {
+            account: JSON.parse(localStorage.getItem('admin')).account,
+            token: localStorage.getItem('admin_token'),
+            timeStamp: Date.now(),
+            flow: elements.concat(newNode),
+            room: {
+                id: localStorage.getItem('roomId')
+            }
+        };
+        CooperationApi.EditData(data);
         setElements((es) => es.concat(newNode));
     };
     const [camera, setCamera] = useState(null);
@@ -1067,34 +1048,54 @@ const Orchestration = () => {
                     entityApi.addWorkFlow(workflowSave).then((res) => {
                         console.log(res);
                         entityApi.getWorkFlows().then((re) => {
-                            setWorkflowlist(re.data);
+                            // setWorkflowlist(re.data);
                             const queue = [];
                             queue.push('新建');
                             // eslint-disable-next-line no-plusplus
                             for (let i = 0; i < re.data.length; i++) {
                                 queue.push(re.data[i].name);
                             }
-                            setWorkOptions(queue);
+                            // setWorkOptions(queue);
                             console.log(queue);
                         });
                     });
                     setElements(initialElements);
                     setWorkInstance([]);
+                    const data = {
+                        account: JSON.parse(localStorage.getItem('admin')).account,
+                        token: localStorage.getItem('admin_token'),
+                        room: {
+                            id: localStorage.getItem('roomId'),
+                            password: 'Success'
+                        }
+                    };
+                    CooperationApi.DeleteRoom(data);
+                    window.location.href = 'cooperation';
                 } else {
                     entityApi.updateWorkFlow(workflowSave).then((res) => {
                         console.log(res);
                         entityApi.getWorkFlows().then((re) => {
-                            setWorkflowlist(re.data);
+                            // setWorkflowlist(re.data);
                             const queue = [];
                             queue.push('新建');
                             // eslint-disable-next-line no-plusplus
                             for (let i = 0; i < re.data.length; i++) {
                                 queue.push(re.data[i].name);
                             }
-                            setWorkOptions(queue);
+                            // setWorkOptions(queue);
                             console.log(queue);
                         });
                     });
+                    const data = {
+                        account: JSON.parse(localStorage.getItem('admin')).account,
+                        token: localStorage.getItem('admin_token'),
+                        room: {
+                            id: localStorage.getItem('roomId'),
+                            password: 'Success'
+                        }
+                    };
+                    CooperationApi.DeleteRoom(data);
+                    window.location.href = 'cooperation';
                 }
                 // const conductor = new ConductorApi();
                 // conductor.setWorkFlow(workflow).then((r) => console.log(r));
@@ -1117,31 +1118,65 @@ const Orchestration = () => {
         setSnackbarMsg('');
     };
     useEffect(() => {
+        CooperationApi.subscribeToNewElements(JSON.parse(localStorage.getItem('admin')).account, (flow) => {
+            // eslint-disable-next-line no-plusplus
+            for (let j = 0; j < flow.length; j++) {
+                if (flow[j].type === 'White') {
+                    flow[j].data.updateWid = updateWid;
+                } else if (flow[j].type === 'Black') {
+                    flow[j].data.updateBid = updateBid;
+                } else if (flow[j].type === 'Tag') {
+                    flow[j].data.updateGid = updateGid;
+                } else if (flow[j].type === 'Region') {
+                    flow[j].data.updateRegions = updateRegions;
+                }
+            }
+            console.log(flow);
+            setElements(flow);
+        });
+    }, []);
+    useEffect(() => {
+        if (localStorage.getItem('elements') !== '') {
+            const flow = JSON.parse(localStorage.getItem('elements'));
+            // eslint-disable-next-line no-plusplus
+            for (let j = 0; j < flow.length; j++) {
+                if (flow[j].type === 'White') {
+                    flow[j].data.updateWid = updateWid;
+                } else if (flow[j].type === 'Black') {
+                    flow[j].data.updateBid = updateBid;
+                } else if (flow[j].type === 'Tag') {
+                    flow[j].data.updateGid = updateGid;
+                } else if (flow[j].type === 'Region') {
+                    flow[j].data.updateRegions = updateRegions;
+                }
+            }
+            setElements(flow);
+        }
         const entityApi = new EntityApi(localStorage.getItem('admin_token'));
         entityApi
             .getServiceInfos()
             .then((res) => {
                 setPerm(true);
                 setServiceInfo(res.data);
-                entityApi.getWhitelists().then((re) => {
-                    setWhite(re.data);
-                });
-                entityApi.getBlacklists().then((re) => {
-                    setBlack(re.data);
-                });
-                entityApi.getUserGroups().then((re) => {
-                    setGroup(re.data);
-                });
-                entityApi.getWorkFlows().then((re) => {
-                    setWorkflowlist(re.data);
-                    const queue = [];
-                    queue.push('新建');
-                    // eslint-disable-next-line no-plusplus
-                    for (let i = 0; i < re.data.length; i++) {
-                        queue.push(re.data[i].name);
-                    }
-                    setWorkOptions(queue);
-                });
+                // entityApi.getWhitelists().then((re) => {
+                //     // setWhite(re.data);
+                // });
+                // entityApi.getBlacklists().then((re) => {
+                //     // setBlack(re.data);
+                // });
+                // entityApi.getUserGroups().then((re) => {
+                //     // setGroup(re.data);
+                // });
+                // entityApi.getWorkFlows().then((re) => {
+                //     setWorkflowlist(re.data);
+                //     const queue = [];
+                //     queue.push('新建');
+                //     // eslint-disable-next-line no-plusplus
+                //     for (let i = 0; i < re.data.length; i++) {
+                //         queue.push(re.data[i].name);
+                //     }
+                //     // setWorkOptions(queue);
+                // });
             })
             .catch(() => {
                 setSnackbarMsg('您无权限操作！');
@@ -1260,13 +1295,7 @@ const Orchestration = () => {
                                     <Background />
                                 </ReactFlow>
                             </div>
-                            <SidebarOpen
-                                onRestore={onRestore}
-                                /* eslint-disable-next-line react/jsx-no-bind */
-                                updateFlowinstance={updateFlowinstance}
-                                workOptions={workOptions}
-                                serviceInfo={serviceInfo}
-                            />
+                            <SidebarOpen onRestore={onRestore} serviceInfo={serviceInfo} />
                             <Fab color="primary" aria-label="add" sx={{ display: 'flex', position: 'fixed', left: '94%', top: '90%' }}>
                                 {/* eslint-disable-next-line react/destructuring-assignment,react/jsx-no-bind */}
                                 <Check onClick={handleCameraOpen} />
@@ -1315,13 +1344,7 @@ const Orchestration = () => {
                                 <Background />
                             </ReactFlow>
                         </div>
-                        <Sidebar
-                            onRestore={onRestore}
-                            /* eslint-disable-next-line react/jsx-no-bind */
-                            updateFlowinstance={updateFlowinstance}
-                            workOptions={workOptions}
-                            serviceInfo={serviceInfo}
-                        />
+                        <Sidebar onRestore={onRestore} serviceInfo={serviceInfo} />
                         <Fab color="primary" aria-label="add" sx={{ display: 'flex', position: 'fixed', left: '94%', top: '90%' }}>
                             {/* eslint-disable-next-line react/destructuring-assignment,react/jsx-no-bind */}
                             <Check onClick={handleCameraOpen} />
@@ -1406,4 +1429,4 @@ const Orchestration = () => {
     );
 };
 
-export default Orchestration;
+export default CooperationFlow;

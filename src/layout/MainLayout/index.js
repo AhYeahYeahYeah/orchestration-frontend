@@ -17,6 +17,7 @@ import { SET_MENU } from 'store/actions';
 
 // assets
 import { IconChevronRight } from '@tabler/icons';
+import CooperationApi from '../../api/CooperationApi';
 
 // styles
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
@@ -79,6 +80,17 @@ const MainLayout = () => {
         dispatch({ type: SET_MENU, opened: !matchDownMd });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [matchDownMd]);
+
+    useEffect(() => {
+        const admin = JSON.parse(localStorage.getItem('admin'));
+        // const cooperationApi = new CooperationApi();
+        // setSocketApi(cooperationApi);
+        const data = {
+            account: admin.account,
+            token: localStorage.getItem('admin_token')
+        };
+        CooperationApi.connectionWebServer(admin.account, localStorage.getItem('admin_token'), data);
+    }, []);
 
     return (
         <Box sx={{ display: 'flex' }}>

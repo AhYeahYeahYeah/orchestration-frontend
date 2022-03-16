@@ -24,6 +24,8 @@ const Group = Loadable(lazy(() => import('views/group')));
 const CustomerManagement = Loadable(lazy(() => import('views/customer-management')));
 const AdminManagement = Loadable(lazy(() => import('views/admin-management')));
 const LogManagement = Loadable(lazy(() => import('views/log-management')));
+const Cooperation = Loadable(lazy(() => import('views/cooperation')));
+const CooperationFlow = Loadable(lazy(() => import('views/cooperationFlow')));
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
@@ -43,12 +45,20 @@ const MainRoutes = {
             element: <Orchestration />
         },
         {
+            path: '/cooperation',
+            element: <Cooperation />
+        },
+        {
             path: '/admin-management',
             element: <AdminManagement />
         },
         {
             path: '/customer-management',
             element: <CustomerManagement />
+        },
+        {
+            path: '/cooperationFlow',
+            element: <CooperationFlow />
         },
         {
             path: '/log-management',

@@ -28,6 +28,14 @@ const management = {
             breadcrumbs: false
         },
         {
+            id: 'cooperation',
+            title: '在线协作',
+            type: 'item',
+            url: '/cooperation',
+            icon: icons.IconDashboard,
+            breadcrumbs: false
+        },
+        {
             id: 'admin-management',
             title: '管理员管理',
             type: 'item',
