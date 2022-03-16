@@ -1,4 +1,4 @@
-const wsUrl = 'ws://localhost:10451/roomsocket';
+const wsUrl = 'ws://conductor.rinne.top:10451/roomsocket';
 
 export default class CooperationApi {
     static socket;
