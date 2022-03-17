@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
+// import Card from '@mui/material/Card';
+// import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import ControllableStates from './ControllableStates';
 import PropTypes from 'prop-types';
@@ -34,21 +34,36 @@ export default function CardWhite({ setWid, initName }) {
         });
     }, []);
     return (
-        <Box sx={{ minWidth: 30 }}>
-            <Card variant="outlined">
-                <CardContent>
-                    <Box sx={{ marginLeft: 8.5 }}>
-                        <Typography variant="h5" component="div">
-                            白名单
-                        </Typography>
-                    </Box>
-                    <Box sx={{ marginTop: 1.5, width: 180 }}>
-                        {/* eslint-disable-next-line react/jsx-no-bind */}
-                        <ControllableStates value={whiteName} saveId={saveId} name={initName} />
-                    </Box>
-                </CardContent>
-            </Card>
-        </Box>
+        // <Box sx={{ minWidth: 30 }}>
+        //     <Card variant="outlined">
+        //         <CardContent>
+        //             <Box sx={{ marginLeft: 8.5 }}>
+        //                 <Typography variant="h5" component="div">
+        //                     白名单
+        //                 </Typography>
+        //             </Box>
+        //             <Box sx={{ marginTop: 1.5, width: 180 }}>
+        //                 {/* eslint-disable-next-line react/jsx-no-bind */}
+        //                 <ControllableStates value={whiteName} saveId={saveId} name={initName} />
+        //             </Box>
+        //         </CardContent>
+        //     </Card>
+        // </Box>
+        <div align="center">
+            {/* <Card variant="outlined"> */}
+            {/*    <CardContent> */}
+            {/*        <Box sx={{ marginLeft: 8.5 }}> */}
+            <Typography variant="h6" component="div">
+                白名单
+            </Typography>
+            {/* </Box> */}
+            <Box sx={{ marginTop: 1.5, width: 180 }}>
+                {/* eslint-disable-next-line react/jsx-no-bind */}
+                <ControllableStates value={whiteName} saveId={saveId} name={initName} />
+            </Box>
+            {/*    </CardContent> */}
+            {/* </Card> */}
+        </div>
     );
 }
 

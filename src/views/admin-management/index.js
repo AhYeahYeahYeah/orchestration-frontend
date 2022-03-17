@@ -69,7 +69,9 @@ export default function AdminManagement() {
         };
         console.log(admin);
         const entityApi = new EntityApi(localStorage.getItem('admin_token'));
-        entityApi.updateAdmin(admin).then();
+        entityApi.updateAdmin(admin).then((res) => {
+            console.log(res);
+        });
     }
     React.useEffect(() => {
         const entityApi = new EntityApi(localStorage.getItem('admin_token'));

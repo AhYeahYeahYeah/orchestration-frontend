@@ -1,11 +1,12 @@
 import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
+// import Card from '@mui/material/Card';
+// import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import ControllableStates from './ControllableStates';
 import * as React from 'react';
 import { EntityApi } from '../../../api/restful';
 import PropTypes from 'prop-types';
+// import RegionCheck from './RegionCheck';
 
 // eslint-disable-next-line react/prop-types
 export default function CardTag({ setGid, initName }) {
@@ -35,21 +36,36 @@ export default function CardTag({ setGid, initName }) {
     }, []);
 
     return (
-        <Box sx={{ minWidth: 30 }}>
-            <Card variant="outlined">
-                <CardContent>
-                    <Box sx={{ marginLeft: 8 }}>
-                        <Typography variant="h5" component="div">
-                            用户标签
-                        </Typography>
-                    </Box>
-                    <Box sx={{ marginTop: 1.5, width: 180 }}>
-                        {/* eslint-disable-next-line react/jsx-no-bind */}
-                        <ControllableStates value={groupName} saveId={saveId} name={initName} />
-                    </Box>
-                </CardContent>
-            </Card>
-        </Box>
+        // <Box sx={{ minWidth: 30 }}>
+        //     <Card variant="outlined">
+        //         <CardContent>
+        //             <Box sx={{ marginLeft: 8 }}>
+        //                 <Typography variant="h5" component="div">
+        //                     用户标签
+        //                 </Typography>
+        //             </Box>
+        //             <Box sx={{ marginTop: 1.5, width: 180 }}>
+        //                 {/* eslint-disable-next-line react/jsx-no-bind */}
+        //                 <ControllableStates value={groupName} saveId={saveId} name={initName} />
+        //             </Box>
+        //         </CardContent>
+        //     </Card>
+        // </Box>
+        <div align="center">
+            {/* <Card variant="outlined"> */}
+            {/*    <CardContent> */}
+            {/*        <Box sx={{ marginLeft: 8.5 }}> */}
+            <Typography variant="h6" component="div">
+                用户标签
+            </Typography>
+            {/* </Box> */}
+            <Box sx={{ marginTop: 1.5, width: 180 }}>
+                {/* eslint-disable-next-line react/jsx-no-bind */}
+                <ControllableStates value={groupName} saveId={saveId} name={initName} />
+            </Box>
+            {/*    </CardContent> */}
+            {/* </Card> */}
+        </div>
     );
 }
 CardTag.protoTypes = {

@@ -344,6 +344,7 @@ const Orchestration = () => {
                     position,
                     data: { label: ` ${type} node ` },
                     flag: 'CaseNo',
+                    style: { border: '1px solid black', borderRadius: 99999 },
                     visited: 0
                 };
                 break;
@@ -354,6 +355,7 @@ const Orchestration = () => {
                     type,
                     position,
                     data: { label: ` ${type} node ` },
+                    style: { border: '1px solid black', borderRadius: 99999 },
                     flag: 'CaseYes',
                     visited: 0
                 };
@@ -377,6 +379,7 @@ const Orchestration = () => {
                     position,
                     data: { updateBid, blackName: '' },
                     flag: `${type}`,
+                    style: { border: '1px solid black', padding: 10, borderRadius: 8, width: 210 },
                     visited: 0
                 };
                 break;
@@ -388,6 +391,7 @@ const Orchestration = () => {
                     position,
                     data: { updateWid, whiteName: '' },
                     flag: `${type}`,
+                    style: { border: '1px solid black', padding: 10, borderRadius: 8, width: 210 },
                     visited: 0
                 };
                 break;
@@ -399,6 +403,7 @@ const Orchestration = () => {
                     position,
                     data: { updateFid, workFlowName: '' },
                     flag: `${type}`,
+                    style: { border: '1px solid black', padding: 10, borderRadius: 8, width: 210 },
                     visited: 0
                 };
                 break;
@@ -409,6 +414,7 @@ const Orchestration = () => {
                     position,
                     data: { label: ` ${type} node ` },
                     flag: `${type}`,
+                    style: { border: '1px solid black', padding: 10, borderRadius: 8, width: 140 },
                     visited: 0
                 };
                 break;
@@ -420,6 +426,7 @@ const Orchestration = () => {
                     position,
                     data: { label: ` ${type} node ` },
                     flag: `${type}`,
+                    style: { border: '1px solid black', padding: 10, borderRadius: 8, width: 140 },
                     visited: 0
                 };
                 break;
@@ -431,6 +438,7 @@ const Orchestration = () => {
                     position,
                     data: { label: ` ${type} node ` },
                     flag: `${type}`,
+                    style: { border: '1px solid black', padding: 12, borderRadius: 8, width: 140 },
                     visited: 0
                 };
                 break;
@@ -442,6 +450,7 @@ const Orchestration = () => {
                     position,
                     data: { label: ` ${type} node ` },
                     flag: `${type}`,
+                    style: { border: '1px solid black', padding: 10, borderRadius: 8, width: 140 },
                     visited: 0
                 };
                 break;
@@ -453,6 +462,7 @@ const Orchestration = () => {
                     position,
                     data: { label: ` ${type} node ` },
                     flag: `${type}`,
+                    style: { border: '1px solid black', padding: 10, borderRadius: 8, width: 140 },
                     visited: 0
                 };
                 break;
@@ -464,6 +474,7 @@ const Orchestration = () => {
                     position,
                     data: { updateRegions, regions: [] },
                     flag: `${type}`,
+                    style: { border: '1px solid black', padding: 10, borderRadius: 8, width: 210 },
                     visited: 0
                 };
                 break;
@@ -475,6 +486,7 @@ const Orchestration = () => {
                     position,
                     data: { updateGid, groupName: '' },
                     flag: `${type}`,
+                    style: { border: '1px solid black', padding: 10, borderRadius: 8, width: 210 },
                     visited: 0
                 };
                 break;
@@ -486,6 +498,7 @@ const Orchestration = () => {
                     position,
                     data: { label: ` ${type} node ` },
                     flag: `${type}`,
+                    style: { border: '1px solid black', padding: 10, borderRadius: 8, width: 140 },
                     visited: 0
                 };
                 break;
@@ -497,6 +510,7 @@ const Orchestration = () => {
                     position,
                     data: { label: ` ${type} node ` },
                     flag: `${type}`,
+                    style: { border: '1px solid black', padding: 10, borderRadius: 8, width: 140 },
                     visited: 0
                 };
                 break;
@@ -528,6 +542,7 @@ const Orchestration = () => {
                     position,
                     data: { label: ` ${type} node ` },
                     flag: `${type}`,
+                    style: { border: '1px solid black', padding: 10, borderRadius: 8, width: 140 },
                     visited: 0
                 };
                 break;
