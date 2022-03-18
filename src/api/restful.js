@@ -133,6 +133,10 @@ export class EntityApi {
         return this.instance.put('/admin', data);
     }
 
+    async getByAccount(account) {
+        return this.instance.get(`/admin/findByAccount/${account}`);
+    }
+
     // Customer
     async getCustomers() {
         return this.instance.get('/customer');

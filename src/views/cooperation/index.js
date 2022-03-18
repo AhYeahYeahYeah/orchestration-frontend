@@ -76,12 +76,12 @@ export default function Cooperation() {
                 password: sha1(password)
             }
         };
-        console.log(password);
+        // console.log(password);
         CooperationApi.JoinRoom(data);
         sleep(1050).then(() => {
             const roomData = CooperationApi.roomInstance;
             // eslint-disable-next-line no-plusplus
-            // console.log(roomData);
+            console.log(roomData);
             if (roomData.result === 'Failed') {
                 setSnackbarMsg('密码错误！');
                 setSnackbarOpen(true);
@@ -89,6 +89,7 @@ export default function Cooperation() {
                 handlePwdClose();
                 localStorage.setItem('roomId', roomParam.id);
                 localStorage.setItem('elements', roomData.msg);
+                localStorage.setItem('accountLists', roomData.accountList);
                 window.location.href = '/cooperationFlow';
             }
         });

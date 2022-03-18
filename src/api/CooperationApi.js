@@ -14,6 +14,8 @@ export default class CooperationApi {
 
     static deleteInfo;
 
+    static newAccountLists = new Map();
+
     static connectionWebServer(account, token) {
         this.socket = new WebSocket(`${wsUrl}/${account}`);
         // Open
@@ -39,6 +41,7 @@ export default class CooperationApi {
                 const data = JSON.parse(event.data);
                 switch (data.path) {
                     case 'V1/Room/Join':
+                        if (this.newAccountLists.has(data.account)) this.newAccountLists.get(data.account)(data.accountList);
                         this.roomInstance = data;
                         break;
                     case 'V1/Room/Query':
@@ -54,10 +57,17 @@ export default class CooperationApi {
                         // console.log(data.flow);
                         this.deleteInfo = data;
                         break;
+                    case 'V1/Room/Quit':
+                        if (this.newAccountLists.has(data.account)) this.newAccountLists.get(data.account)(data.accountList);
+                        break;
                     default:
                         break;
                 }
             }
+        });
+
+        this.socket.addEventListener('close', () => {
+            this.socket = new WebSocket(wsUrl);
         });
     }
 
@@ -102,10 +112,31 @@ export default class CooperationApi {
         this.newElements.set(account, handleNewElements);
     }
 
+    static unsubscribeToNewElements(account) {
+        this.newElements.delete(account);
+    }
+
+    static subscribeToNewAccountLists(account, handleNewAccountLists) {
+        this.newAccountLists.set(account, handleNewAccountLists);
+    }
+
+    static unsubscribeToNewAccountLists(account) {
+        this.newAccountLists.delete(account);
+    }
+
     static DeleteRoom(data) {
         this.socket.send(
             JSON.stringify({
                 path: 'V1/Room/Delete',
+                data
+            })
+        );
+    }
+
+    static QuitRoom(data) {
+        this.socket.send(
+            JSON.stringify({
+                path: 'V1/Room/Quit',
                 data
             })
         );

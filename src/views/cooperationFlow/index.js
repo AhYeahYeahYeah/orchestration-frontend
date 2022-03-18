@@ -16,7 +16,7 @@ import Sidebar from './Sidebar';
 import SidebarOpen from './SidebarOpen';
 import './dnd.css';
 import { useTheme } from '@mui/material/styles';
-import { Alert, Chip, Dialog, DialogActions, DialogTitle, Fab, Grid, Slide, Snackbar } from '@mui/material';
+import { Alert, Avatar, Chip, Dialog, DialogActions, DialogTitle, Fab, Grid, Slide, Snackbar } from '@mui/material';
 import { InputNode, WorkflowBuilder } from '../../utils/workflowBuilder';
 import {
     log,
@@ -58,6 +58,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import axios from 'axios';
 import CooperationApi from '../../api/CooperationApi';
+import { AvatarGroup } from '@mui/lab';
 
 const nodeTypes = {
     No: NoSelector,
@@ -1132,6 +1133,7 @@ const CooperationFlow = () => {
         setSnackbarOpen(false);
         setSnackbarMsg('');
     };
+    const [avatar, setAvatar] = useState([]);
     useEffect(() => {
         CooperationApi.subscribeToNewElements(JSON.parse(localStorage.getItem('admin')).account, (flow) => {
             // eslint-disable-next-line no-plusplus
@@ -1149,8 +1151,61 @@ const CooperationFlow = () => {
             console.log(flow);
             setElements(flow);
         });
+
+        CooperationApi.subscribeToNewAccountLists(JSON.parse(localStorage.getItem('admin')).account, (accountLists) => {
+            const entityApi = new EntityApi(localStorage.getItem('admin_token'));
+            // console.log(accountLists);
+            localStorage.setItem('accountLists', accountLists);
+            accountLists = accountLists.substring(1, accountLists.length - 1).split(',');
+            const queue = [];
+            // eslint-disable-next-line no-plusplus
+            for (let i = 0; i < accountLists.length; i++) {
+                if (i === 0) queue.push(entityApi.getByAccount(accountLists[i]));
+                else queue.push(entityApi.getByAccount(accountLists[i].substring(1, accountLists[i].length)));
+            }
+            const avatar = [];
+            Promise.all(queue).then((res) => {
+                // eslint-disable-next-line no-plusplus
+                for (let i = 0; i < res.length; i++) {
+                    avatar.push(res[i].data.avatar);
+                }
+                avatar.map((value) => console.log(value));
+                setAvatar(avatar);
+            });
+        });
+        // return () => {
+        //     const data = {
+        //         account: JSON.parse(localStorage.getItem('admin')).account,
+        //         token: localStorage.getItem('admin_token'),
+        //         room: {
+        //             id: localStorage.getItem('roomId')
+        //         }
+        //     };
+        //     CooperationApi.QuitRoom(data);
+        // };
     }, []);
     useEffect(() => {
+        const entityApi = new EntityApi(localStorage.getItem('admin_token'));
+        let accountLists = localStorage.getItem('accountLists');
+        localStorage.setItem('accountLists', accountLists);
+        accountLists = accountLists.substring(1, accountLists.length - 1).split(',');
+        const queue = [];
+        // eslint-disable-next-line no-plusplus
+        for (let i = 0; i < accountLists.length; i++) {
+            if (i === 0) queue.push(entityApi.getByAccount(accountLists[i]));
+            else queue.push(entityApi.getByAccount(accountLists[i].substring(1, accountLists[i].length)));
+        }
+        const avatar = [];
+        Promise.all(queue).then((res) => {
+            console.log(res);
+            // eslint-disable-next-line no-plusplus
+            for (let i = 0; i < res.length; i++) {
+                avatar.push(res[i].data.avatar);
+            }
+            console.log(avatar);
+            avatar.map((value) => console.log(value));
+            setAvatar(avatar);
+        });
         if (localStorage.getItem('elements') !== '') {
             const flow = JSON.parse(localStorage.getItem('elements'));
             // eslint-disable-next-line no-plusplus
@@ -1167,7 +1222,6 @@ const CooperationFlow = () => {
             }
             setElements(flow);
         }
-        const entityApi = new EntityApi(localStorage.getItem('admin_token'));
         entityApi
             .getServiceInfos()
             .then((res) => {
@@ -1265,8 +1319,38 @@ const CooperationFlow = () => {
             // mediaStream.getTracks()[0].stop();
         });
     }
+    function Quit() {
+        const data = {
+            account: JSON.parse(localStorage.getItem('admin')).account,
+            token: localStorage.getItem('admin_token'),
+            room: {
+                id: localStorage.getItem('roomId')
+            }
+        };
+        CooperationApi.QuitRoom(data);
+        CooperationApi.unsubscribeToNewElements(JSON.parse(localStorage.getItem('admin')).account);
+        CooperationApi.unsubscribeToNewAccountLists(JSON.parse(localStorage.getItem('admin')).account);
+        window.location.href = '/cooperation';
+    }
     return (
         <>
+            <Grid container>
+                <Grid item xs={10}>
+                    {/* eslint-disable-next-line react/jsx-no-bind */}
+                    <Button onClick={Quit} variant="outlined">
+                        Quit
+                    </Button>
+                </Grid>
+                <AvatarGroup max={3}>
+                    {avatar.map((value, index) => (
+                        <Box key={index}>
+                            <Avatar src={value} sx={{ width: 30, height: 30 }} />
+                        </Box>
+                    ))}
+                </AvatarGroup>
+            </Grid>
+            {/* eslint-disable-next-line react/jsx-no-undef */}
+            {/* eslint-disable-next-line react/jsx-no-bind */}
             {/* eslint-disable-next-line react/jsx-no-bind */}
             <Dialog open={cameraOpen} onClose={handleCameraClose}>
                 <DialogTitle>
@@ -1338,7 +1422,7 @@ const CooperationFlow = () => {
                     variant="outlined"
                 />
             </Dialog>
-            <Grid sx={{ position: 'relative', height: '100%', background: theme.palette.background.default }}>
+            <Grid sx={{ position: 'relative', height: '93%', background: theme.palette.background.default, mt: 0.5 }}>
                 <div className="dndflow">
                     <ReactFlowProvider>
                         <div className="reactflow-wrapper" ref={reactFlowWrapper}>
