@@ -1160,8 +1160,7 @@ const CooperationFlow = () => {
             const queue = [];
             // eslint-disable-next-line no-plusplus
             for (let i = 0; i < accountLists.length; i++) {
-                if (i === 0) queue.push(entityApi.getByAccount(accountLists[i]));
-                else queue.push(entityApi.getByAccount(accountLists[i].substring(1, accountLists[i].length)));
+                queue.push(entityApi.getByAccount(accountLists[i]));
             }
             const avatar = [];
             Promise.all(queue).then((res) => {
@@ -1192,8 +1191,7 @@ const CooperationFlow = () => {
         const queue = [];
         // eslint-disable-next-line no-plusplus
         for (let i = 0; i < accountLists.length; i++) {
-            if (i === 0) queue.push(entityApi.getByAccount(accountLists[i]));
-            else queue.push(entityApi.getByAccount(accountLists[i].substring(1, accountLists[i].length)));
+            queue.push(entityApi.getByAccount(accountLists[i]));
         }
         const avatar = [];
         Promise.all(queue).then((res) => {
