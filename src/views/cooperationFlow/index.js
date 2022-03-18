@@ -1333,13 +1333,16 @@ const CooperationFlow = () => {
     return (
         <>
             <Grid container>
-                <Grid item xs={10}>
+                <Grid item xs={9}>
                     {/* eslint-disable-next-line react/jsx-no-bind */}
                     <Button onClick={Quit} variant="outlined">
-                        Quit
+                        退出
                     </Button>
                 </Grid>
-                <AvatarGroup max={3}>
+                <Typography variant="h5" mt={1}>
+                    {`正在编辑:  `}{' '}
+                </Typography>
+                <AvatarGroup max={3} sx={{ ml: 2 }}>
                     {avatar.map((value, index) => (
                         <Box key={index}>
                             <Avatar src={value} sx={{ width: 30, height: 30 }} />
