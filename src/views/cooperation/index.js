@@ -22,6 +22,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import DeleteModel from './DeleteModel';
+import { useNavigate } from 'react-router-dom';
 
 function CustomPagination() {
     const apiRef = useGridApiContext();
@@ -42,6 +43,7 @@ export default function Cooperation() {
     const [snackbarMsg, setSnackbarMsg] = React.useState('');
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [roomDelete, setRoomDelete] = useState({});
+    const navigate = useNavigate();
     function handleDeleteOpen() {
         setDeleteOpen(true);
     }
@@ -90,7 +92,7 @@ export default function Cooperation() {
                 localStorage.setItem('roomId', roomParam.id);
                 localStorage.setItem('elements', roomData.msg);
                 localStorage.setItem('accountLists', roomData.accountList);
-                window.location.href = '/cooperationFlow';
+                navigate('/cooperationFlow');
             }
         });
     }
