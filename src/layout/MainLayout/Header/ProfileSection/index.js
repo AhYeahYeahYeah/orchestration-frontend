@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 // material-ui
@@ -31,15 +31,16 @@ import Transitions from 'ui-component/extended/Transitions';
 
 // assets
 import { IconLogout, IconSettings } from '@tabler/icons';
+import { EntityApi } from '../../../../api/restful';
 
 // ==============================|| PROFILE MENU ||============================== //
 
 const ProfileSection = () => {
     const theme = useTheme();
     const customization = useSelector((state) => state.customization);
-    const navigate = useNavigate();
-    const admin = JSON.parse(localStorage.getItem('admin'));
-    const [selectedIndex, setSelectedIndex] = useState(-1);
+    // const navigate = useNavigate();
+    const [admin, setAdmin] = useState({});
+    // const [selectedIndex, setSelectedIndex] = useState(-1);
     const [open, setOpen] = useState(false);
     /**
      * anchorRef is used on different componets and specifying one type leads to other components throwing an error
@@ -58,14 +59,14 @@ const ProfileSection = () => {
         setOpen(false);
     };
 
-    const handleListItemClick = (event, index, route = '') => {
-        setSelectedIndex(index);
-        handleClose(event);
-
-        if (route && route !== '') {
-            navigate(route);
-        }
-    };
+    // const handleListItemClick = (event, index, route = '') => {
+    //     setSelectedIndex(index);
+    //     handleClose(event);
+    //
+    //     if (route && route !== '') {
+    //         navigate(route);
+    //     }
+    // };
     const handleToggle = () => {
         setOpen((prevOpen) => !prevOpen);
     };
@@ -78,6 +79,21 @@ const ProfileSection = () => {
 
         prevOpen.current = open;
     }, [open]);
+
+    useEffect(() => {
+        if (localStorage.getItem('admin') === null) {
+            window.location.href = '/';
+        } else {
+            const eneity = new EntityApi(localStorage.getItem('admin_token'));
+            eneity
+                .getOrders()
+                .then()
+                // eslint-disable-next-line no-return-assign
+                .catch(() => (window.location.href = '/'));
+            const admin = JSON.parse(localStorage.getItem('admin'));
+            setAdmin(admin);
+        }
+    }, []);
 
     return (
         <>
@@ -178,19 +194,19 @@ const ProfileSection = () => {
                                                     }
                                                 }}
                                             >
+                                                {/* <ListItemButton */}
+                                                {/*    sx={{ borderRadius: `${customization.borderRadius}px` }} */}
+                                                {/*    selected={selectedIndex === 0} */}
+                                                {/*    onClick={(event) => handleListItemClick(event, 0, '/user/account-profile/profile1')} */}
+                                                {/* > */}
+                                                {/*    <ListItemIcon> */}
+                                                {/*        <IconSettings stroke={1.5} size="1.3rem" /> */}
+                                                {/*    </ListItemIcon> */}
+                                                {/*    <ListItemText primary={<Typography variant="body2">Account Settings</Typography>} /> */}
+                                                {/* </ListItemButton> */}
                                                 <ListItemButton
                                                     sx={{ borderRadius: `${customization.borderRadius}px` }}
-                                                    selected={selectedIndex === 0}
-                                                    onClick={(event) => handleListItemClick(event, 0, '/user/account-profile/profile1')}
-                                                >
-                                                    <ListItemIcon>
-                                                        <IconSettings stroke={1.5} size="1.3rem" />
-                                                    </ListItemIcon>
-                                                    <ListItemText primary={<Typography variant="body2">Account Settings</Typography>} />
-                                                </ListItemButton>
-                                                <ListItemButton
-                                                    sx={{ borderRadius: `${customization.borderRadius}px` }}
-                                                    selected={selectedIndex === 4}
+                                                    // selected={selectedIndex === 4}
                                                     onClick={handleLogout}
                                                 >
                                                     <ListItemIcon>

@@ -18,6 +18,14 @@ const dashboard = {
             url: '/dashboard',
             icon: icons.IconDashboard,
             breadcrumbs: false
+        },
+        {
+            id: 'monitor',
+            title: '流程监控',
+            type: 'item',
+            url: '/monitor',
+            icon: icons.IconDashboard,
+            breadcrumbs: false
         }
     ]
 };

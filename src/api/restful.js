@@ -244,15 +244,19 @@ export class EntityApi {
 
     // Order
     async getOrders() {
-        return this.instance.get('/order');
+        return this.instance.get('/orders');
     }
 
     async getOrder(oid) {
-        return this.instance.get(`/order/${oid}`);
+        return this.instance.get(`/orders/${oid}`);
     }
 
     async addOrder(data) {
-        return this.instance.post('/order', data);
+        return this.instance.post('/orders', data);
+    }
+
+    async getOrdersRecent() {
+        return this.instance.get('/orders/dashboard/recent');
     }
 
     // WorkFlow
@@ -279,6 +283,14 @@ export class EntityApi {
     async getLogs() {
         return this.instance.get('/log');
     }
+
+    async getProductsToDas() {
+        return this.instance.get('/product/dashboard');
+    }
+
+    async getWorkFlowListsToDas() {
+        return this.instance.get('/workflow/dashboard');
+    }
 }
 
 export class ConductorApi {
@@ -293,5 +305,10 @@ export class ConductorApi {
     // eslint-disable-next-line class-methods-use-this
     async getMetaDataWorkFlow(name) {
         return axios.get(`${conductorBase}/metadata/workflow/${name}`);
+    }
+
+    // eslint-disable-next-line class-methods-use-this
+    async getByWorkFlowId(id) {
+        return axios.get(`${conductorBase}/workflow/${id}`);
     }
 }

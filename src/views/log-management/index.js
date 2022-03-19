@@ -33,7 +33,7 @@ export default function LogManagement() {
     return (
         <div>
             <Typography component="h1" variant="h3" align="center">
-                客户信息
+                日志管理
             </Typography>
             <div style={{ marginTop: 10, height: `calc(100vh - 180px)`, width: '100%', background: theme.palette.background.default }}>
                 <DataGrid

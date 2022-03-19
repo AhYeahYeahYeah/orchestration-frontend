@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // material-ui
 import { styled, useTheme } from '@mui/material/styles';
@@ -12,11 +12,12 @@ import SkeletonEarningCard from 'ui-component/cards/Skeleton/EarningCard';
 // assets
 import EarningIcon from 'assets/images/icons/earning.svg';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+// import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import GetAppTwoToneIcon from '@mui/icons-material/GetAppOutlined';
 import FileCopyTwoToneIcon from '@mui/icons-material/FileCopyOutlined';
 import PictureAsPdfTwoToneIcon from '@mui/icons-material/PictureAsPdfOutlined';
 import ArchiveTwoToneIcon from '@mui/icons-material/ArchiveOutlined';
+import { EntityApi } from '../../api/restful';
 
 const CardWrapper = styled(MainCard)(({ theme }) => ({
     backgroundColor: theme.palette.secondary.dark,
@@ -60,7 +61,7 @@ const EarningCard = ({ isLoading }) => {
     const theme = useTheme();
 
     const [anchorEl, setAnchorEl] = useState(null);
-
+    const [count, setCount] = useState(0);
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -69,6 +70,12 @@ const EarningCard = ({ isLoading }) => {
         setAnchorEl(null);
     };
 
+    useEffect(() => {
+        const entity = new EntityApi(localStorage.getItem('admin_token'));
+        entity.getProductsToDas().then((res) => {
+            setCount(res.data.length);
+        });
+    }, []);
     return (
         <>
             {isLoading ? (
@@ -144,20 +151,8 @@ const EarningCard = ({ isLoading }) => {
                                 <Grid container alignItems="center">
                                     <Grid item>
                                         <Typography sx={{ fontSize: '2.125rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>
-                                            $500.00
+                                            {count} 个
                                         </Typography>
-                                    </Grid>
-                                    <Grid item>
-                                        <Avatar
-                                            sx={{
-                                                cursor: 'pointer',
-                                                ...theme.typography.smallAvatar,
-                                                backgroundColor: theme.palette.secondary[200],
-                                                color: theme.palette.secondary.dark
-                                            }}
-                                        >
-                                            <ArrowUpwardIcon fontSize="inherit" sx={{ transform: 'rotate3d(1, 1, 1, 45deg)' }} />
-                                        </Avatar>
                                     </Grid>
                                 </Grid>
                             </Grid>
@@ -169,7 +164,7 @@ const EarningCard = ({ isLoading }) => {
                                         color: theme.palette.secondary[200]
                                     }}
                                 >
-                                    Total Earning
+                                    产品总数
                                 </Typography>
                             </Grid>
                         </Grid>

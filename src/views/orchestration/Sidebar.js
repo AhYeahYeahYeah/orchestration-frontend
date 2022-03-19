@@ -115,7 +115,7 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                     <Grid item xs={12} sx={{ marginLeft: 2, marginRight: 2, marginTop: 1.5 }}>
                         {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
                         <div
-                            onClick={() => handleClickOpen(3)}
+                            onClick={() => handleClickOpen(4)}
                             className="react-flow__node-default"
                             onDragStart={(event) => onDragStart(event, 'Update')}
                             draggable
@@ -129,7 +129,7 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                     <Grid item xs={12} sx={{ marginLeft: 2, marginRight: 2, marginTop: 1.5 }}>
                         {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
                         <div
-                            onClick={() => handleClickOpen(4)}
+                            onClick={() => handleClickOpen(5)}
                             className="react-flow__node-default"
                             onDragStart={(event) => onDragStart(event, 'Unlock')}
                             draggable
@@ -143,7 +143,7 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                     <Grid item xs={12} sx={{ marginLeft: 2, marginRight: 2, marginTop: 1.5 }}>
                         {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
                         <div
-                            onClick={() => handleClickOpen(5)}
+                            onClick={() => handleClickOpen(6)}
                             className="react-flow__node-default"
                             onDragStart={(event) => onDragStart(event, 'Credential')}
                             draggable
@@ -157,7 +157,7 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                     <Grid item xs={12} sx={{ marginLeft: 2, marginRight: 2, marginTop: 1.5 }}>
                         {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
                         <div
-                            onClick={() => handleClickOpen(6)}
+                            onClick={() => handleClickOpen(7)}
                             className="react-flow__node-default"
                             onDragStart={(event) => onDragStart(event, 'Profile')}
                             draggable
@@ -171,7 +171,7 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                     <Grid item xs={12} sx={{ marginLeft: 2, marginRight: 2, marginTop: 1.5 }}>
                         {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
                         <div
-                            onClick={() => handleClickOpen(7)}
+                            onClick={() => handleClickOpen(8)}
                             className="react-flow__node-default"
                             onDragStart={(event) => onDragStart(event, 'White')}
                             draggable
@@ -185,7 +185,7 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                     <Grid item xs={12} sx={{ marginLeft: 2, marginRight: 2, marginTop: 1.5 }}>
                         {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
                         <div
-                            onClick={() => handleClickOpen(8)}
+                            onClick={() => handleClickOpen(9)}
                             className="react-flow__node-default"
                             onDragStart={(event) => onDragStart(event, 'Black')}
                             draggable
@@ -199,7 +199,7 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                     <Grid item xs={12} sx={{ marginLeft: 2, marginRight: 2, marginTop: 1.5 }}>
                         {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
                         <div
-                            onClick={() => handleClickOpen(9)}
+                            onClick={() => handleClickOpen(10)}
                             className="react-flow__node-default"
                             onDragStart={(event) => onDragStart(event, 'Region')}
                             draggable
@@ -213,7 +213,7 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                     <Grid item xs={12} sx={{ marginLeft: 2, marginRight: 2, marginTop: 1.5 }}>
                         {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
                         <div
-                            onClick={() => handleClickOpen(10)}
+                            onClick={() => handleClickOpen(11)}
                             className="react-flow__node-default"
                             onDragStart={(event) => onDragStart(event, 'Tag')}
                             draggable
@@ -255,7 +255,7 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                     <Grid item xs={12} sx={{ marginLeft: 2, marginRight: 2, marginTop: 1.5 }}>
                         {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
                         <div
-                            onClick={() => handleClickOpen(7)}
+                            onClick={() => handleClickOpen(3)}
                             className="react-flow__node-default"
                             onDragStart={(event) => onDragStart(event, 'WorkFlow')}
                             draggable

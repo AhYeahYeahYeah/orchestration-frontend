@@ -6,7 +6,7 @@ import Loadable from 'ui-component/Loadable';
 
 // dashboard routing
 const Dashboard = Loadable(lazy(() => import('views/dashboard')));
-
+const Monitor = Loadable(lazy(() => import('views/monitor')));
 // utilities routing
 const UtilsTypography = Loadable(lazy(() => import('views/utilities/Typography')));
 const UtilsColor = Loadable(lazy(() => import('views/utilities/Color')));
@@ -35,6 +35,10 @@ const MainRoutes = {
         {
             path: '/dashboard',
             element: <Dashboard />
+        },
+        {
+            path: '/monitor',
+            element: <Monitor />
         },
         {
             path: '/product',
