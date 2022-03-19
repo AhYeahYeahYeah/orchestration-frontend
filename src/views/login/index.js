@@ -9,7 +9,7 @@ import AuthWrapper1 from 'views/pages/authentication/AuthWrapper1';
 import AuthCardWrapper from 'views/pages/authentication/AuthCardWrapper';
 import AuthLogin from 'views/pages/authentication/auth-forms/AuthLogin';
 import Logo from 'ui-component/Logo';
-import AuthFooter from 'ui-component/cards/AuthFooter';
+// import AuthFooter from 'ui-component/cards/AuthFooter';
 
 // assets
 
@@ -46,14 +46,14 @@ const Login = () => {
                                                         gutterBottom
                                                         variant={matchDownSM ? 'h3' : 'h2'}
                                                     >
-                                                        Hi, Welcome Back
+                                                        欢迎回来
                                                     </Typography>
                                                     <Typography
                                                         variant="caption"
                                                         fontSize="16px"
                                                         textAlign={matchDownSM ? 'center' : 'inherit'}
                                                     >
-                                                        Enter your credentials to continue
+                                                        选择登陆方式
                                                     </Typography>
                                                 </Stack>
                                             </Grid>
@@ -68,7 +68,7 @@ const Login = () => {
                                     <Grid item xs={12}>
                                         <Grid item container direction="column" alignItems="center" xs={12}>
                                             <Typography component={Link} to="/register" variant="subtitle1" sx={{ textDecoration: 'none' }}>
-                                                Don&apos;t have an account?
+                                                需 要 注 册？
                                             </Typography>
                                         </Grid>
                                     </Grid>
@@ -77,9 +77,9 @@ const Login = () => {
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid item xs={12} sx={{ m: 3, mt: 1 }}>
-                    <AuthFooter />
-                </Grid>
+                {/* <Grid item xs={12} sx={{ m: 3, mt: 1 }}> */}
+                {/*    <AuthFooter /> */}
+                {/* </Grid> */}
             </Grid>
         </AuthWrapper1>
     );

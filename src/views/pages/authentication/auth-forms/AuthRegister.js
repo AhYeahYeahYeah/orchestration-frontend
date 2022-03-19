@@ -126,10 +126,10 @@ const FirebaseRegister = ({ ...others }) => {
                     submit: null
                 }}
                 validationSchema={Yup.object().shape({
-                    account: Yup.string().max(255).required('Account is required'),
-                    nickName: Yup.string().max(255).required('NickName is required'),
-                    aname: Yup.string().max(255).required('Name is required'),
-                    password: Yup.string().max(255).required('Password is required')
+                    account: Yup.string().max(255).required('账户不能为空'),
+                    nickName: Yup.string().max(255).required('昵称不能为空'),
+                    aname: Yup.string().max(255).required('真实姓名不能为空'),
+                    password: Yup.string().max(255).required('密码不能为空')
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                     try {
@@ -165,7 +165,7 @@ const FirebaseRegister = ({ ...others }) => {
                 {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
                     <form noValidate onSubmit={handleSubmit} {...others}>
                         <FormControl fullWidth error={Boolean(touched.account && errors.account)} sx={{ ...theme.typography.customInput }}>
-                            <InputLabel htmlFor="outlined-adornment-email-register">account</InputLabel>
+                            <InputLabel htmlFor="outlined-adornment-email-register">账户</InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-email-register"
                                 type="account"
@@ -186,7 +186,7 @@ const FirebaseRegister = ({ ...others }) => {
                             error={Boolean(touched.nickName && errors.nickName)}
                             sx={{ ...theme.typography.customInput }}
                         >
-                            <InputLabel htmlFor="outlined-adornment-email-register">nickName</InputLabel>
+                            <InputLabel htmlFor="outlined-adornment-email-register">昵称</InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-email-register"
                                 type="nickName"
@@ -203,7 +203,7 @@ const FirebaseRegister = ({ ...others }) => {
                             )}
                         </FormControl>
                         <FormControl fullWidth error={Boolean(touched.aname && errors.aname)} sx={{ ...theme.typography.customInput }}>
-                            <InputLabel htmlFor="outlined-adornment-email-register">name</InputLabel>
+                            <InputLabel htmlFor="outlined-adornment-email-register">真实姓名</InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-email-register"
                                 type="aname"

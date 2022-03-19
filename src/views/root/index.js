@@ -66,7 +66,7 @@ export default function RootPage() {
                                 sx={{ left: '18%' }}
                                 href="/login"
                             >
-                                Sign In
+                                登 录
                             </LoadingButton>
 
                             <LoadingButton
@@ -80,7 +80,7 @@ export default function RootPage() {
                                 sx={{ left: '37%' }}
                                 href="/register"
                             >
-                                Sign Up
+                                注 册
                             </LoadingButton>
                         </Grid>
                         <Copyright sx={{ mt: 30 }} />

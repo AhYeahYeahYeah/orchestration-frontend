@@ -9,7 +9,7 @@ import AuthWrapper1 from 'views/pages/authentication/AuthWrapper1';
 import AuthCardWrapper from 'views/pages/authentication/AuthCardWrapper';
 import Logo from 'ui-component/Logo';
 import AuthRegister from 'views/pages/authentication/auth-forms/AuthRegister';
-import AuthFooter from 'ui-component/cards/AuthFooter';
+// import AuthFooter from 'ui-component/cards/AuthFooter';
 
 // assets
 
@@ -77,9 +77,9 @@ const Register = () => {
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid item xs={12} sx={{ m: 3, mt: 1 }}>
-                    <AuthFooter />
-                </Grid>
+                {/* <Grid item xs={12} sx={{ m: 3, mt: 1 }}> */}
+                {/*    <AuthFooter /> */}
+                {/* </Grid> */}
             </Grid>
         </AuthWrapper1>
     );

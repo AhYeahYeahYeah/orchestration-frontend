@@ -18,7 +18,6 @@ import {
     OutlinedInput,
     Stack,
     Typography,
-    useMediaQuery,
     Alert,
     Snackbar
 } from '@mui/material';
@@ -35,7 +34,7 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
-import Google from 'assets/images/icons/social-google.svg';
+// import Google from 'assets/images/icons/social-google.svg';
 import { AuthApi } from '../../../../api/restful';
 import sha1 from 'js-sha1';
 // ============================|| FIREBASE - LOGIN ||============================ //
@@ -43,7 +42,7 @@ import sha1 from 'js-sha1';
 const FirebaseLogin = ({ ...others }) => {
     const theme = useTheme();
     const scriptedRef = useScriptRef();
-    const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
+    // const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
     const customization = useSelector((state) => state.customization);
     const [checked, setChecked] = useState(true);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -82,10 +81,9 @@ const FirebaseLogin = ({ ...others }) => {
                                 borderColor: theme.palette.grey[100]
                             }}
                         >
-                            <Box sx={{ mr: { xs: 1, sm: 2, width: 20 } }}>
-                                <img src={Google} alt="google" width={16} height={16} style={{ marginRight: matchDownSM ? 8 : 16 }} />
-                            </Box>
-                            Sign in with Google
+                            {/* <Box sx={{ mr: { xs: 1, sm: 2, width: 20 } }}> */}
+                            {/*    <img src={Google} alt="google" width={16} height={16} style={{ marginRight: matchDownSM ? 8 : 16 }} /> */}
+                            {/* </Box> */}手 机 号 登 陆
                         </Button>
                     </AnimateButton>
                 </Grid>
@@ -113,7 +111,7 @@ const FirebaseLogin = ({ ...others }) => {
                             disableRipple
                             disabled
                         >
-                            OR
+                            或
                         </Button>
 
                         <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
@@ -121,7 +119,7 @@ const FirebaseLogin = ({ ...others }) => {
                 </Grid>
                 <Grid item xs={12} container alignItems="center" justifyContent="center">
                     <Box sx={{ mb: 2 }}>
-                        <Typography variant="subtitle1">Sign in with Email address</Typography>
+                        <Typography variant="subtitle1">账 户 名 登 录</Typography>
                     </Box>
                 </Grid>
             </Grid>
@@ -133,8 +131,8 @@ const FirebaseLogin = ({ ...others }) => {
                     submit: null
                 }}
                 validationSchema={Yup.object().shape({
-                    email: Yup.string().max(255).required('Account is required'),
-                    password: Yup.string().max(255).required('Password is required')
+                    email: Yup.string().max(255).required('账户不能为空'),
+                    password: Yup.string().max(255).required('密码不能为空')
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                     try {
@@ -168,7 +166,7 @@ const FirebaseLogin = ({ ...others }) => {
                 {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
                     <form noValidate onSubmit={handleSubmit} {...others}>
                         <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
-                            <InputLabel htmlFor="outlined-adornment-email-login">Email Address / Username</InputLabel>
+                            <InputLabel htmlFor="outlined-adornment-email-login">账户</InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-email-login"
                                 type="email"
@@ -176,7 +174,7 @@ const FirebaseLogin = ({ ...others }) => {
                                 name="email"
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                label="Email Address / Username"
+                                label="账户"
                                 inputProps={{}}
                             />
                             {touched.email && errors.email && (
@@ -191,7 +189,7 @@ const FirebaseLogin = ({ ...others }) => {
                             error={Boolean(touched.password && errors.password)}
                             sx={{ ...theme.typography.customInput }}
                         >
-                            <InputLabel htmlFor="outlined-adornment-password-login">Password</InputLabel>
+                            <InputLabel htmlFor="outlined-adornment-password-login">密码</InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-password-login"
                                 type={showPassword ? 'text' : 'password'}
@@ -212,7 +210,7 @@ const FirebaseLogin = ({ ...others }) => {
                                         </IconButton>
                                     </InputAdornment>
                                 }
-                                label="Password"
+                                label="密码"
                                 inputProps={{}}
                             />
                             {touched.password && errors.password && (
@@ -231,10 +229,10 @@ const FirebaseLogin = ({ ...others }) => {
                                         color="primary"
                                     />
                                 }
-                                label="Remember me"
+                                label="记住我"
                             />
                             <Typography variant="subtitle1" color="secondary" sx={{ textDecoration: 'none', cursor: 'pointer' }}>
-                                Forgot Password?
+                                忘记密码？
                             </Typography>
                         </Stack>
                         {errors.submit && (
@@ -254,7 +252,7 @@ const FirebaseLogin = ({ ...others }) => {
                                     variant="contained"
                                     color="secondary"
                                 >
-                                    Sign in
+                                    登 录
                                 </Button>
                             </AnimateButton>
                         </Box>
