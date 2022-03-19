@@ -8,6 +8,7 @@ import {
     FactCheck,
     Lock,
     LockOpen,
+    Pageview,
     RateReview,
     Reply,
     SwitchCamera,
@@ -21,7 +22,7 @@ import ServiceInfoModel from './ServiceInfoModel';
 import { useState } from 'react';
 import { GridActionsCellItem } from '@mui/x-data-grid';
 
-export default function Sidebar({ onRestore, updateFlowinstance, workOptions, serviceInfo }) {
+export default function Sidebar({ onRestore, updateFlowinstance, workOptions, serviceInfo, workFlowInstanceName }) {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
     const [serviceShow, setServiceShow] = useState({});
@@ -50,6 +51,17 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                     <Grid item xs={8}>
                         <ControllableStates updateFlowinstance={updateFlowinstance} workOptions={workOptions} />
                     </Grid>
+                    {workFlowInstanceName === '' || workFlowInstanceName === '新建' ? (
+                        ''
+                    ) : (
+                        <Grid item xs={1}>
+                            {/* eslint-disable-next-line react/destructuring-assignment */}
+                            <GridActionsCellItem
+                                icon={<Pageview />}
+                                onClick={() => window.open(`http://conductor.rinne.top:5000/workflowDef/${workFlowInstanceName}`)}
+                            />
+                        </Grid>
+                    )}
                 </Grid>
             </Box>
             <Box sx={{ position: 'absolute', height: '80%' }}>
@@ -286,5 +298,6 @@ Sidebar.propTypes = {
     onRestore: PropTypes.func,
     updateFlowinstance: PropTypes.func,
     workOptions: PropTypes.array,
-    serviceInfo: PropTypes.array
+    serviceInfo: PropTypes.array,
+    workFlowInstanceName: PropTypes.string
 };

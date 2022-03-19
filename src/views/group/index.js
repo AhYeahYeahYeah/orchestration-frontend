@@ -70,6 +70,7 @@ export default function Group() {
         {
             field: 'actions',
             type: 'actions',
+            headerName: '修改操作',
             flex: 0.65,
             minWidth: 150,
             getActions: (params) => [

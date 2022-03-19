@@ -83,7 +83,7 @@ export default function AddDialog({ open, handleClose, save }) {
         <Dialog open={open} fullWidth onClose={restore}>
             <Paper sx={{ my: { xs: 1, md: 2 }, p: { xs: 1, md: 1 } }}>
                 <Typography component="h1" variant="h4" align="center">
-                    白名单模板
+                    用户组标签
                 </Typography>
                 <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
                     {steps.map((label) => (

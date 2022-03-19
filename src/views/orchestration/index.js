@@ -253,8 +253,10 @@ const Orchestration = () => {
     };
     const onEdgeUpdate = (oldEdge, newConnection) => setElements((els) => updateEdge(oldEdge, newConnection, els));
     const onLoad = (_reactFlowInstance) => setReactFlowInstance(_reactFlowInstance);
+    const [workFlowInstanceName, setWorkFlowInstanceName] = useState('');
     function updateFlowinstance(value) {
         console.log(value);
+        setWorkFlowInstanceName(value);
         if (value === '新建') {
             setElements(initialElements);
             setWorkInstance([]);
@@ -1336,6 +1338,7 @@ const Orchestration = () => {
                             updateFlowinstance={updateFlowinstance}
                             workOptions={workOptions}
                             serviceInfo={serviceInfo}
+                            workFlowInstanceName={workFlowInstanceName}
                         />
                         <Fab color="primary" aria-label="add" sx={{ display: 'flex', position: 'fixed', left: '94%', top: '90%' }}>
                             {/* eslint-disable-next-line react/destructuring-assignment,react/jsx-no-bind */}

@@ -68,6 +68,7 @@ export default function Whitelist() {
         { field: 'description', headerName: '模板描述', flex: 2.3, minWidth: 580 },
         {
             field: 'actions',
+            headerName: '修改操作',
             type: 'actions',
             flex: 0.65,
             minWidth: 150,
