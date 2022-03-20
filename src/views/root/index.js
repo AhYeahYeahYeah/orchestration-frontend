@@ -8,6 +8,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { AppRegistration, Login } from '@mui/icons-material';
 import Echarts from './echarts';
 import OverviewFlow from './Flow';
+import LogoSection from '../../layout/MainLayout/LogoSection';
 
 // function Copyright(props) {
 //     return (
@@ -57,6 +58,9 @@ export default function RootPage() {
                 {/*    </Box> */}
                 {/* </Grid> */}
                 <Grid item xs={false} sm={4} md={7}>
+                    <Box component="span" sx={{ position: 'fixed', top: '2%', ml: 2 }}>
+                        <LogoSection />
+                    </Box>
                     <Echarts />
                     <Box sx={{ position: 'fixed', width: '30%', height: '30%', top: '50%', left: '6%' }}>
                         <LoadingButton
