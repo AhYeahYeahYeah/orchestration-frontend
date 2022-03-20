@@ -9,7 +9,6 @@ import { AppRegistration, Login } from '@mui/icons-material';
 import Echarts from './echarts';
 import OverviewFlow from './Flow';
 import LogoSection from '../../layout/MainLayout/LogoSection';
-import { useEffect } from 'react';
 
 // function Copyright(props) {
 //     return (
@@ -31,6 +30,8 @@ export default function RootPage() {
     // eslint-disable-next-line camelcase
     function handleClick_l() {
         setLoading_l(true);
+        window.location.href = '/login';
+        setLoading_l(false);
     }
 
     // eslint-disable-next-line camelcase
@@ -38,15 +39,9 @@ export default function RootPage() {
     // eslint-disable-next-line camelcase
     function handleClick_r() {
         setLoading_r(true);
+        window.location.href = '/register';
+        setLoading_r(false);
     }
-    useEffect(
-        () =>
-            function cleanUp() {
-                setLoading_r(false);
-                setLoading_l(false);
-            },
-        []
-    );
     return (
         <ThemeProvider theme={theme}>
             <Grid container component="main" sx={{ height: '100vh', background: '#eeeeee' }}>
@@ -83,7 +78,6 @@ export default function RootPage() {
                             sx={{ left: '10%', borderRadius: 15, width: 120, height: 50 }}
                             size="large"
                             color="primary"
-                            href="/login"
                         >
                             登 录
                         </LoadingButton>
@@ -103,7 +97,6 @@ export default function RootPage() {
                             }}
                             color="secondary"
                             size="large"
-                            href="/register"
                         >
                             注 册
                         </LoadingButton>
