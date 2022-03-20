@@ -165,7 +165,15 @@ const ProfileSection = () => {
                                     <Box sx={{ p: 1 }}>
                                         <Stack>
                                             <Stack direction="row" spacing={0.5} alignItems="center">
-                                                <Typography variant="h4">{new Date().getHours() < 12 ? '早上好' : '晚上好'},</Typography>
+                                                <Typography variant="h4">
+                                                    {/* eslint-disable-next-line no-nested-ternary */}
+                                                    {new Date().getHours() < 12
+                                                        ? '早上好'
+                                                        : new Date().getHours() < 18
+                                                        ? '下午好'
+                                                        : '晚上好'}
+                                                    ,
+                                                </Typography>
                                                 <Typography component="span" variant="h4" sx={{ fontWeight: 400 }}>
                                                     {admin.aname}
                                                 </Typography>
