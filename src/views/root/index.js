@@ -40,10 +40,11 @@ export default function RootPage() {
         setLoading_r(true);
     }
     useEffect(
-        () => () => {
-            setLoading_l(false);
-            setLoading_r(false);
-        },
+        () =>
+            function cleanUp() {
+                setLoading_r(false);
+                setLoading_l(false);
+            },
         []
     );
     return (
