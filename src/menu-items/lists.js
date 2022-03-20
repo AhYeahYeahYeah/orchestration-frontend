@@ -1,6 +1,5 @@
 // assets
 import { IconDashboard, IconList } from '@tabler/icons';
-
 // constant
 const icons = { IconDashboard, IconList };
 
@@ -39,7 +38,7 @@ const lists = {
             title: '用户组',
             type: 'item',
             url: '/group',
-            icon: icons.IconDashboard,
+            icon: icons.IconList,
             breadcrumbs: false
         }
     ]

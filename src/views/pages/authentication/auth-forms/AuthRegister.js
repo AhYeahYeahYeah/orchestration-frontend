@@ -316,7 +316,7 @@ const FirebaseRegister = ({ ...others }) => {
                                     size="large"
                                     type="submit"
                                     variant="contained"
-                                    color="secondary"
+                                    color="primary"
                                 >
                                     注册
                                 </Button>

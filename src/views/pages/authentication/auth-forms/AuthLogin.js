@@ -250,7 +250,7 @@ const FirebaseLogin = ({ ...others }) => {
                                     size="large"
                                     type="submit"
                                     variant="contained"
-                                    color="secondary"
+                                    color="primary"
                                 >
                                     登 录
                                 </Button>

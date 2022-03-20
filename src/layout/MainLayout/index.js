@@ -18,6 +18,7 @@ import { SET_MENU } from 'store/actions';
 // assets
 import { IconChevronRight } from '@tabler/icons';
 import CooperationApi from '../../api/CooperationApi';
+// import { grey } from '@mui/material/colors';
 
 // styles
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
@@ -93,7 +94,7 @@ const MainLayout = () => {
     }, []);
 
     return (
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex', background: '#f5f5f5' }}>
             <CssBaseline />
             {/* header */}
             <AppBar
@@ -106,7 +107,7 @@ const MainLayout = () => {
                     transition: leftDrawerOpened ? theme.transitions.create('width') : 'none'
                 }}
             >
-                <Toolbar>
+                <Toolbar sx={{ background: '#f5f5f5' }}>
                     <Header handleLeftDrawerToggle={handleLeftDrawerToggle} />
                 </Toolbar>
             </AppBar>

@@ -1,8 +1,8 @@
 // assets
 import { IconDashboard } from '@tabler/icons';
-
+import { Store, ManageAccounts, ListAlt, PeopleAlt, ColorLens } from '@mui/icons-material';
 // constant
-const icons = { IconDashboard };
+const icons = { IconDashboard, Store, ManageAccounts, ListAlt, PeopleAlt, ColorLens };
 
 // ==============================|| MANAGEMENT MENU ITEMS ||============================== //
 
@@ -16,7 +16,7 @@ const management = {
             title: '产品管理',
             type: 'item',
             url: '/product',
-            icon: icons.IconDashboard,
+            icon: icons.Store,
             breadcrumbs: false
         },
         {
@@ -24,7 +24,7 @@ const management = {
             title: '服务编排',
             type: 'item',
             url: '/orchestration',
-            icon: icons.IconDashboard,
+            icon: icons.ColorLens,
             breadcrumbs: false
         },
         {
@@ -32,7 +32,7 @@ const management = {
             title: '在线协作',
             type: 'item',
             url: '/cooperation',
-            icon: icons.IconDashboard,
+            icon: icons.PeopleAlt,
             breadcrumbs: false
         },
         {
@@ -40,7 +40,7 @@ const management = {
             title: '管理员管理',
             type: 'item',
             url: '/admin-management',
-            icon: icons.IconDashboard,
+            icon: icons.ManageAccounts,
             breadcrumbs: false
         },
         {
@@ -48,7 +48,7 @@ const management = {
             title: '客户管理',
             type: 'item',
             url: '/customer-management',
-            icon: icons.IconDashboard,
+            icon: icons.ManageAccounts,
             breadcrumbs: false
         },
         {
@@ -56,7 +56,7 @@ const management = {
             title: '日志管理',
             type: 'item',
             url: '/log-management',
-            icon: icons.IconDashboard,
+            icon: icons.ListAlt,
             breadcrumbs: false
         }
     ]

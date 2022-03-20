@@ -10,17 +10,18 @@ import MainCard from 'ui-component/cards/MainCard';
 import SkeletonEarningCard from 'ui-component/cards/Skeleton/EarningCard';
 
 // assets
-import EarningIcon from 'assets/images/icons/earning.svg';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+// import EarningIcon from 'assets/images/icons/earning.svg';
+// import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 // import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import GetAppTwoToneIcon from '@mui/icons-material/GetAppOutlined';
 import FileCopyTwoToneIcon from '@mui/icons-material/FileCopyOutlined';
 import PictureAsPdfTwoToneIcon from '@mui/icons-material/PictureAsPdfOutlined';
 import ArchiveTwoToneIcon from '@mui/icons-material/ArchiveOutlined';
 import { EntityApi } from '../../api/restful';
+import { Store } from '@mui/icons-material';
 
 const CardWrapper = styled(MainCard)(({ theme }) => ({
-    backgroundColor: theme.palette.secondary.dark,
+    backgroundColor: '#009688',
     color: '#fff',
     overflow: 'hidden',
     position: 'relative',
@@ -29,7 +30,7 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
         position: 'absolute',
         width: 210,
         height: 210,
-        background: theme.palette.secondary[800],
+        background: '#00695c',
         borderRadius: '50%',
         top: -85,
         right: -95,
@@ -43,7 +44,7 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
         position: 'absolute',
         width: 210,
         height: 210,
-        background: theme.palette.secondary[800],
+        background: '#00796b',
         borderRadius: '50%',
         top: -125,
         right: -15,
@@ -62,9 +63,9 @@ const EarningCard = ({ isLoading }) => {
 
     const [anchorEl, setAnchorEl] = useState(null);
     const [count, setCount] = useState(0);
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
+    // const handleClick = (event) => {
+    //     setAnchorEl(event.currentTarget);
+    // };
 
     const handleClose = () => {
         setAnchorEl(null);
@@ -92,29 +93,30 @@ const EarningCard = ({ isLoading }) => {
                                             sx={{
                                                 ...theme.typography.commonAvatar,
                                                 ...theme.typography.largeAvatar,
-                                                backgroundColor: theme.palette.secondary[800],
+                                                backgroundColor: '#00695c',
+                                                color: '#fff',
                                                 mt: 1
                                             }}
                                         >
-                                            <img src={EarningIcon} alt="Notification" />
+                                            <Store fontSize="inherit" />
                                         </Avatar>
                                     </Grid>
                                     <Grid item>
-                                        <Avatar
-                                            variant="rounded"
-                                            sx={{
-                                                ...theme.typography.commonAvatar,
-                                                ...theme.typography.mediumAvatar,
-                                                backgroundColor: theme.palette.secondary.dark,
-                                                color: theme.palette.secondary[200],
-                                                zIndex: 1
-                                            }}
-                                            aria-controls="menu-earning-card"
-                                            aria-haspopup="true"
-                                            onClick={handleClick}
-                                        >
-                                            <MoreHorizIcon fontSize="inherit" />
-                                        </Avatar>
+                                        {/* <Avatar */}
+                                        {/*    variant="rounded" */}
+                                        {/*    sx={{ */}
+                                        {/*        ...theme.typography.commonAvatar, */}
+                                        {/*        ...theme.typography.mediumAvatar, */}
+                                        {/*        backgroundColor: theme.palette.secondary.dark, */}
+                                        {/*        color: theme.palette.secondary[200], */}
+                                        {/*        zIndex: 1 */}
+                                        {/*    }} */}
+                                        {/*    aria-controls="menu-earning-card" */}
+                                        {/*    aria-haspopup="true" */}
+                                        {/*    onClick={handleClick} */}
+                                        {/* > */}
+                                        {/*    <MoreHorizIcon fontSize="inherit" /> */}
+                                        {/* </Avatar> */}
                                         <Menu
                                             id="menu-earning-card"
                                             anchorEl={anchorEl}
@@ -161,7 +163,7 @@ const EarningCard = ({ isLoading }) => {
                                     sx={{
                                         fontSize: '1rem',
                                         fontWeight: 500,
-                                        color: theme.palette.secondary[200]
+                                        color: '#80cbc4'
                                     }}
                                 >
                                     产品总数

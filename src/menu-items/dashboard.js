@@ -1,8 +1,8 @@
 // assets
 import { IconDashboard } from '@tabler/icons';
-
+import { Monitor } from '@mui/icons-material';
 // constant
-const icons = { IconDashboard };
+const icons = { IconDashboard, Monitor };
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 
@@ -24,7 +24,7 @@ const dashboard = {
             title: '流程监控',
             type: 'item',
             url: '/monitor',
-            icon: icons.IconDashboard,
+            icon: icons.Monitor,
             breadcrumbs: false
         }
     ]

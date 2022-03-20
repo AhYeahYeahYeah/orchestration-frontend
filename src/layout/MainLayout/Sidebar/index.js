@@ -13,6 +13,7 @@ import MenuList from './MenuList';
 import LogoSection from '../LogoSection';
 // import MenuCard from './MenuCard';
 import { drawerWidth } from 'store/constant';
+// import { grey } from '@mui/material/colors';
 
 // ==============================|| SIDEBAR DRAWER ||============================== //
 
@@ -62,7 +63,7 @@ const Sidebar = ({ drawerOpen, drawerToggle, window }) => {
                 sx={{
                     '& .MuiDrawer-paper': {
                         width: drawerWidth,
-                        background: theme.palette.background.default,
+                        background: '#f5f5f5',
                         color: theme.palette.text.primary,
                         borderRight: 'none',
                         [theme.breakpoints.up('md')]: {

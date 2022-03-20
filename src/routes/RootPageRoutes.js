@@ -6,7 +6,6 @@ import Loadable from 'ui-component/Loadable';
 import MinimalLayout from 'layout/MinimalLayout';
 
 const RootPage = Loadable(lazy(() => import('views/root')));
-
 // ==============================|| AUTHENTICATION ROUTING ||============================== //
 
 const RootPageRoutes = {

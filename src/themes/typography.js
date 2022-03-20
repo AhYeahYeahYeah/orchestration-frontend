@@ -87,7 +87,7 @@ export default function themeTypography(theme) {
             }
         },
         mainContent: {
-            backgroundColor: theme.background,
+            backgroundColor: '#e0e0e0',
             width: '100%',
             minHeight: 'calc(100vh - 88px)',
             flexGrow: 1,
@@ -97,9 +97,9 @@ export default function themeTypography(theme) {
             borderRadius: `${theme?.customization?.borderRadius}px`
         },
         menuCaption: {
-            fontSize: '0.875rem',
+            fontSize: '0.975rem',
             fontWeight: 500,
-            color: theme.heading,
+            color: '#37474f',
             padding: '6px',
             textTransform: 'capitalize',
             marginTop: '10px'
@@ -107,7 +107,7 @@ export default function themeTypography(theme) {
         subMenuCaption: {
             fontSize: '0.6875rem',
             fontWeight: 500,
-            color: theme.darkTextSecondary,
+            color: '#37474f',
             textTransform: 'capitalize'
         },
         commonAvatar: {
