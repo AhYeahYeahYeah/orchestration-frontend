@@ -141,7 +141,7 @@ const OverviewFlow = () => {
                 nodeBorderRadius={2}
             />
             {/* <Controls /> */}
-            <Background color="#aaa" gap={8} />
+            <Background variant="dots" gap={9} color="#c62828" />
         </ReactFlow>
     );
 };
