@@ -24,6 +24,11 @@ const Dashboard = () => {
         const entity = new EntityApi(localStorage.getItem('admin_token'));
         const conductor = new ConductorApi();
         const workFlow = new Map();
+        let dateTime = new Date();
+        dateTime = dateTime.setDate(dateTime.getDate());
+        dateTime = new Date(dateTime).toLocaleDateString();
+        dateTime = new Date(dateTime).getTime();
+        // console.log(dateTime);
         entity.getOrdersRecent().then((res) => {
             // console.log(res.data);
             const queue = [];
@@ -31,25 +36,25 @@ const Dashboard = () => {
             const day_num = [0, 0, 0, 0, 0, 0, 0];
             // eslint-disable-next-line no-plusplus
             for (let i = 0; i < res.data.length; i++) {
-                if (res.data[i].orderDate >= new Date().getTime() - 1 * 86400000) {
+                if (res.data[i].orderDate >= dateTime) {
                     // eslint-disable-next-line no-plusplus
                     day_num[0]++;
-                } else if (res.data[i].orderDate >= new Date().getTime() - 2 * 86400000) {
+                } else if (res.data[i].orderDate >= dateTime - 1 * 86400000) {
                     // eslint-disable-next-line no-plusplus
                     day_num[1]++;
-                } else if (res.data[i].orderDate >= new Date().getTime() - 3 * 86400000) {
+                } else if (res.data[i].orderDate >= dateTime - 2 * 86400000) {
                     // eslint-disable-next-line no-plusplus
                     day_num[2]++;
-                } else if (res.data[i].orderDate >= new Date().getTime() - 4 * 86400000) {
+                } else if (res.data[i].orderDate >= dateTime - 3 * 86400000) {
                     // eslint-disable-next-line no-plusplus
                     day_num[3]++;
-                } else if (res.data[i].orderDate >= new Date().getTime() - 5 * 86400000) {
+                } else if (res.data[i].orderDate >= dateTime - 4 * 86400000) {
                     // eslint-disable-next-line no-plusplus
                     day_num[4]++;
-                } else if (res.data[i].orderDate >= new Date().getTime() - 6 * 86400000) {
+                } else if (res.data[i].orderDate >= dateTime - 5 * 86400000) {
                     // eslint-disable-next-line no-plusplus
                     day_num[5]++;
-                } else if (res.data[i].orderDate >= new Date().getTime() - 7 * 86400000) {
+                } else if (res.data[i].orderDate >= dateTime - 6 * 86400000) {
                     // eslint-disable-next-line no-plusplus
                     day_num[6]++;
                 }
