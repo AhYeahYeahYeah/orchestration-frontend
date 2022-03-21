@@ -62,7 +62,7 @@ export default function Sidebar({ onRestore, serviceInfo }) {
                 >
                     <Grid item xs={12} sx={{ marginLeft: 2, marginRight: 2, marginTop: 1.5 }}>
                         <div className="react-flow__node-input" onDragStart={(event) => onDragStart(event, 'input')} draggable>
-                            Input Node
+                            起点
                         </div>
                     </Grid>
                     <Grid item xs={12} sx={{ marginLeft: 2, marginRight: 2, marginTop: 1.5 }}>
@@ -267,7 +267,7 @@ export default function Sidebar({ onRestore, serviceInfo }) {
                     </Grid>
                     <Grid item xs={12} sx={{ marginLeft: 2, marginRight: 2, marginTop: 1.5 }}>
                         <div className="react-flow__node-output" onDragStart={(event) => onDragStart(event, 'output')} draggable>
-                            Output Node
+                            终点
                         </div>
                     </Grid>
                     <ServiceInfoModel
