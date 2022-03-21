@@ -218,7 +218,7 @@ export default function Whitelist() {
             <Slide direction="up" in={selectionModel.length > 0} mountOnEnter unmountOnExit>
                 <Chip
                     sx={{ position: 'fixed', marginTop: 3.5, background: '#f44336' }}
-                    label={`${selectionModel.length} row selected`}
+                    label={`${selectionModel.length} 行`}
                     /* eslint-disable-next-line react/jsx-no-bind  */
                     onDelete={deleteWhite}
                     deleteIcon={<DeleteIcon />}
