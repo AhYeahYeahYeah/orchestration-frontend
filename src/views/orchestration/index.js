@@ -278,6 +278,7 @@ const Orchestration = () => {
                                 for (let k = 0; k < white.length; k++) {
                                     if (flow[j].data.whiteName === white[k].wid) {
                                         flow[j].data.whiteName = white[k].name;
+                                        setWhiteId(white[k].wid);
                                     }
                                 }
                             } else if (flow[j].type === 'Black') {
@@ -286,6 +287,7 @@ const Orchestration = () => {
                                 for (let k = 0; k < black.length; k++) {
                                     if (flow[j].data.blackName === black[k].bid) {
                                         flow[j].data.blackName = black[k].name;
+                                        setBid(black[k].bid);
                                     }
                                 }
                             } else if (flow[j].type === 'Tag') {
@@ -294,17 +296,20 @@ const Orchestration = () => {
                                 for (let k = 0; k < group.length; k++) {
                                     if (flow[j].data.groupName === group[k].gid) {
                                         flow[j].data.groupName = group[k].name;
+                                        setGid(group[k].gid);
                                     }
                                 }
                             } else if (flow[j].type === 'Region') {
                                 // eslint-disable-next-line no-plusplus
                                 flow[j].data.regions = res.data.inputTemplate.region;
+                                setRegions(res.data.inputTemplate.region);
                                 flow[j].data.updateRegions = updateRegions;
                             } else if (flow[j].type === 'WorkFlow') {
                                 flow[j].data.updateFid = updateFid;
                                 // eslint-disable-next-line no-plusplus
                                 for (let k = 0; k < workflowlist.length; k++) {
                                     if (flow[j].data.workFlowName === workflowlist[k].fid) {
+                                        setFid(workflowlist[k].fid);
                                         flow[j].data.workFlowName = workflowlist[k].name;
                                     }
                                 }
