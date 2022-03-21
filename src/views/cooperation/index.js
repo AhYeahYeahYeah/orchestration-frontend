@@ -102,6 +102,7 @@ export default function Cooperation() {
         {
             field: 'actions',
             type: 'actions',
+            headerName: '删除',
             width: 80,
             getActions: (params) => [
                 <GridActionsCellItem
