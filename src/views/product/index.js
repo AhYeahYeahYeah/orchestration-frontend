@@ -3,12 +3,13 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import { Alert, Fab, Grid, Snackbar } from '@mui/material';
+import { Alert, Fab, Grid, Snackbar, Pagination } from '@mui/material';
 import { Add, Delete, Edit } from '@mui/icons-material';
 import AddProductModel from './AddProductModel';
 import UpdateProductModel from './UpdateProductModel';
 import { EntityApi } from '../../api/restful';
 import { GridActionsCellItem } from '@mui/x-data-grid';
+import { useState } from 'react';
 
 const card = (updatehandleOpen, value, deleteProduct) => (
     <>
@@ -39,7 +40,7 @@ const card = (updatehandleOpen, value, deleteProduct) => (
                 </Grid>
                 <Grid item xs={6}>
                     <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                        年化利率：{value.annualRate}
+                        年化利率：{(Number(value.annualRate) * 100).toFixed(2)}%
                     </Typography>
                 </Grid>
                 <Grid item xs={6}>
@@ -93,6 +94,9 @@ export default function Product() {
     const updatehandleClose = () => {
         setUpdateOpen(false);
     };
+    const [defaults, setDefaults] = useState(1);
+    const [count, setCount] = useState(0);
+    const [productPage, setProductPage] = useState([]);
     function addProduct(value) {
         const entityApi = new EntityApi(localStorage.getItem('admin_token'));
         entityApi.addProduct(value).then((res) => {
@@ -100,6 +104,9 @@ export default function Product() {
             entityApi.getProducts().then((re) => {
                 if (re.status === 200) {
                     setProduct(re.data);
+                    setProductPage(re.data.slice(0, 9));
+                    setCount(Math.ceil(re.data.length / 9));
+                    setDefaults(1);
                 }
             });
         });
@@ -112,6 +119,8 @@ export default function Product() {
                 entityApi.getProducts().then((re) => {
                     if (re.status === 200) {
                         setProduct(re.data);
+                        setProductPage(re.data.slice(0, 9));
+                        setDefaults(1);
                     }
                 });
             }
@@ -124,12 +133,18 @@ export default function Product() {
                 entityApi.getProducts().then((re) => {
                     if (re.status === 200) {
                         setProduct(re.data);
+                        setProductPage(re.data.slice(0, 9));
+                        setCount(Math.ceil(re.data.length / 9));
+                        setDefaults(1);
                         setSnackbarMsg('删除成功！');
                         setSnackbarOpen(true);
                     }
                 });
             }
         });
+    }
+    function updatePage(value) {
+        setProductPage(product.slice(9 * (value - 1), 9 * (value - 1) + 9));
     }
     React.useEffect(() => {
         const entityApi = new EntityApi(localStorage.getItem('admin_token'));
@@ -138,6 +153,8 @@ export default function Product() {
             .then((res) => {
                 if (res.status === 200) {
                     setProduct(res.data);
+                    setProductPage(res.data.slice(0, 9));
+                    setCount(Math.ceil(res.data.length / 9));
                     setPerm(true);
                     entityApi.getWorkFlows().then((re) => {
                         if (re.status === 200) {
@@ -161,13 +178,21 @@ export default function Product() {
 
     return (
         <Grid container spacing={3}>
-            {product.map((value) => (
+            {productPage.map((value) => (
                 <Grid item lg={4} sm={6} xs={12} key={value.pid}>
                     <Box>
                         <Card variant="outlined">{card(updatehandleOpen, value, deleteProduct)}</Card>
                     </Box>
                 </Grid>
             ))}
+            <Pagination
+                count={count}
+                showFirstButton
+                showLastButton
+                defaultPage={defaults}
+                sx={{ position: 'fixed', top: '94%', left: '70%' }}
+                onChange={(e, page) => updatePage(page)}
+            />
             <Fab color="primary" aria-label="add" sx={{ display: 'flex', position: 'fixed', left: '92.5%', top: '86%' }}>
                 <Add onClick={handleOpen} />
             </Fab>
