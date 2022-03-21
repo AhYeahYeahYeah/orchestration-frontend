@@ -82,7 +82,7 @@ const initialElements = [
     {
         id: '1',
         type: 'input',
-        data: { label: 'input node' },
+        data: { label: ' 起点 ' },
         position: { x: 250, y: 5 },
         flag: null,
         selectable: false
@@ -492,7 +492,7 @@ const CooperationFlow = () => {
                     id: `${genID()}`,
                     type,
                     position,
-                    data: { label: ` ${type} node ` },
+                    data: { label: ` 终点 ` },
                     flag: `${type}`,
                     visited: 0
                 };
@@ -502,7 +502,7 @@ const CooperationFlow = () => {
                     id: `${genID()}`,
                     type,
                     position,
-                    data: { label: ` ${type} node ` },
+                    data: { label: ` 起点 ` },
                     flag: `${type}`,
                     visited: 0
                 };
