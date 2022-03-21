@@ -1,7 +1,8 @@
-import { useState } from 'react';
-import ReactFlow, { addEdge, MiniMap, Background } from 'react-flow-renderer';
+// import { useState } from 'react';
+import ReactFlow, { MiniMap, Background } from 'react-flow-renderer';
 
-const onInit = (reactFlowInstance) => console.log('flow loaded:', reactFlowInstance);
+// const onInit = (reactFlowInstance) => console.log('flow loaded:', reactFlowInstance);
+
 const nodes = [
     {
         id: '1',
@@ -108,42 +109,41 @@ const nodes = [
         labelStyle: { fill: '#f6ab6c', fontWeight: 700 }
     }
 ];
-const OverviewFlow = () => {
-    const [elements, setElements] = useState(nodes);
-    const onConnect = (params) => {
-        setElements((elements) =>
-            addEdge({ ...params, animated: true }, elements).map((ele) => {
-                if (ele.id === params.source) {
-                    ele.next = params.target;
-                    return ele;
-                }
-                return ele;
-            })
-        );
-    };
+const OverviewFlow = () => (
+    // const [elements, setElements] = useState(nodes);
+    // const [reactFlowInstance, setReactFlowInstance] = useState(null);
+    // const onLoad = (_reactFlowInstance) => setReactFlowInstance(_reactFlowInstance);
+    // const onConnect = (params) => {
+    //     setElements((elements) =>
+    //         addEdge({ ...params, animated: true }, elements).map((ele) => {
+    //             if (ele.id === params.source) {
+    //                 ele.next = params.target;
+    //                 return ele;
+    //             }
+    //             return ele;
+    //         })
+    //     );
+    // };
 
-    return (
-        <ReactFlow elements={elements} onConnect={onConnect} onInit={onInit} fitView attributionPosition="top-right">
-            <MiniMap
-                nodeStrokeColor={(n) => {
-                    if (n.style?.background) return n.style.background;
-                    if (n.type === 'input') return '#0041d0';
-                    if (n.type === 'output') return '#ff0072';
-                    if (n.type === 'default') return '#1a192b';
+    <ReactFlow elements={nodes}>
+        <MiniMap
+            nodeStrokeColor={(n) => {
+                if (n.style?.background) return n.style.background;
+                if (n.type === 'input') return '#0041d0';
+                if (n.type === 'output') return '#ff0072';
+                if (n.type === 'default') return '#1a192b';
 
-                    return '#eee';
-                }}
-                nodeColor={(n) => {
-                    if (n.style?.background) return n.style.background;
+                return '#eee';
+            }}
+            nodeColor={(n) => {
+                if (n.style?.background) return n.style.background;
 
-                    return '#fff';
-                }}
-                nodeBorderRadius={2}
-            />
-            {/* <Controls /> */}
-            <Background variant="dots" gap={9} color="#c62828" />
-        </ReactFlow>
-    );
-};
-
+                return '#fff';
+            }}
+            nodeBorderRadius={2}
+        />
+        {/* <Controls /> */}
+        <Background variant="dots" gap={9} color="#c62828" />
+    </ReactFlow>
+);
 export default OverviewFlow;

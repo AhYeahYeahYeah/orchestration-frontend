@@ -16,7 +16,19 @@ import Sidebar from './Sidebar';
 import SidebarOpen from './SidebarOpen';
 import './dnd.css';
 import { useTheme } from '@mui/material/styles';
-import { Alert, Chip, Dialog, DialogActions, DialogTitle, Fab, Grid, Slide, Snackbar } from '@mui/material';
+import {
+    Alert,
+    Chip,
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    Fab,
+    Grid,
+    Slide,
+    Snackbar
+} from '@mui/material';
 import { InputNode, WorkflowBuilder } from '../../utils/workflowBuilder';
 import {
     log,
@@ -47,7 +59,7 @@ import UpdateSelector from '../../ui-component/services/UpdateSelector';
 import WhiteSelector from '../../ui-component/services/WhiteSelector';
 import LogSelector from '../../ui-component/services/LogSelector';
 import SwitchSelector from '../../ui-component/caseCard/SwitchSelector';
-import { Check, CloseOutlined, FlagCircle, FullscreenExitOutlined, PanToolOutlined } from '@mui/icons-material';
+import { Check, Close, CloseOutlined, FlagCircle, FullscreenExitOutlined, PanToolOutlined } from '@mui/icons-material';
 import AddModel from './AddModel';
 import { GridActionsCellItem } from '@mui/x-data-grid';
 import TerminateSelector from '../../ui-component/services/TerminateSelector';
@@ -58,6 +70,9 @@ import WorkFlowSelector from '../../ui-component/services/WorkFlowSelector';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import axios from 'axios';
+import CheckIcon from '@mui/icons-material/Check';
+import SaveIcon from '@mui/icons-material/Save';
+import { green, red } from '@mui/material/colors';
 
 const nodeTypes = {
     No: NoSelector,
@@ -137,6 +152,25 @@ const Orchestration = () => {
     const [lookFlag, setLookFlag] = useState(false);
     const [lookInstance, setLookInstance] = useState(initialElements);
     const [fid, setFid] = useState('');
+    const [testFlowOpen, setTestFlowOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState(false);
+    const [testMsg, setTestMsg] = useState('');
+    const [wrong, setWrong] = useState(false);
+    const buttonSx = {
+        ...(success && {
+            bgcolor: green[500],
+            '&:hover': {
+                bgcolor: green[700]
+            }
+        }),
+        ...(wrong && {
+            bgcolor: red[500],
+            '&:hover': {
+                bgcolor: red[700]
+            }
+        })
+    };
     function handleOpenLook() {
         setLookInstance(elements);
         setLookFlag(true);
@@ -576,6 +610,7 @@ const Orchestration = () => {
         mediaStream.getTracks()[0].stop();
         setCameraOpen(false);
     }
+    // const timer = useRef();
     const onSave = useCallback(
         (workNew) => {
             if (perm === false) {
@@ -587,6 +622,10 @@ const Orchestration = () => {
             //     // eslint-disable-next-line no-template-curly-in-string
             //     interest: '${InterestRate_Node.output.response.body.interest}'
             // });
+            setTestMsg('正在进行流程测试！');
+            setSuccess(false);
+            setLoading(true);
+            setTestFlowOpen(true);
             if (reactFlowInstance) {
                 console.log(workNew);
                 const builder = new WorkflowBuilder(workNew.name, workNew.version, '1010353663@qq.com');
@@ -642,8 +681,9 @@ const Orchestration = () => {
                         flow: `[${flow_queue.toString()}]`
                     };
                 }
+                // console.log(workflowSave.flow);
                 // localforage.setItem(flowKey, flow);
-                console.log(flow.elements);
+                // console.log(flow.elements);
                 const entityApi = new EntityApi(localStorage.getItem('admin_token'));
                 // console.log(flow);
                 const input = flow.elements[0];
@@ -1084,38 +1124,63 @@ const Orchestration = () => {
                 console.log(workflow);
                 console.log(flow_all);
                 workflowSave.metadataWorkflow = JSON.parse(workflow);
-                console.log(JSON.parse(workflowSave.flow));
+                console.log(workflowSave.flow);
                 if (workInstance.length === 0) {
                     entityApi.addWorkFlow(workflowSave).then((res) => {
                         console.log(res);
-                        entityApi.getWorkFlows().then((re) => {
-                            setWorkflowlist(re.data);
-                            const queue = [];
-                            queue.push('新建');
-                            // eslint-disable-next-line no-plusplus
-                            for (let i = 0; i < re.data.length; i++) {
-                                queue.push(re.data[i].name);
-                            }
-                            setWorkOptions(queue);
-                            console.log(queue);
-                        });
+                        if (res.data.status !== 'Failed') {
+                            setTestMsg('测试通过，发布成功');
+                            setSuccess(true);
+                            setLoading(false);
+                            entityApi.getWorkFlows().then((re) => {
+                                setWorkflowlist(re.data);
+                                const queue = [];
+                                queue.push('新建');
+                                // eslint-disable-next-line no-plusplus
+                                for (let i = 0; i < re.data.length; i++) {
+                                    queue.push(re.data[i].name);
+                                }
+                                setWorkOptions(queue);
+                                // console.log(queue);
+                                // timer.current = window.setTimeout(() => {
+                                //
+                                // }, 2000);
+                            });
+                        } else {
+                            setTestMsg('测试失败请修改流程');
+                            setWrong(true);
+                            setLoading(false);
+                        }
                     });
                     setElements(initialElements);
                     setWorkInstance([]);
+                    // setTestFlowOpen(true);
                 } else {
                     entityApi.updateWorkFlow(workflowSave).then((res) => {
                         console.log(res);
-                        entityApi.getWorkFlows().then((re) => {
-                            setWorkflowlist(re.data);
-                            const queue = [];
-                            queue.push('新建');
-                            // eslint-disable-next-line no-plusplus
-                            for (let i = 0; i < re.data.length; i++) {
-                                queue.push(re.data[i].name);
-                            }
-                            setWorkOptions(queue);
-                            console.log(queue);
-                        });
+                        if (res.data.status !== 'Failed') {
+                            setTestMsg('测试通过，发布成功');
+                            setSuccess(true);
+                            setLoading(false);
+                            entityApi.getWorkFlows().then((re) => {
+                                setWorkflowlist(re.data);
+                                const queue = [];
+                                queue.push('新建');
+                                // eslint-disable-next-line no-plusplus
+                                for (let i = 0; i < re.data.length; i++) {
+                                    queue.push(re.data[i].name);
+                                }
+                                setWorkOptions(queue);
+                                // console.log(queue);
+                                // timer.current = window.setTimeout(() => {
+                                //
+                                // }, 2000);
+                            });
+                        } else {
+                            setTestMsg('测试失败请修改流程');
+                            setWrong(true);
+                            setLoading(false);
+                        }
                     });
                 }
                 // const conductor = new ConductorApi();
@@ -1430,6 +1495,42 @@ const Orchestration = () => {
             ) : (
                 ''
             )}
+            <Dialog
+                open={testFlowOpen}
+                onClose={() => {
+                    setTestFlowOpen(false);
+                    setWrong(false);
+                    setSuccess(false);
+                }}
+            >
+                <DialogTitle>
+                    <Typography fontSize="1.15rem" align="center">
+                        {testMsg}
+                    </Typography>
+                </DialogTitle>
+                <DialogContent>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Box sx={{ mt: 1, ml: 5.5, position: 'relative' }}>
+                            <Fab aria-label="save" color="primary" sx={buttonSx}>
+                                {/* eslint-disable-next-line no-nested-ternary */}
+                                {success ? <CheckIcon /> : wrong ? <Close /> : <SaveIcon />}
+                            </Fab>
+                            {loading && (
+                                <CircularProgress
+                                    size={68}
+                                    sx={{
+                                        color: green[500],
+                                        position: 'absolute',
+                                        top: -6,
+                                        left: -6,
+                                        zIndex: 1
+                                    }}
+                                />
+                            )}
+                        </Box>
+                    </Box>
+                </DialogContent>
+            </Dialog>
         </>
     );
 };
