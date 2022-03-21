@@ -1141,6 +1141,8 @@ const Orchestration = () => {
                                     queue.push(re.data[i].name);
                                 }
                                 setWorkOptions(queue);
+                                setElements(initialElements);
+                                setWorkInstance([]);
                                 // console.log(queue);
                                 // timer.current = window.setTimeout(() => {
                                 //
@@ -1152,8 +1154,6 @@ const Orchestration = () => {
                             setLoading(false);
                         }
                     });
-                    setElements(initialElements);
-                    setWorkInstance([]);
                     // setTestFlowOpen(true);
                 } else {
                     entityApi.updateWorkFlow(workflowSave).then((res) => {
