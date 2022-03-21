@@ -46,7 +46,7 @@ import UpdateSelector from '../../ui-component/services/UpdateSelector';
 import WhiteSelector from '../../ui-component/services/WhiteSelector';
 import LogSelector from '../../ui-component/services/LogSelector';
 import SwitchSelector from '../../ui-component/caseCard/SwitchSelector';
-import { Check, CloseOutlined, FlagCircle, FullscreenExitOutlined } from '@mui/icons-material';
+import { Check, CloseOutlined, FlagCircle, FullscreenExitOutlined, PanToolOutlined } from '@mui/icons-material';
 import AddModel from './AddModel';
 import { GridActionsCellItem } from '@mui/x-data-grid';
 import TerminateSelector from '../../ui-component/services/TerminateSelector';
@@ -1497,6 +1497,10 @@ const CooperationFlow = () => {
                                 icon={<CloseOutlined />}
                                 /* eslint-disable-next-line react/jsx-no-bind */
                                 onClick={handleCloseLook}
+                            />
+                            <GridActionsCellItem
+                                sx={{ position: 'fixed', right: '0.5%', top: '0.5%', zIndex: 999 }}
+                                icon={<PanToolOutlined />}
                             />
                             <div className="dndflow">
                                 <ReactFlowProvider>
