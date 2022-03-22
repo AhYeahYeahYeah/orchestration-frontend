@@ -60,9 +60,6 @@ export default function Cooperation() {
     function handlePwdClose() {
         setPwdOpen(false);
     }
-    function sleep(time) {
-        return new Promise((resolve) => setTimeout(resolve, time));
-    }
     function handleAddOpen() {
         setAddOpen(true);
     }
@@ -80,21 +77,6 @@ export default function Cooperation() {
         };
         // console.log(password);
         CooperationApi.JoinRoom(data);
-        sleep(1050).then(() => {
-            const roomData = CooperationApi.roomInstance;
-            // eslint-disable-next-line no-plusplus
-            console.log(roomData);
-            if (roomData.result === 'Failed') {
-                setSnackbarMsg('密码错误！');
-                setSnackbarOpen(true);
-            } else {
-                handlePwdClose();
-                localStorage.setItem('roomId', roomParam.id);
-                localStorage.setItem('elements', roomData.msg);
-                localStorage.setItem('accountLists', roomData.accountList);
-                navigate('/cooperationFlow');
-            }
-        });
     }
     const columns = [
         { field: 'sid', headerName: '文件编号', flex: 1, minWidth: 120 },
@@ -143,15 +125,15 @@ export default function Cooperation() {
             token: localStorage.getItem('admin_token')
         };
         CooperationApi.QueryRoom(data);
-        sleep(800).then(() => {
-            const roomData = CooperationApi.roomsData.data.rooms;
-            // eslint-disable-next-line no-plusplus
-            for (let i = 0; i < roomData.length; i++) {
-                // console.log(roomData[i]);
-                roomData[i].id = roomData[i].sid;
-            }
-            setRooms(roomData);
-        });
+        // sleep(800).then(() => {
+        //     const roomData = CooperationApi.roomsData.data.rooms;
+        //     // eslint-disable-next-line no-plusplus
+        //     for (let i = 0; i < roomData.length; i++) {
+        //         // console.log(roomData[i]);
+        //         roomData[i].id = roomData[i].sid;
+        //     }
+        //     setRooms(roomData);
+        // });
         handleAddClose();
     }
     function deleteRoom(value) {
@@ -164,46 +146,79 @@ export default function Cooperation() {
             }
         };
         CooperationApi.DeleteRoom(data);
-        CooperationApi.QueryRoom(data);
-        sleep(800).then(() => {
-            if (CooperationApi.deleteInfo.result === 'Failed') {
-                setSnackbarMsg('密码错误！');
-                setSnackbarOpen(true);
-            } else {
-                const roomData = CooperationApi.roomsData.data.rooms;
-                // eslint-disable-next-line no-plusplus
-                for (let i = 0; i < roomData.length; i++) {
-                    // console.log(roomData[i]);
-                    roomData[i].id = roomData[i].sid;
-                }
-                setRooms(roomData);
-                handleDeleteClose();
-            }
-        });
+        // sleep(800).then(() => {
+        //     if (CooperationApi.deleteInfo.result === 'Failed') {
+        //
+        //     } else {
+        //         handleDeleteClose();
+        //     }
+        // });
     }
     React.useEffect(() => {
         // const entityApi = new EntityApi(localStorage.getItem('admin_token'));
         const admin = JSON.parse(localStorage.getItem('admin'));
         // const cooperationApi = new CooperationApi();
         // setSocketApi(cooperationApi);
-        console.log(localStorage.getItem('admin_token'));
+        // console.log(localStorage.getItem('admin_token'));
         const data = {
             account: admin.account,
             token: localStorage.getItem('admin_token')
         };
         // CooperationApi.connectionWebServer(admin.account, localStorage.getItem('admin_token'), data);
-        CooperationApi.QueryRoom(data);
-        sleep(800).then(() => {
-            // console.log(CooperationApi.roomsData);
-            const roomData = CooperationApi.roomsData.data.rooms;
+        CooperationApi.subscribeToRoomData(JSON.parse(localStorage.getItem('admin')).account, (rooms) => {
+            console.log(rooms);
             // eslint-disable-next-line no-plusplus
-            for (let i = 0; i < roomData.length; i++) {
+            for (let i = 0; i < rooms.length; i++) {
                 // console.log(roomData[i]);
-                roomData[i].id = roomData[i].sid;
+                rooms[i].id = rooms[i].sid;
             }
-            setRooms(roomData);
+            setRooms(rooms);
         });
-    }, []);
+        CooperationApi.subscribeToDeleteInfo(JSON.parse(localStorage.getItem('admin')).account, (data) => {
+            if (data.result === 'Success') {
+                const data2 = {
+                    account: admin.account,
+                    token: localStorage.getItem('admin_token')
+                };
+                CooperationApi.QueryRoom(data2);
+                if (deleteOpen) {
+                    handleDeleteClose();
+                }
+            } else if (deleteOpen) {
+                // handleDeleteClose();
+                setSnackbarMsg('密码错误！');
+                setSnackbarOpen(true);
+            }
+        });
+        CooperationApi.subscribeToRoomInstance(JSON.parse(localStorage.getItem('admin')).account, (data) => {
+            if (data.result === 'Failed') {
+                setSnackbarMsg('密码错误！');
+                setSnackbarOpen(true);
+            } else {
+                handlePwdClose();
+                localStorage.setItem('roomId', roomParam.id);
+                localStorage.setItem('elements', data.msg);
+                localStorage.setItem('accountLists', data.accountList);
+                navigate('/cooperationFlow');
+            }
+        });
+        CooperationApi.QueryRoom(data);
+        // sleep(800).then(() => {
+        //     // console.log(CooperationApi.roomsData);
+        //     const roomData = CooperationApi.roomsData.data.rooms;
+        //     // eslint-disable-next-line no-plusplus
+        //     for (let i = 0; i < roomData.length; i++) {
+        //         // console.log(roomData[i]);
+        //         roomData[i].id = roomData[i].sid;
+        //     }
+        //     setRooms(roomData);
+        // });
+        return () => {
+            CooperationApi.unsubscribeToRoomData(JSON.parse(localStorage.getItem('admin')).account);
+            CooperationApi.unsubscribeToDeleteInfo(JSON.parse(localStorage.getItem('admin')).account);
+            CooperationApi.unsubscribeToRoomInstance(JSON.parse(localStorage.getItem('admin')).account);
+        };
+    }, [deleteOpen, navigate, roomParam]);
     return (
         <div>
             <Typography component="h1" variant="h3" align="center">

@@ -4,15 +4,13 @@ const wsUrl = 'ws://conductor.rinne.top:10451/roomsocket';
 export default class CooperationApi {
     static socket;
 
-    static roomsData;
+    static roomsData = new Map();
 
-    static roomInstance;
-
-    static elements;
+    static roomInstance = new Map();
 
     static newElements = new Map();
 
-    static deleteInfo;
+    static deleteInfo = new Map();
 
     static newAccountLists = new Map();
 
@@ -42,10 +40,13 @@ export default class CooperationApi {
                 switch (data.path) {
                     case 'V1/Room/Join':
                         if (this.newAccountLists.has(data.account)) this.newAccountLists.get(data.account)(data.accountList);
-                        this.roomInstance = data;
+                        if (this.roomInstance.has(data.account)) this.roomInstance.get(data.account)(data);
                         break;
                     case 'V1/Room/Query':
-                        this.roomsData = data;
+                        // this.roomsData = data;
+                        console.log(data);
+                        if (this.roomsData.has(data.data.account)) this.roomsData.get(data.data.account)(data.data.rooms);
+                        // this.roomInstance = data;
                         break;
                     case 'V1/Data/Edit':
                         // this.elements = data;
@@ -54,8 +55,9 @@ export default class CooperationApi {
                         break;
                     case 'V1/Room/Delete':
                         // this.elements = data;
-                        // console.log(data.flow);
-                        this.deleteInfo = data;
+                        console.log(data);
+                        // console.log(this.deleteInfo);
+                        if (this.deleteInfo.has(data.account)) this.deleteInfo.get(data.account)(data);
                         break;
                     case 'V1/Room/Quit':
                         if (this.newAccountLists.has(data.account)) this.newAccountLists.get(data.account)(data.accountList);
@@ -122,6 +124,30 @@ export default class CooperationApi {
 
     static unsubscribeToNewAccountLists(account) {
         this.newAccountLists.delete(account);
+    }
+
+    static subscribeToRoomData(account, handleRoomData) {
+        this.roomsData.set(account, handleRoomData);
+    }
+
+    static unsubscribeToRoomData(account) {
+        this.roomsData.delete(account);
+    }
+
+    static subscribeToDeleteInfo(account, handleDeleteInfo) {
+        this.deleteInfo.set(account, handleDeleteInfo);
+    }
+
+    static unsubscribeToDeleteInfo(account) {
+        this.deleteInfo.delete(account);
+    }
+
+    static subscribeToRoomInstance(account, handleRoomInstance) {
+        this.roomInstance.set(account, handleRoomInstance);
+    }
+
+    static unsubscribeToRoomInstance(account) {
+        this.roomInstance.delete(account);
     }
 
     static DeleteRoom(data) {

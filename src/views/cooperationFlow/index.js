@@ -75,6 +75,7 @@ import { AvatarGroup } from '@mui/lab';
 import CheckIcon from '@mui/icons-material/Check';
 import SaveIcon from '@mui/icons-material/Save';
 import { green, red } from '@mui/material/colors';
+import { useNavigate } from 'react-router-dom';
 
 const nodeTypes = {
     No: NoSelector,
@@ -1171,6 +1172,7 @@ const CooperationFlow = () => {
         setSnackbarMsg('');
     };
     const [avatar, setAvatar] = useState([]);
+    const navigate = useNavigate();
     useEffect(() => {
         CooperationApi.subscribeToNewElements(JSON.parse(localStorage.getItem('admin')).account, (flow) => {
             // eslint-disable-next-line no-plusplus
@@ -1209,6 +1211,11 @@ const CooperationFlow = () => {
                 setAvatar(avatar);
             });
         });
+        CooperationApi.subscribeToDeleteInfo(JSON.parse(localStorage.getItem('admin')).account, (data) => {
+            if (data.msg.indexOf(JSON.parse(localStorage.getItem('admin')).account) !== -1) {
+                navigate('/cooperation');
+            }
+        });
         // return () => {
         //     const data = {
         //         account: JSON.parse(localStorage.getItem('admin')).account,
@@ -1219,7 +1226,12 @@ const CooperationFlow = () => {
         //     };
         //     CooperationApi.QuitRoom(data);
         // };
-    }, []);
+        return () => {
+            CooperationApi.unsubscribeToNewAccountLists(JSON.parse(localStorage.getItem('admin')).account);
+            CooperationApi.unsubscribeToNewElements(JSON.parse(localStorage.getItem('admin')).account);
+            CooperationApi.unsubscribeToDeleteInfo(JSON.parse(localStorage.getItem('admin')).account);
+        };
+    }, [navigate]);
     useEffect(() => {
         const entityApi = new EntityApi(localStorage.getItem('admin_token'));
         let accountLists = localStorage.getItem('accountLists');
@@ -1365,7 +1377,7 @@ const CooperationFlow = () => {
         CooperationApi.QuitRoom(data);
         CooperationApi.unsubscribeToNewElements(JSON.parse(localStorage.getItem('admin')).account);
         CooperationApi.unsubscribeToNewAccountLists(JSON.parse(localStorage.getItem('admin')).account);
-        window.location.href = '/cooperation';
+        navigate('/cooperation');
     }
     return (
         <>
