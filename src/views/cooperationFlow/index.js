@@ -583,6 +583,7 @@ const CooperationFlow = () => {
         });
         setCameraOpen(true);
     }
+    const navigate = useNavigate();
     function handleCameraClose() {
         mediaStream.getTracks()[0].stop();
         setCameraOpen(false);
@@ -1149,13 +1150,13 @@ const CooperationFlow = () => {
                         }
                     };
                     CooperationApi.DeleteRoom(data);
-                    window.location.href = '/cooperation';
+                    navigate('/cooperation');
                 }
                 // const conductor = new ConductorApi();
                 // conductor.setWorkFlow(workflow).then((r) => console.log(r));
             }
         },
-        [workInstance, perm, whiteId, bid, gid, regions, reactFlowInstance, fid]
+        [workInstance, perm, whiteId, bid, gid, regions, reactFlowInstance, fid, navigate]
     );
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const onRestore = useCallback(() => {
@@ -1172,7 +1173,6 @@ const CooperationFlow = () => {
         setSnackbarMsg('');
     };
     const [avatar, setAvatar] = useState([]);
-    const navigate = useNavigate();
     useEffect(() => {
         CooperationApi.subscribeToNewElements(JSON.parse(localStorage.getItem('admin')).account, (flow) => {
             // eslint-disable-next-line no-plusplus
