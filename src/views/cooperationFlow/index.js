@@ -71,7 +71,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import axios from 'axios';
 import CooperationApi from '../../api/CooperationApi';
-import { AvatarGroup } from '@mui/lab';
+import AvatarGroup from '@mui/material/AvatarGroup';
 import CheckIcon from '@mui/icons-material/Check';
 import SaveIcon from '@mui/icons-material/Save';
 import { green, red } from '@mui/material/colors';
