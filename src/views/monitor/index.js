@@ -31,7 +31,8 @@ export default function CustomerManagement() {
         { field: 'productName', headerName: '产品名字', flex: 1, minWidth: 120 },
         { field: 'account', headerName: '用户账户', flex: 1.6, minWidth: 200 },
         { field: 'payment', headerName: '金额', flex: 1, minWidth: 120 },
-        { field: 'status', headerName: '订单状态', flex: 1.2, minWidth: 150 },
+        { field: 'status', headerName: '订单状态', flex: 0.6, minWidth: 150 },
+        { field: 'orderDate', headerName: '订单生成时间', flex: 1.2, minWidth: 150 },
         {
             field: 'actions',
             type: 'actions',
@@ -54,6 +55,7 @@ export default function CustomerManagement() {
     useEffect(() => {
         const entityApi = new EntityApi(localStorage.getItem('admin_token'));
         entityApi.getOrders().then((res) => {
+            console.log(res.data);
             if (res.status === 200) {
                 const queue = [];
                 // eslint-disable-next-line camelcase
@@ -62,6 +64,7 @@ export default function CustomerManagement() {
                 const productInfo = [];
                 // eslint-disable-next-line no-plusplus
                 for (let i = 0; i < res.data.length; i++) {
+                    res.data[i].orderDate = new Date(Number(res.data[i].orderDate)).toLocaleString();
                     queue.push(entityApi.getProduct(res.data[i].pid));
                     queue_customer.push(entityApi.getCustomer(res.data[i].cid));
                 }

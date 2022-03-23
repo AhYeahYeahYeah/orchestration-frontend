@@ -17,7 +17,7 @@ export default function LogManagement() {
     const theme = useTheme();
     const [logInfo, setLogInfo] = React.useState([]);
     const columns = [
-        { field: 'oid', headerName: '订单号', flex: 1.1, minWidth: 120 },
+        { field: 'oid', headerName: '订单号', flex: 0.9, minWidth: 120 },
         { field: 'description', headerName: '日志描述', flex: 4, minWidth: 200 }
     ];
     React.useEffect(() => {
