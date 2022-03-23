@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 // material-ui
 import { useTheme, styled } from '@mui/material/styles';
-import { Avatar, Box, Grid, Typography } from '@mui/material';
+import { Avatar, Box, Dialog, Grid, Typography } from '@mui/material';
 
 // third-party
 // import Chart from 'react-apexcharts';
@@ -19,7 +19,9 @@ import SkeletonTotalOrderCard from 'ui-component/cards/Skeleton/EarningCard';
 // import LocalMallOutlinedIcon from '@mui/icons-material/LocalMallOutlined';
 // import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import { EntityApi } from '../../api/restful';
-import { ColorLens } from '@mui/icons-material';
+import { ColorLens, Search } from '@mui/icons-material';
+import Paper from '@mui/material/Paper';
+import { DataGrid, GridActionsCellItem, GridToolbar } from '@mui/x-data-grid';
 
 const CardWrapper = styled(MainCard)(({ theme }) => ({
     backgroundColor: theme.palette.primary.dark,
@@ -72,15 +74,64 @@ const TotalOrderLineChartCard = ({ isLoading }) => {
     // const handleChangeTime = (event, newValue) => {
     //     setTimeValue(newValue);
     // };
-
+    const [workFlow, setWorkFlow] = useState([]);
+    const [open, setOpen] = useState(false);
+    const columns = [
+        { field: 'name', headerName: '流程名', flex: 0.2, minWidth: 100 },
+        { field: 'description', headerName: '流程描述', flex: 1, minWidth: 170 },
+        {
+            field: 'actions',
+            headerName: '查看',
+            type: 'actions',
+            flex: 0.1,
+            getActions: (params) => [
+                <GridActionsCellItem
+                    icon={<Search />}
+                    onClick={() => {
+                        console.log(params);
+                        window.open(`http://conductor.rinne.top:5000/workflowDef/${params.row.name}`);
+                    }}
+                />
+            ]
+        }
+    ];
+    function handleOpen() {
+        setOpen(true);
+    }
+    function handleClose() {
+        setOpen(false);
+    }
     useEffect(() => {
         const entity = new EntityApi(localStorage.getItem('admin_token'));
         entity.getWorkFlowListsToDas().then((res) => {
             setCount(res.data.length);
+            // eslint-disable-next-line no-plusplus
+            for (let i = 0; i < res.data.length; i++) {
+                res.data[i].id = res.data[i].fid;
+            }
+            setWorkFlow(res.data);
         });
     });
     return (
         <>
+            {/* eslint-disable-next-line react/jsx-no-bind */}
+            <Dialog open={open} fullWidth onClose={handleClose}>
+                <Paper sx={{ my: { xs: 1, md: 2 }, p: { xs: 1, md: 1 } }}>
+                    <Typography component="h1" variant="h4" align="center">
+                        编排流程
+                    </Typography>
+                    <div style={{ marginTop: 5, height: `calc(100vh - 290px)`, width: '100%' }}>
+                        <DataGrid
+                            // autoHeight
+                            autoPageSize
+                            rows={workFlow}
+                            columns={columns}
+                            // pageSize={5}
+                            components={{ Toolbar: GridToolbar }}
+                        />
+                    </div>
+                </Paper>
+            </Dialog>
             {isLoading ? (
                 <SkeletonTotalOrderCard />
             ) : (
@@ -99,6 +150,7 @@ const TotalOrderLineChartCard = ({ isLoading }) => {
                                                 color: '#fff',
                                                 mt: 1
                                             }}
+                                            onClick={() => handleOpen()}
                                         >
                                             <ColorLens fontSize="inherit" />
                                         </Avatar>
