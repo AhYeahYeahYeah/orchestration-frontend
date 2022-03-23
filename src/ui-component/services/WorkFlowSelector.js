@@ -9,6 +9,7 @@ export default function WorkFlowSelector({ data }) {
     //     props(e.target.value);
     // }
     // eslint-disable-next-line react/prop-types
+    // console.log(data);
     return (
         <>
             <Handle
@@ -17,8 +18,16 @@ export default function WorkFlowSelector({ data }) {
                 style={{ background: '#555', width: 10, height: 10 }}
                 // onConnect={(params) => console.log('handle onConnect', params)}
             />
-            {/* eslint-disable-next-line react/jsx-no-bind,react/prop-types */}
-            <CardWorkFlow setFid={data.updateFid} initName={data.workFlowName} />
+            <CardWorkFlow
+                /* eslint-disable-next-line react/prop-types */
+                setFid={data.updateFid}
+                /* eslint-disable-next-line react/prop-types */
+                initName={data.workFlowName}
+                /* eslint-disable-next-line react/prop-types */
+                updateLookInstance={data.updateLookInstance}
+                /* eslint-disable-next-line react/prop-types */
+                onlyOpenLook={data.onlyOpenLook}
+            />
             <Handle type="source" position="bottom" style={{ background: '#555', width: 10, height: 10 }} />
         </>
     );

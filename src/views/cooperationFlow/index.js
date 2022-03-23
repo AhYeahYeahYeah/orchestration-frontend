@@ -174,8 +174,14 @@ const CooperationFlow = () => {
             }
         })
     };
+    function updateLookInstance(value) {
+        setLookInstance(value);
+    }
     function handleOpenLook() {
         setLookInstance(elements);
+        setLookFlag(true);
+    }
+    function onlyOpenLook() {
         setLookFlag(true);
     }
     function handleCloseLook() {
@@ -405,11 +411,13 @@ const CooperationFlow = () => {
                 break;
 
             case 'WorkFlow':
+                console.log(1);
+                console.log(updateFid);
                 newNode = {
                     id: `${genID()}`,
                     type,
                     position,
-                    data: { updateFid, workFlowName: '' },
+                    data: { updateFid, workFlowName: '', updateLookInstance, onlyOpenLook },
                     flag: `${type}`,
                     style: { border: '1px solid black', padding: 10, borderRadius: 8, width: 210 },
                     visited: 0
@@ -1185,9 +1193,13 @@ const CooperationFlow = () => {
                     flow[j].data.updateGid = updateGid;
                 } else if (flow[j].type === 'Region') {
                     flow[j].data.updateRegions = updateRegions;
+                } else if (flow[j].type === 'WorkFlow') {
+                    flow[j].data.updateFid = updateFid;
+                    flow[j].data.updateLookInstance = updateLookInstance;
+                    flow[j].data.onlyOpenLook = onlyOpenLook;
                 }
             }
-            console.log(flow);
+            // console.log(flow);
             setElements(flow);
         });
 
@@ -1536,7 +1548,8 @@ const CooperationFlow = () => {
                             height: 400
                         },
                         zIndex: 1500,
-                        top: '5%'
+                        top: '3%',
+                        left: '1%'
                     }}
                 >
                     <Draggable>

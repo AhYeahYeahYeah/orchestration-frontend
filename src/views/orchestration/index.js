@@ -171,8 +171,14 @@ const Orchestration = () => {
             }
         })
     };
+    function updateLookInstance(value) {
+        setLookInstance(value);
+    }
     function handleOpenLook() {
         setLookInstance(elements);
+        setLookFlag(true);
+    }
+    function onlyOpenLook() {
         setLookFlag(true);
     }
     function handleCloseLook() {
@@ -340,6 +346,8 @@ const Orchestration = () => {
                                 flow[j].data.updateRegions = updateRegions;
                             } else if (flow[j].type === 'WorkFlow') {
                                 flow[j].data.updateFid = updateFid;
+                                flow[j].data.updateLookInstance = updateLookInstance;
+                                flow[j].data.onlyOpenLook = onlyOpenLook;
                                 // eslint-disable-next-line no-plusplus
                                 for (let k = 0; k < workflowlist.length; k++) {
                                     if (flow[j].data.workFlowName === workflowlist[k].fid) {
@@ -442,7 +450,7 @@ const Orchestration = () => {
                     id: `${genID()}`,
                     type,
                     position,
-                    data: { updateFid, workFlowName: '' },
+                    data: { updateFid, workFlowName: '', updateLookInstance, onlyOpenLook },
                     flag: `${type}`,
                     style: { border: '1px solid black', padding: 10, borderRadius: 8, width: 210 },
                     visited: 0
