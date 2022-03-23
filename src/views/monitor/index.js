@@ -57,35 +57,14 @@ export default function CustomerManagement() {
         entityApi.getOrders().then((res) => {
             console.log(res.data);
             if (res.status === 200) {
-                const queue = [];
-                // eslint-disable-next-line camelcase
-                const queue_customer = [];
-                // eslint-disable-next-line no-plusplus
-                const productInfo = [];
                 // eslint-disable-next-line no-plusplus
                 for (let i = 0; i < res.data.length; i++) {
                     res.data[i].orderDate = new Date(Number(res.data[i].orderDate)).toLocaleString();
-                    queue.push(entityApi.getProduct(res.data[i].pid));
-                    queue_customer.push(entityApi.getCustomer(res.data[i].cid));
+                    res.data[i].id = res.data[i].oid;
+                    res.data[i].status = res.data[i].status === 1 ? '交易成功' : '交易失败';
                 }
-                Promise.all(queue).then((re) => {
-                    Promise.all(queue_customer).then((r) => {
-                        // eslint-disable-next-line no-plusplus
-                        for (let i = 0; i < re.length; i++) {
-                            productInfo.push(re[i].data[0]);
-                        }
-                        // eslint-disable-next-line no-plusplus
-                        for (let i = 0; i < res.data.length; i++) {
-                            res.data[i].id = res.data[i].oid;
-                            res.data[i].productName = re[i].data[0].productName;
-                            res.data[i].account = r[i].data[0].account;
-                            res.data[i].status = res.data[i].status === 1 ? '交易成功' : '交易失败';
-                        }
-                        // console.log(res.data);
-                        setOrderInfo(res.data);
-                    });
-                    // console.log(re);
-                });
+                // console.log(res.data);
+                setOrderInfo(res.data);
             }
         });
     }, []);
