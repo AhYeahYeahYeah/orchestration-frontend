@@ -144,7 +144,7 @@ const NotificationSection = () => {
                             <TextField
                                 id="outlined-basic"
                                 variant="outlined"
-                                label="Say Something"
+                                label="请输入信息"
                                 fullWidth
                                 /* eslint-disable-next-line react/jsx-no-bind */
                                 onChange={handleTextChange}
