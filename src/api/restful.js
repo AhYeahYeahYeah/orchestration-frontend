@@ -11,7 +11,7 @@ const version = 'v1';
 const generalBackendBase = `${baseUrl}:${generalBackendPort}/${version}`;
 const authBase = `${generalBackendBase}/auth`;
 const entityBase = `${generalBackendBase}/entity`;
-
+const robotUrl = 'http://8.141.159.53:12888/https://aip.baidubce.com/rpc/2.0/unit/service/v3';
 const conductorBase = `http://8.141.159.53:12888/${baseUrl}:${conductorPort}/api`;
 
 const servicesBackendBase = `${baseUrl}:${servicesBackendPort}/${version}`;
@@ -48,7 +48,19 @@ async function poll(fn, fnCondition, ms) {
     }
     return result;
 }
+export class RobotApi {
+    constructor() {
+        this.instance = axios.create({
+            baseURL: `${robotUrl}/`,
+            // timeout: 1050,
+            headers: { Accept: 'application/json' }
+        });
+    }
 
+    async sendMsg(data) {
+        return this.instance.post('/chat?access_token=24.d145535a28a91c83cb78724ff4e9bb45.2592000.1650596258.282335-25826498', data);
+    }
+}
 export class AuthApi {
     constructor() {
         this.instance = axios.create({
