@@ -77,6 +77,7 @@ const Dashboard = () => {
                 let resultArr = Array.from(workFlow);
                 // console.log(resultArr.sort((a, b) => b[1] - a[1]));
                 resultArr = resultArr.sort((a, b) => b[1] - a[1]);
+                resultArr = resultArr.slice(0, 5);
                 setWorkFlowNum(resultArr);
             });
         });
