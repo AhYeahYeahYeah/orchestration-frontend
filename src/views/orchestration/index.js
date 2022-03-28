@@ -126,10 +126,11 @@ const Orchestration = () => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const reactFlowWrapper = useRef(null);
     const reactFlowWrapperOpen = useRef(null);
-    const reactFlowWrapperLook = useRef(null);
+    // const reactFlowWrapperLook = useRef(null);
     const [openFull, setOpenFull] = useState(false);
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
+    const [reactFlowInstanceOpen, setReactFlowInstanceOpen] = useState(null);
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [elements, setElements] = useState(initialElements);
     // const [white, setWhite] = useState([]);
@@ -294,6 +295,7 @@ const Orchestration = () => {
     };
     const onEdgeUpdate = (oldEdge, newConnection) => setElements((els) => updateEdge(oldEdge, newConnection, els));
     const onLoad = (_reactFlowInstance) => setReactFlowInstance(_reactFlowInstance);
+    const onLoadOpen = (_reactFlowInstance) => setReactFlowInstanceOpen(_reactFlowInstance);
     const [workFlowInstanceName, setWorkFlowInstanceName] = useState('');
     function updateFlowinstance(value) {
         console.log(value);
@@ -376,15 +378,25 @@ const Orchestration = () => {
         event.preventDefault();
         let reactFlowBounds;
         if (openFull) {
+            // reactFlowWrapper = reactFlowWrapperOpen;
             reactFlowBounds = reactFlowWrapperOpen.current.getBoundingClientRect();
         } else {
+            // reactFlowWrapperOpen = reactFlowWrapperOpen
             reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
         }
         const type = event.dataTransfer.getData('application/reactflow');
-        const position = reactFlowInstance.project({
-            x: event.clientX - reactFlowBounds.left,
-            y: event.clientY - reactFlowBounds.top
-        });
+        let position;
+        if (openFull) {
+            position = reactFlowInstanceOpen.project({
+                x: event.clientX - reactFlowBounds.left,
+                y: event.clientY - reactFlowBounds.top
+            });
+        } else {
+            position = reactFlowInstance.project({
+                x: event.clientX - reactFlowBounds.left,
+                y: event.clientY - reactFlowBounds.top
+            });
+        }
         let newNode = null;
         switch (type) {
             case 'No':
@@ -1350,7 +1362,7 @@ const Orchestration = () => {
                                     defaultZoom={1.35}
                                     onElementsRemove={onElementsRemove}
                                     onConnect={onConnect}
-                                    onLoad={onLoad}
+                                    onLoad={onLoadOpen}
                                     onDrop={onDrop}
                                     onDragOver={onDragOver}
                                     nodeTypes={nodeTypes}
@@ -1483,7 +1495,7 @@ const Orchestration = () => {
                             />
                             <div className="dndflow">
                                 <ReactFlowProvider>
-                                    <div className="reactflow-wrapper" ref={reactFlowWrapperLook}>
+                                    <div className="reactflow-wrapper">
                                         <ReactFlow
                                             elements={lookInstance}
                                             // snapToGrid
