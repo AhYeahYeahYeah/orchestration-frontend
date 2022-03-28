@@ -651,7 +651,9 @@ const Orchestration = () => {
                 //     interest: '${interest_1.output.response.body.interest}'
                 // });
                 const inputNode = new InputNode();
-                const flow = reactFlowInstance.toObject();
+                const flow = {
+                    elements
+                };
                 // eslint-disable-next-line camelcase
                 const flow_queue = [];
                 // eslint-disable-next-line no-plusplus
@@ -1198,7 +1200,7 @@ const Orchestration = () => {
                 // conductor.setWorkFlow(workflow).then((r) => console.log(r));
             }
         },
-        [workInstance, perm, whiteId, bid, gid, regions, reactFlowInstance, fid]
+        [workInstance, perm, whiteId, bid, gid, regions, reactFlowInstance, fid, elements]
     );
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const onRestore = useCallback(() => {
