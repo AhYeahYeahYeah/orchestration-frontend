@@ -240,11 +240,13 @@ export class WorkflowBuilder {
                     task.type = 'HTTP';
                     task.name = node.name;
                     task.taskReferenceName = node.taskReferenceName;
+                    task.retryCount = 3;
                     task.inputParameters = {
                         http_request: {
                             uri: node.url,
                             method: node.method,
-                            body: node.body
+                            body: node.body,
+                            timeoutSeconds: 4000
                         }
                     };
                     if (node.nextNode && node.nextNode.type === 'Switch') task.optional = true;
@@ -287,6 +289,7 @@ export class WorkflowBuilder {
                     task.type = 'TERMINATE';
                     task.name = node.name;
                     task.taskReferenceName = node.taskReferenceName;
+                    task.timeoutSeconds = 4000;
                     task.inputParameters = {
                         terminationStatus: node.status,
                         workflowOutput: node.output
