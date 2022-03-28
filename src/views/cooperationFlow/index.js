@@ -132,6 +132,7 @@ const CooperationFlow = () => {
     const [openFull, setOpenFull] = useState(false);
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
+    const [reactFlowInstanceOpen, setReactFlowInstanceOpen] = useState(null);
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [elements, setElements] = useState(initialElements);
     // const [white, setWhite] = useState([]);
@@ -330,7 +331,7 @@ const CooperationFlow = () => {
         setElements(anonymous(elements));
     };
     const onLoad = (_reactFlowInstance) => setReactFlowInstance(_reactFlowInstance);
-
+    const onLoadOpen = (_reactFlowInstance) => setReactFlowInstanceOpen(_reactFlowInstance);
     const onDragOver = (event) => {
         event.preventDefault();
         event.dataTransfer.dropEffect = 'move';
@@ -345,10 +346,18 @@ const CooperationFlow = () => {
             reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
         }
         const type = event.dataTransfer.getData('application/reactflow');
-        const position = reactFlowInstance.project({
-            x: event.clientX - reactFlowBounds.left,
-            y: event.clientY - reactFlowBounds.top
-        });
+        let position;
+        if (openFull) {
+            position = reactFlowInstanceOpen.project({
+                x: event.clientX - reactFlowBounds.left,
+                y: event.clientY - reactFlowBounds.top
+            });
+        } else {
+            position = reactFlowInstance.project({
+                x: event.clientX - reactFlowBounds.left,
+                y: event.clientY - reactFlowBounds.top
+            });
+        }
         let newNode = null;
         switch (type) {
             case 'No':
@@ -627,7 +636,9 @@ const CooperationFlow = () => {
                 //     interest: '${interest_1.output.response.body.interest}'
                 // });
                 const inputNode = new InputNode();
-                const flow = reactFlowInstance.toObject();
+                const flow = {
+                    elements
+                };
                 // eslint-disable-next-line camelcase
                 const flow_queue = [];
                 // eslint-disable-next-line no-plusplus
@@ -1165,7 +1176,7 @@ const CooperationFlow = () => {
                 // conductor.setWorkFlow(workflow).then((r) => console.log(r));
             }
         },
-        [workInstance, perm, whiteId, bid, gid, regions, reactFlowInstance, fid, navigate]
+        [workInstance, perm, whiteId, bid, gid, regions, reactFlowInstance, fid, navigate, elements]
     );
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const onRestore = useCallback(() => {
@@ -1447,7 +1458,7 @@ const CooperationFlow = () => {
                                     defaultZoom={1.35}
                                     onElementsRemove={onElementsRemove}
                                     onConnect={onConnect}
-                                    onLoad={onLoad}
+                                    onLoad={onLoadOpen}
                                     onDrop={onDrop}
                                     onDragOver={onDragOver}
                                     nodeTypes={nodeTypes}
