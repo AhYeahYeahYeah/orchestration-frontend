@@ -176,6 +176,7 @@ export class WorkflowBuilder {
         this.name = name;
         this.version = version;
         this.ownerEmail = ownerEmail;
+        this.timeoutSeconds = 1500;
     }
 
     setBuildtimeInput = (buildtimeInput) => {
@@ -218,6 +219,7 @@ export class WorkflowBuilder {
         ret.inputParameters = this.runtimeInput;
         ret.inputTemplate = this.buildtimeInput;
         ret.outputParameters = this.output;
+        ret.timeoutSeconds = this.timeoutSeconds;
         ret.tasks = [];
 
         const taskIter = (node, list) => {
