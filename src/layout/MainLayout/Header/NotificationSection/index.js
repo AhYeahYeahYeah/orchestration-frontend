@@ -6,7 +6,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
-import { SupportAgent } from '@mui/icons-material';
+import { Send, SupportAgent } from '@mui/icons-material';
 import MessageBubble from './MessageBubble';
 import Typography from '@mui/material/Typography';
 import { RobotApi } from '../../../../api/restful';
@@ -73,10 +73,17 @@ const NotificationSection = () => {
         setText('');
     }
     useEffect(() => {
-        sleep(500).then(() => {
-            // 这里写sleep之后需要去做的事情
-            if (messages.length !== 0 && open) scrollToBottom();
-        });
+        if (open) {
+            setMessages((messages) => [...messages, { text: '请问需要什么帮助呢', flag: false }]);
+        }
+    }, [open]);
+    useEffect(() => {
+        if (open) {
+            sleep(500).then(() => {
+                // 这里写sleep之后需要去做的事情
+                if (messages.length !== 0 && open) scrollToBottom();
+            });
+        }
     }, [messages.length, open]);
     return (
         <>
@@ -117,7 +124,7 @@ const NotificationSection = () => {
                 <DialogTitle>
                     <Typography size="2.8rem">智能机器人</Typography>
                 </DialogTitle>
-                <DialogContent sx={{ position: 'flex', height: 600 }}>
+                <DialogContent sx={{ position: 'flex', height: 600, background: '#eeeeee' }}>
                     <List sx={{ overflow: 'auto', flexGrow: 1 }}>
                         {/* eslint-disable-next-line react/prop-types */}
                         {messages.map((msg, index) => (
@@ -139,8 +146,8 @@ const NotificationSection = () => {
                     </List>
                 </DialogContent>
                 <DialogActions>
-                    <Grid container spacing={2}>
-                        <Grid item xs={11.5}>
+                    <Grid container spacing={1.5}>
+                        <Grid item xs={9}>
                             <TextField
                                 id="outlined-basic"
                                 variant="outlined"
@@ -158,18 +165,17 @@ const NotificationSection = () => {
                             />
                             {/* eslint-disable-next-line react/jsx-no-bind */}
                         </Grid>
-                        {/* <Grid item xs={3} sx={{ mt: 1 }}> */}
-                        {/*    <Button */}
-                        {/*        disabled={disable} */}
-                        {/*        startIcon={<Send />} */}
-                        {/*        variant="outlined" */}
-                        {/*        /* eslint-disable-next-line react/jsx-no-bind */}
-                        {/*        onClick={() => handleSendBtnClicked()} */}
-                        {/*        sx={{ margin: 1 }} */}
-                        {/*    > */}
-                        {/*        SEND */}
-                        {/*    </Button> */}
-                        {/* </Grid> */}
+                        <Grid item xs={3} sx={{ mt: 1 }}>
+                            <Button
+                                // disabled={disable}
+                                startIcon={<Send />}
+                                variant="outlined"
+                                onClick={() => handleSendBtnClicked()}
+                                sx={{ margin: 1 }}
+                            >
+                                发送
+                            </Button>
+                        </Grid>
                         <Grid item xs={12} sx={{ ml: 65 }}>
                             <Button onClick={() => handleClose()}>关闭</Button>
                         </Grid>
