@@ -77,7 +77,7 @@ const NotificationSection = () => {
             // 这里写sleep之后需要去做的事情
             if (messages.length !== 0 && open) scrollToBottom();
         });
-    });
+    }, [messages.length, open]);
     return (
         <>
             <Box

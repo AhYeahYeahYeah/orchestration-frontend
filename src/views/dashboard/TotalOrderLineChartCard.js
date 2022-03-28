@@ -79,6 +79,7 @@ const TotalOrderLineChartCard = ({ isLoading }) => {
     const columns = [
         { field: 'name', headerName: '流程名', flex: 0.2, minWidth: 100 },
         { field: 'description', headerName: '流程描述', flex: 1, minWidth: 170 },
+        { field: 'account', headerName: '发布人账户', flex: 0.2, minWidth: 100 },
         {
             field: 'actions',
             headerName: '查看',
@@ -111,7 +112,7 @@ const TotalOrderLineChartCard = ({ isLoading }) => {
             }
             setWorkFlow(res.data);
         });
-    });
+    }, []);
     return (
         <>
             {/* eslint-disable-next-line react/jsx-no-bind */}

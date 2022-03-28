@@ -1108,6 +1108,7 @@ const CooperationFlow = () => {
                 console.log(workflow);
                 console.log(flow_all);
                 workflowSave.metadataWorkflow = JSON.parse(workflow);
+                workflowSave.account = JSON.parse(localStorage.getItem('admin')).account;
                 console.log(JSON.parse(workflowSave.flow));
                 if (workInstance.length === 0) {
                     entityApi.addWorkFlow(workflowSave).then((res) => {
