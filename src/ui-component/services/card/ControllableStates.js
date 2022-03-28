@@ -16,6 +16,7 @@ export default function ControllableStates({ value, saveId, name }) {
             <Autocomplete
                 value={initName}
                 onChange={(event, newValue) => {
+                    // console.log(newValue);
                     saveId(newValue);
                     setInitName(newValue);
                 }}

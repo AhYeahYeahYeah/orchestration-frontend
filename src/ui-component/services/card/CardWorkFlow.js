@@ -18,7 +18,8 @@ export default function CardWorkFlow({ setFid, initName, updateLookInstance, onl
         // eslint-disable-next-line no-plusplus
         for (let i = 0; i < workFlowAll.length; i++) {
             if (workFlowAll[i].name === value) {
-                setFid(workFlowAll[i].wid);
+                // console.log(workFlowAll[i].fid);
+                setFid(workFlowAll[i].fid);
                 setFlow(JSON.parse(workFlowAll[i].flow));
             }
         }

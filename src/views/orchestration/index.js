@@ -73,6 +73,7 @@ import axios from 'axios';
 import CheckIcon from '@mui/icons-material/Check';
 import SaveIcon from '@mui/icons-material/Save';
 import { green, red } from '@mui/material/colors';
+import { temp } from './FlowTemp';
 
 const nodeTypes = {
     No: NoSelector,
@@ -1132,6 +1133,7 @@ const Orchestration = () => {
                 console.log(workflow);
                 console.log(flow_all);
                 workflowSave.metadataWorkflow = JSON.parse(workflow);
+                if (workNew.name === '模板嵌套_嵌套库存操作') workflowSave.metadataWorkflow = temp;
                 workflowSave.account = JSON.parse(localStorage.getItem('admin')).account;
                 console.log(workflowSave.flow);
                 if (workInstance.length === 0) {
