@@ -12,6 +12,7 @@ import TotalOrderLineChartCard from './TotalOrderLineChartCard';
 import TotalGrowthBarChart from './TotalGrowthBarChart';
 import { gridSpacing } from 'store/constant';
 import { ConductorApi, EntityApi } from '../../api/restful';
+// import Skeleton from '@mui/material/Skeleton';
 
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
@@ -20,7 +21,6 @@ const Dashboard = () => {
     const [dayNum, setDayNum] = useState([]);
     const [workFlowNum, setWorkFlowNum] = useState([]);
     useEffect(() => {
-        setLoading(false);
         const entity = new EntityApi(localStorage.getItem('admin_token'));
         const conductor = new ConductorApi();
         const workFlow = new Map();
@@ -79,6 +79,7 @@ const Dashboard = () => {
                 resultArr = resultArr.sort((a, b) => b[1] - a[1]);
                 resultArr = resultArr.slice(0, 5);
                 setWorkFlowNum(resultArr);
+                setLoading(false);
             });
         });
     }, []);

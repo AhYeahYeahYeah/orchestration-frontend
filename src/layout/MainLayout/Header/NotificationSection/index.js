@@ -1,22 +1,25 @@
 import { useEffect, useRef, useState } from 'react';
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Avatar, Box, Button, ButtonBase, Grid, List, ListItem, TextField } from '@mui/material';
+import { Avatar, Box, Button, ButtonBase, Grid, IconButton, List, ListItem, TextField } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
-import { Send, SupportAgent } from '@mui/icons-material';
+import { Mic, Send, SupportAgent } from '@mui/icons-material';
 import MessageBubble from './MessageBubble';
 import Typography from '@mui/material/Typography';
 import { RobotApi } from '../../../../api/restful';
-
+import Recorder from 'js-audio-recorder';
+import axios from 'axios';
 // ==============================|| NOTIFICATION ||============================== //
 
 const NotificationSection = () => {
     const theme = useTheme();
     const messagesEndRef = useRef(null);
     const [open, setOpen] = useState(false);
+    const [micOpen, setMicOpen] = useState(false);
+    const [chunk, setChunk] = useState(null);
     const scrollToBottom = () => {
         messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     };
@@ -30,6 +33,7 @@ const NotificationSection = () => {
 
     const handleClose = () => {
         setOpen(false);
+        setChunk(null);
     };
     function handleTextChange(e) {
         setText((text) => {
@@ -71,6 +75,104 @@ const NotificationSection = () => {
         // setLoading(false);
         sendMessage();
         setText('');
+    }
+    function StartMic() {
+        setMicOpen(!micOpen);
+        if (!micOpen) {
+            const recorder = new Recorder({ sampleRate: 16000 });
+            recorder.start().then(
+                () => {
+                    // 开始录音
+                    console.log('开始录音');
+                    setChunk(recorder);
+                },
+                (error) => {
+                    // 出错了
+                    console.log(`${error.name} : ${error.message}`);
+                }
+            );
+            // const constraints = { audio: true };
+            // navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
+            //     const options = {
+            //         audioBitsPerSecond: 16000,
+            //         // videoBitsPerSecond : 2500000,
+            //         // mimeType: 'video/mp4'
+            //     };
+            //     const mediaRecorder = new MediaRecorder(stream, options);
+            //     setMicOpen(mediaRecorder);
+            //     mediaRecorder.start(100);
+            //     console.log('录音中...');
+            //     console.log('录音器状态：', mediaRecorder.state);
+            //     // const chunks = [];
+            //     mediaRecorder.ondataavailable = (e) => {
+            //         // chunks.push(e.data);
+            //         console.log(e.data);
+            //         setChunk((chunks) => [...chunks, e.data]);
+            //     };
+            // });
+        } else {
+            chunk.stop();
+            const blob = chunk.getPCMBlob();
+            // blob.type = 'audio/wav';
+            // blob = new Blob(blob, { type: 'audio/wav' });
+            // console.log(blob);
+            const file = new File([blob], '123', { type: 'audio/pcm', lastModified: Date.now() });
+            // console.log(file);
+            // console.log(file.size);
+            const reader = new FileReader();
+            reader.onload = (evt) => {
+                const base64 = evt.target.result;
+                // console.log(base64.substring(37));
+                const data = {
+                    format: 'pcm',
+                    rate: 16000,
+                    dev_pid: 1537,
+                    channel: 1,
+                    token: '24.a2d8dbff5a4dd0b30c4aaa96c0c36b70.2592000.1651808174.282335-25898929',
+                    cuid: 'baidu_workshop',
+                    len: file.size,
+                    speech: base64.substring(37)
+                };
+                axios.post('http://8.141.159.53:12888/http://vop.baidu.com/server_api', data).then((res) => {
+                    // console.log(res.data);
+                    // console.log(res.data.result[0]);
+                    if (res.data.result[0] !== '我不知道。') {
+                        setText(res.data.result[0]);
+                    }
+                });
+            };
+            reader.readAsDataURL(blob);
+            // chunk.downloadPCM('123');
+            chunk.destroy().then(() => {
+                setChunk(null);
+            });
+            // const reader = new FileReader();
+            // // 取指定的 Blob 或 File 对象，读取操作完成的时候，readyState 会变成已完成DONE
+            // reader.readAsDataURL(blob);
+            // reader.onload = () => {
+            //     // result 属性将包含一个data:URL格式的字符串（base64编码）以表示所读取文件的内容
+            //     console.log(reader.result); // reader.result 为 base64 字符串编码
+            // };
+            // micOpen.stop();
+            // micOpen.onstop = () => {
+            //     console.log(chunk);
+            //     const blob = new Blob(chunk, { type: 'audio/pcm' });
+            //     const audioURL = URL.createObjectURL(blob);
+            //     // const audio = new Audio(audioURL);
+            //     console.log(audioURL);
+            //     const reader = new FileReader();
+            //     // 取指定的 Blob 或 File 对象，读取操作完成的时候，readyState 会变成已完成DONE
+            //     reader.readAsDataURL(blob);
+            //     reader.onload = () => {
+            //         // result 属性将包含一个data:URL格式的字符串（base64编码）以表示所读取文件的内容
+            //         console.log(reader.result); // reader.result 为 base64 字符串编码
+            //     };
+            //
+            //     setChunk([]);
+            //     // console.log(audioURL);
+            // };
+            // console.log('录音器状态：', micOpen.state);
+        }
     }
     useEffect(() => {
         if (open) {
@@ -161,6 +263,15 @@ const NotificationSection = () => {
                                     if (event.keyCode === 13) {
                                         handleSendBtnClicked();
                                     }
+                                }}
+                                InputProps={{
+                                    endAdornment: (
+                                        <IconButton position="end" onClick={() => StartMic()}>
+                                            {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+                                            {/* <audio /> */}
+                                            <Mic sx={{ color: chunk === null ? '' : 'red' }} />
+                                        </IconButton>
+                                    )
                                 }}
                             />
                             {/* eslint-disable-next-line react/jsx-no-bind */}

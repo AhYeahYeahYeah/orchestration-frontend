@@ -18,7 +18,7 @@ import KeyboardArrowUpOutlinedIcon from '@mui/icons-material/KeyboardArrowUpOutl
 
 // ==============================|| DASHBOARD DEFAULT - POPULAR CARD ||============================== //
 
-const PopularCard = ({ isLoading, workFlowNum }) => (
+const PopularCard = ({ isLoading, workFlowNum }) => {
     // const theme = useTheme();
 
     // const [anchorEl, setAnchorEl] = useState(null);
@@ -30,115 +30,118 @@ const PopularCard = ({ isLoading, workFlowNum }) => (
     // const handleClose = () => {
     //     setAnchorEl(null);
     // };
+    console.log(isLoading);
 
-    <>
-        {isLoading ? (
-            <SkeletonPopularCard />
-        ) : (
-            <MainCard content={false}>
-                <CardContent>
-                    <Grid container spacing={gridSpacing}>
-                        <Grid item xs={12}>
-                            <Grid container alignContent="center" justifyContent="space-between">
-                                <Grid item>
-                                    <Typography variant="h4">Top5(近一周执行次数)</Typography>
+    return (
+        <>
+            {isLoading ? (
+                <SkeletonPopularCard />
+            ) : (
+                <MainCard content={false}>
+                    <CardContent>
+                        <Grid container spacing={gridSpacing}>
+                            <Grid item xs={12}>
+                                <Grid container alignContent="center" justifyContent="space-between">
+                                    <Grid item>
+                                        <Typography variant="h4">Top5(近一周执行次数)</Typography>
+                                    </Grid>
+                                    {/* <Grid item> */}
+                                    {/*    <MoreHorizOutlinedIcon */}
+                                    {/*        fontSize="small" */}
+                                    {/*        sx={{ */}
+                                    {/*            color: theme.palette.primary[200], */}
+                                    {/*            cursor: 'pointer' */}
+                                    {/*        }} */}
+                                    {/*        aria-controls="menu-popular-card" */}
+                                    {/*        aria-haspopup="true" */}
+                                    {/*        onClick={handleClick} */}
+                                    {/*    /> */}
+                                    {/*    <Menu */}
+                                    {/*        id="menu-popular-card" */}
+                                    {/*        anchorEl={anchorEl} */}
+                                    {/*        keepMounted */}
+                                    {/*        open={Boolean(anchorEl)} */}
+                                    {/*        onClose={handleClose} */}
+                                    {/*        variant="selectedMenu" */}
+                                    {/*        anchorOrigin={{ */}
+                                    {/*            vertical: 'bottom', */}
+                                    {/*            horizontal: 'right' */}
+                                    {/*        }} */}
+                                    {/*        transformOrigin={{ */}
+                                    {/*            vertical: 'top', */}
+                                    {/*            horizontal: 'right' */}
+                                    {/*        }} */}
+                                    {/*    > */}
+                                    {/*        <MenuItem onClick={handleClose}> Today</MenuItem> */}
+                                    {/*        <MenuItem onClick={handleClose}> This Month</MenuItem> */}
+                                    {/*        <MenuItem onClick={handleClose}> This Year </MenuItem> */}
+                                    {/*    </Menu> */}
+                                    {/* </Grid> */}
                                 </Grid>
-                                {/* <Grid item> */}
-                                {/*    <MoreHorizOutlinedIcon */}
-                                {/*        fontSize="small" */}
-                                {/*        sx={{ */}
-                                {/*            color: theme.palette.primary[200], */}
-                                {/*            cursor: 'pointer' */}
-                                {/*        }} */}
-                                {/*        aria-controls="menu-popular-card" */}
-                                {/*        aria-haspopup="true" */}
-                                {/*        onClick={handleClick} */}
-                                {/*    /> */}
-                                {/*    <Menu */}
-                                {/*        id="menu-popular-card" */}
-                                {/*        anchorEl={anchorEl} */}
-                                {/*        keepMounted */}
-                                {/*        open={Boolean(anchorEl)} */}
-                                {/*        onClose={handleClose} */}
-                                {/*        variant="selectedMenu" */}
-                                {/*        anchorOrigin={{ */}
-                                {/*            vertical: 'bottom', */}
-                                {/*            horizontal: 'right' */}
-                                {/*        }} */}
-                                {/*        transformOrigin={{ */}
-                                {/*            vertical: 'top', */}
-                                {/*            horizontal: 'right' */}
-                                {/*        }} */}
-                                {/*    > */}
-                                {/*        <MenuItem onClick={handleClose}> Today</MenuItem> */}
-                                {/*        <MenuItem onClick={handleClose}> This Month</MenuItem> */}
-                                {/*        <MenuItem onClick={handleClose}> This Year </MenuItem> */}
-                                {/*    </Menu> */}
-                                {/* </Grid> */}
                             </Grid>
-                        </Grid>
-                        {/* <Grid item xs={12} sx={{ pt: '16px !important' }}> */}
-                        {/*    <BajajAreaChartCard /> */}
-                        {/* </Grid> */}
-                        <Grid item xs={12} sx={{ mt: 2 }}>
-                            {workFlowNum.map((workFlowInstance) => (
-                                <div key={workFlowInstance[0]}>
-                                    <Grid container direction="column">
-                                        <Grid item>
-                                            <Grid container alignItems="center" justifyContent="space-between">
-                                                <Grid item>
-                                                    <Typography variant="subtitle1" color="inherit">
-                                                        名字:{workFlowInstance[0]}
-                                                    </Typography>
-                                                </Grid>
-                                                <Grid item>
-                                                    <Grid container alignItems="center" justifyContent="space-between">
-                                                        <Grid item>
-                                                            <Typography variant="subtitle1" color="inherit">
-                                                                次数:{workFlowInstance[1]}
-                                                            </Typography>
-                                                        </Grid>
-                                                        <Grid item>
-                                                            <Avatar
-                                                                variant="rounded"
-                                                                sx={{
-                                                                    width: 16,
-                                                                    height: 16,
-                                                                    borderRadius: '5px',
-                                                                    backgroundColor: '#c62828',
-                                                                    color: 'white',
-                                                                    ml: 2
-                                                                }}
-                                                            >
-                                                                <KeyboardArrowUpOutlinedIcon fontSize="small" color="inherit" />
-                                                            </Avatar>
+                            {/* <Grid item xs={12} sx={{ pt: '16px !important' }}> */}
+                            {/*    <BajajAreaChartCard /> */}
+                            {/* </Grid> */}
+                            <Grid item xs={12} sx={{ mt: 2 }}>
+                                {workFlowNum.map((workFlowInstance) => (
+                                    <div key={workFlowInstance[0]}>
+                                        <Grid container direction="column">
+                                            <Grid item>
+                                                <Grid container alignItems="center" justifyContent="space-between">
+                                                    <Grid item>
+                                                        <Typography variant="subtitle1" color="inherit">
+                                                            名字:{workFlowInstance[0]}
+                                                        </Typography>
+                                                    </Grid>
+                                                    <Grid item>
+                                                        <Grid container alignItems="center" justifyContent="space-between">
+                                                            <Grid item>
+                                                                <Typography variant="subtitle1" color="inherit">
+                                                                    次数:{workFlowInstance[1]}
+                                                                </Typography>
+                                                            </Grid>
+                                                            <Grid item>
+                                                                <Avatar
+                                                                    variant="rounded"
+                                                                    sx={{
+                                                                        width: 16,
+                                                                        height: 16,
+                                                                        borderRadius: '5px',
+                                                                        backgroundColor: '#c62828',
+                                                                        color: 'white',
+                                                                        ml: 2
+                                                                    }}
+                                                                >
+                                                                    <KeyboardArrowUpOutlinedIcon fontSize="small" color="inherit" />
+                                                                </Avatar>
+                                                            </Grid>
                                                         </Grid>
                                                     </Grid>
                                                 </Grid>
                                             </Grid>
                                         </Grid>
-                                    </Grid>
-                                    <Divider sx={{ my: 1.5 }} />
-                                </div>
-                            ))}
-                            {/* <Grid item> */}
-                            {/*    <Typography variant="subtitle2" sx={{ color: 'success.dark' }}> */}
-                            {/*        10% Profit */}
-                            {/*    </Typography> */}
-                            {/* </Grid> */}
+                                        <Divider sx={{ my: 1.5 }} />
+                                    </div>
+                                ))}
+                                {/* <Grid item> */}
+                                {/*    <Typography variant="subtitle2" sx={{ color: 'success.dark' }}> */}
+                                {/*        10% Profit */}
+                                {/*    </Typography> */}
+                                {/* </Grid> */}
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </CardContent>
-                {/* <CardActions sx={{ p: 1.25, pt: 0, justifyContent: 'center' }}> */}
-                {/*    <Button size="small" disableElevation> */}
-                {/*        View All */}
-                {/*        <ChevronRightOutlinedIcon /> */}
-                {/*    </Button> */}
-                {/* </CardActions> */}
-            </MainCard>
-        )}
-    </>
-);
+                    </CardContent>
+                    {/* <CardActions sx={{ p: 1.25, pt: 0, justifyContent: 'center' }}> */}
+                    {/*    <Button size="small" disableElevation> */}
+                    {/*        View All */}
+                    {/*        <ChevronRightOutlinedIcon /> */}
+                    {/*    </Button> */}
+                    {/* </CardActions> */}
+                </MainCard>
+            )}
+        </>
+    );
+};
 PopularCard.propTypes = {
     isLoading: PropTypes.bool,
     workFlowNum: PropTypes.array
