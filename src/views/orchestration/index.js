@@ -1289,29 +1289,26 @@ const Orchestration = () => {
                 oFileReader.onloadend = function (e) {
                     // 此处拿到的已经是 base64的图片了
                     const base64 = e.target.result;
-                    const entityApi = new EntityApi(localStorage.getItem('admin_token'));
-                    entityApi.getAdmin(JSON.parse(localStorage.getItem('admin')).aid).then((res) => {
-                        const formData = new FormData();
-                        formData.append('api_key', '3sBopkZLRn5DnMrC44wgM94YMKu1Woak');
-                        formData.append('api_secret', '28lgf36_t9Ax7wDX6Fpc2hu3gCG0wLW4');
-                        formData.append('image_base64_1', res.data[0].avatar);
-                        formData.append('image_base64_2', base64);
-                        axios.post('https://api-cn.faceplusplus.com/facepp/v3/compare', formData).then((re) => {
-                            console.log(re.data.confidence);
-                            if (Number(re.data.confidence) > 75) {
-                                console.log('Yes');
-                                setSnackbarMsg('人脸比对成功！');
-                                setSnackbarOpen(true);
-                                mediaStream.getTracks()[0].stop();
-                                handleCameraClose();
-                                handleOpen();
-                            } else {
-                                setSnackbarMsg('人脸比对失败！');
-                                setSnackbarOpen(true);
-                                mediaStream.getTracks()[0].stop();
-                                handleCameraClose();
-                            }
-                        });
+                    const formData = new FormData();
+                    formData.append('api_key', '3sBopkZLRn5DnMrC44wgM94YMKu1Woak');
+                    formData.append('api_secret', '28lgf36_t9Ax7wDX6Fpc2hu3gCG0wLW4');
+                    formData.append('image_base64_1', JSON.parse(localStorage.getItem('admin')).avatar);
+                    formData.append('image_base64_2', base64);
+                    axios.post('https://api-cn.faceplusplus.com/facepp/v3/compare', formData).then((re) => {
+                        console.log(re.data.confidence);
+                        if (Number(re.data.confidence) > 75) {
+                            console.log('Yes');
+                            setSnackbarMsg('人脸比对成功！');
+                            setSnackbarOpen(true);
+                            mediaStream.getTracks()[0].stop();
+                            handleCameraClose();
+                            handleOpen();
+                        } else {
+                            setSnackbarMsg('人脸比对失败！');
+                            setSnackbarOpen(true);
+                            mediaStream.getTracks()[0].stop();
+                            handleCameraClose();
+                        }
                     });
                 };
                 oFileReader.readAsDataURL(blob);
