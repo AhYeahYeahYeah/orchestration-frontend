@@ -26,7 +26,12 @@ export default function MessageBubble({ text }) {
                 color: 'text.primary'
             }}
         >
-            <Typography maxWidth="500px">{text}</Typography>
+            {/* eslint-disable-next-line jsx-a11y/alt-text,react/prop-types */}
+            {text.indexOf('base64') === -1 ? (
+                <Typography maxWidth="500px">{text}</Typography>
+            ) : (
+                <img src={text} loading="lazy" alt="" width="350" />
+            )}
             {/* <Typography fontSize={8} align="right" sx={{ opacity: '70%', userSelect: 'none' }}> */}
             {/*    {formatTime(props.msgTime)} */}
             {/* </Typography> */}

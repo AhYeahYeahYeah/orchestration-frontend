@@ -303,6 +303,10 @@ export class EntityApi {
     async getWorkFlowListsToDas() {
         return this.instance.get('/workflow/dashboard');
     }
+
+    async getFlowImage(value) {
+        return this.instance.get(`/guidance/${value}`);
+    }
 }
 
 export class ConductorApi {

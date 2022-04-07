@@ -9,7 +9,7 @@ import DialogActions from '@mui/material/DialogActions';
 import { Mic, Send, SupportAgent } from '@mui/icons-material';
 import MessageBubble from './MessageBubble';
 import Typography from '@mui/material/Typography';
-import { RobotApi } from '../../../../api/restful';
+import { RobotApi, EntityApi } from '../../../../api/restful';
 import Recorder from 'js-audio-recorder';
 import axios from 'axios';
 // ==============================|| NOTIFICATION ||============================== //
@@ -66,7 +66,18 @@ const NotificationSection = () => {
         robotApi.sendMsg(data).then((res) => {
             // console.log(res);
             if (res.data.result.responses[0].actions[0].type === 'failure') CallBackMsg(res.data.result.responses[0].actions[0].say);
-            else CallBackMsg(res.data.result.responses[0].qu_res.qu_res_chosen.intents[0].slots[0].slot_values[0].normalized_word);
+            else if (
+                res.data.result.responses[0].qu_res.qu_res_chosen.intents[0].slots[0].slot_values[0].normalized_word.indexOf('base64') !==
+                -1
+            ) {
+                const entityApi = new EntityApi(localStorage.getItem('customer_token'));
+                entityApi
+                    .getFlowImage(res.data.result.responses[0].qu_res.qu_res_chosen.intents[0].slots[0].slot_values[0].normalized_word)
+                    .then((res) => {
+                        console.log(res.data.img);
+                        CallBackMsg(res.data.img);
+                    });
+            } else CallBackMsg(res.data.result.responses[0].qu_res.qu_res_chosen.intents[0].slots[0].slot_values[0].normalized_word);
             scrollToBottom();
         });
     }
