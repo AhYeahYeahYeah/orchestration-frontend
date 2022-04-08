@@ -70,11 +70,13 @@ const NotificationSection = () => {
                 res.data.result.responses[0].qu_res.qu_res_chosen.intents[0].slots[0].slot_values[0].normalized_word.indexOf('base64') !==
                 -1
             ) {
-                const entityApi = new EntityApi(localStorage.getItem('customer_token'));
+                // console.log(res.data.result.responses[0].qu_res.qu_res_chosen.intents[0].slots[0].slot_values[0].normalized_word);
+                const entityApi = new EntityApi(localStorage.getItem('admin_token'));
                 entityApi
                     .getFlowImage(res.data.result.responses[0].qu_res.qu_res_chosen.intents[0].slots[0].slot_values[0].normalized_word)
                     .then((res) => {
-                        console.log(res.data.img);
+                        // console.log(res);
+                        // console.log(res.data.img);
                         CallBackMsg(res.data.img);
                     });
             } else CallBackMsg(res.data.result.responses[0].qu_res.qu_res_chosen.intents[0].slots[0].slot_values[0].normalized_word);
