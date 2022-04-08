@@ -54,6 +54,7 @@ const NotificationSection = () => {
         if (text === null || text.trim() === '') return undefined;
         // ChatAPI.sendMessage(props.friendID, text);
         setMessages((messages) => [...messages, { text, flag: true }]);
+        scrollToBottom();
         const data = {
             version: '3.0',
             service_id: 'S66616',
