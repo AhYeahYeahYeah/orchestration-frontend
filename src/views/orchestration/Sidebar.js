@@ -22,7 +22,7 @@ import ServiceInfoModel from './ServiceInfoModel';
 import { useState } from 'react';
 import { GridActionsCellItem } from '@mui/x-data-grid';
 
-export default function Sidebar({ onRestore, updateFlowinstance, workOptions, serviceInfo, workFlowInstanceName }) {
+export default function Sidebar({ onRestore, updateFlowinstance, workOptions, serviceInfo, workFlowInstanceName, openFull }) {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
     const [serviceShow, setServiceShow] = useState({});
@@ -49,7 +49,7 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
                         <GridActionsCellItem icon={<Reply />} onClick={onRestore} />
                     </Grid>
                     <Grid item xs={8}>
-                        <ControllableStates updateFlowinstance={updateFlowinstance} workOptions={workOptions} />
+                        <ControllableStates updateFlowinstance={updateFlowinstance} workOptions={workOptions} openFull={openFull} />
                     </Grid>
                     {workFlowInstanceName === '' || workFlowInstanceName === '新建' ? (
                         ''
@@ -299,5 +299,6 @@ Sidebar.propTypes = {
     updateFlowinstance: PropTypes.func,
     workOptions: PropTypes.array,
     serviceInfo: PropTypes.array,
-    workFlowInstanceName: PropTypes.string
+    workFlowInstanceName: PropTypes.string,
+    openFull: PropTypes.bool
 };

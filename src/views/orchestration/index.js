@@ -1425,6 +1425,7 @@ const Orchestration = () => {
                             </ReactFlow>
                         </div>
                         <Sidebar
+                            openFull={openFull}
                             onRestore={onRestore}
                             /* eslint-disable-next-line react/jsx-no-bind */
                             updateFlowinstance={updateFlowinstance}
