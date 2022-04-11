@@ -59,7 +59,7 @@ import UpdateSelector from '../../ui-component/services/UpdateSelector';
 import WhiteSelector from '../../ui-component/services/WhiteSelector';
 import LogSelector from '../../ui-component/services/LogSelector';
 import SwitchSelector from '../../ui-component/caseCard/SwitchSelector';
-import { Check, Close, CloseOutlined, FlagCircle, FullscreenExitOutlined, PanToolOutlined } from '@mui/icons-material';
+import { Check, Close, CloseOutlined, FlagCircle, FullscreenExitOutlined, PanToolOutlined, PhotoCamera } from '@mui/icons-material';
 import AddModel from './AddModel';
 import { GridActionsCellItem } from '@mui/x-data-grid';
 import TerminateSelector from '../../ui-component/services/TerminateSelector';
@@ -74,6 +74,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import SaveIcon from '@mui/icons-material/Save';
 import { green, red } from '@mui/material/colors';
 import { temp } from './FlowTemp';
+import html2canvas from 'html2canvas';
 
 const nodeTypes = {
     No: NoSelector,
@@ -1403,10 +1404,61 @@ const Orchestration = () => {
                     variant="outlined"
                 />
             </Dialog>
+            <Chip
+                sx={{ position: 'fixed', left: '91%', top: '16%', zIndex: 999 }}
+                label="导出"
+                onClick={() => {
+                    const flow = document.getElementById('flow');
+                    html2canvas(flow, {
+                        scale: 10,
+                        dpi: 5000000
+                    }).then((canvas) => {
+                        const imgUrl = canvas.toDataURL();
+                        // 获取截图base64
+                        console.log(imgUrl.substring(22));
+
+                        const eventPayload = {
+                            content: imgUrl.substring(22),
+                            // 图片base64格式太多，此处省略。不包含前缀：data:image/png;base64,
+                            fileName: `${Date.now()}.png`,
+                            imageType: 'png'
+                        };
+
+                        // console.log(eventPayload);
+                        const content = eventPayload.content;
+                        const imageType = eventPayload.imageType;
+                        const fileName = eventPayload.fileName;
+                        if (content) {
+                            // 接口返回的数据部分
+                            // 解析图片
+                            // 因接口直接返回了base64代码部分，所以不需要截取，如果含"data:image/png;base64," 则需要自己做截取处理
+                            const raw = window.atob(content);
+                            const rawLength = raw.length;
+                            const uInt8Array = new Uint8Array(rawLength);
+                            // eslint-disable-next-line no-plusplus
+                            for (let i = 0; i < rawLength; i++) {
+                                uInt8Array[i] = raw.charCodeAt(i);
+                            }
+                            const blob = new Blob([uInt8Array], { type: `image/${imageType}` });
+                            // 保存图片
+                            const aLink = document.createElement('a');
+                            const evt = document.createEvent('HTMLEvents');
+                            evt.initEvent('click', true, true);
+                            aLink.download = fileName;
+                            aLink.href = URL.createObjectURL(blob);
+                            aLink.click();
+                        } else {
+                            console.log('没有base64代码');
+                        }
+                    });
+                }}
+                icon={<PhotoCamera fontSize="small" />}
+                variant="outlined"
+            />
             <Grid sx={{ position: 'relative', height: '100%', background: theme.palette.background.default }}>
                 <div className="dndflow">
                     <ReactFlowProvider>
-                        <div className="reactflow-wrapper" ref={reactFlowWrapper}>
+                        <div className="reactflow-wrapper" ref={reactFlowWrapper} id="flow">
                             <ReactFlow
                                 elements={elements}
                                 snapToGrid
@@ -1418,6 +1470,7 @@ const Orchestration = () => {
                                 onDrop={onDrop}
                                 onDragOver={onDragOver}
                                 nodeTypes={nodeTypes}
+                                minZoom={0.1}
                             >
                                 <MiniMap />
                                 <Controls />
@@ -1461,8 +1514,7 @@ const Orchestration = () => {
             <Chip
                 sx={{ position: 'fixed', left: '88%', top: '91.7%', zIndex: 999 }}
                 label="悬浮"
-                /* eslint-disable-next-line react/jsx-no-bind */
-                onClick={handleOpenLook}
+                onClick={() => handleOpenLook()}
                 icon={<FlagCircle />}
                 variant="outlined"
             />

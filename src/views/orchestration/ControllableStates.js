@@ -50,7 +50,15 @@ export default function ControllableStates({ updateFlowinstance, workOptions, op
                     {name}
                 </Typography>
             )}
-            <Dialog open={open} onClose={() => handleClickClose()}>
+            <Dialog
+                open={open}
+                onClose={() => {
+                    setOpen(false);
+                    setTimeout(() => {
+                        setValue(name);
+                    }, 50);
+                }}
+            >
                 <DialogTitle>服务编排</DialogTitle>
                 <DialogContent>
                     <DialogContentText>请在此选择新建模板还是修改模板</DialogContentText>
