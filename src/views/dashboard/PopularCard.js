@@ -43,7 +43,7 @@ const PopularCard = ({ isLoading, workFlowNum }) => {
                             <Grid item xs={12}>
                                 <Grid container alignContent="center" justifyContent="space-between">
                                     <Grid item>
-                                        <Typography variant="h4">Top5(近一周执行次数)</Typography>
+                                        <Typography variant="h4">Top5(执行总次数)</Typography>
                                     </Grid>
                                     {/* <Grid item> */}
                                     {/*    <MoreHorizOutlinedIcon */}
