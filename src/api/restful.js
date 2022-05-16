@@ -58,7 +58,7 @@ export class RobotApi {
     }
 
     async sendMsg(data) {
-        return this.instance.post('/chat?access_token=24.d145535a28a91c83cb78724ff4e9bb45.2592000.1650596258.282335-25826498', data);
+        return this.instance.post('/chat?access_token=24.69d8e597fbc16912512e154986497fe8.2592000.1655299491.282335-25826498', data);
     }
 }
 export class AuthApi {

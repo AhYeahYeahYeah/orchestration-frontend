@@ -142,7 +142,7 @@ const NotificationSection = () => {
                     rate: 16000,
                     dev_pid: 1537,
                     channel: 1,
-                    token: '24.a2d8dbff5a4dd0b30c4aaa96c0c36b70.2592000.1651808174.282335-25898929',
+                    token: '24.7929bbd16b4a8b4ed08d3b403f710d5d.2592000.1655299620.282335-25898929',
                     cuid: 'baidu_workshop',
                     len: file.size,
                     speech: base64.substring(37)
