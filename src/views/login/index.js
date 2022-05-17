@@ -8,7 +8,7 @@ import { Divider, Grid, Stack, Typography, useMediaQuery } from '@mui/material';
 import AuthWrapper1 from 'views/pages/authentication/AuthWrapper1';
 import AuthCardWrapper from 'views/pages/authentication/AuthCardWrapper';
 import AuthLogin from 'views/pages/authentication/auth-forms/AuthLogin';
-import Logo from 'ui-component/Logo';
+import { LogoTrim } from 'ui-component/Logo';
 // import AuthFooter from 'ui-component/cards/AuthFooter';
 
 // assets
@@ -29,7 +29,7 @@ const Login = () => {
                                 <Grid container spacing={2} alignItems="center" justifyContent="center">
                                     <Grid item sx={{ mb: 3 }}>
                                         <Link to="#">
-                                            <Logo />
+                                            <LogoTrim />
                                         </Link>
                                     </Grid>
                                     <Grid item xs={12}>
