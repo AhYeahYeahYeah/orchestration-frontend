@@ -15,7 +15,8 @@ import { EntityApi } from '../../api/restful';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddDialog from './AddDialog';
 import UpdateDialog from './UpdateDialog';
-import Typography from '@mui/material/Typography';
+// import Typography from '@mui/material/Typography';
+import MainCard from '../../ui-component/cards/MainCard';
 
 function CustomPagination() {
     const apiRef = useGridApiContext();
@@ -167,7 +168,7 @@ export default function Group() {
             });
     }, []);
     return (
-        <div>
+        <MainCard title="用户组分类">
             {/* <Grid container xs={12} > */}
             {/*    <Grid md={6.9}xs={12}  > */}
             {/*        <ComboBox/> */}
@@ -176,10 +177,10 @@ export default function Group() {
             {/*        <SearchSection/> */}
             {/*    </Grid> */}
             {/* </Grid> */}
-            <Typography component="h1" variant="h3" align="center">
-                用户组分类
-            </Typography>
-            <div style={{ marginTop: 10, height: `calc(100vh - 220px)`, width: '100%', background: theme.palette.background.default }}>
+            {/* <Typography component="h1" variant="h3" align="center"> */}
+            {/*    用户组分类 */}
+            {/* </Typography> */}
+            <div style={{ marginTop: 10, height: `calc(100vh - 285px)`, width: '100%', background: theme.palette.background.default }}>
                 <DataGrid
                     // autoHeight
                     autoPageSize
@@ -236,6 +237,6 @@ export default function Group() {
                     {snackbarMsg}
                 </Alert>
             </Snackbar>
-        </div>
+        </MainCard>
     );
 }

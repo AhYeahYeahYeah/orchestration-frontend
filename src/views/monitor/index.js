@@ -10,10 +10,11 @@ import {
 } from '@mui/x-data-grid';
 import { useTheme } from '@mui/material/styles';
 import { Pagination } from '@mui/material';
-import Typography from '@mui/material/Typography';
+// import Typography from '@mui/material/Typography';
 import { EntityApi } from '../../api/restful';
 import { useEffect } from 'react';
 import { Policy } from '@mui/icons-material';
+import MainCard from '../../ui-component/cards/MainCard';
 
 function CustomPagination() {
     const apiRef = useGridApiContext();
@@ -69,11 +70,11 @@ export default function CustomerManagement() {
         });
     }, []);
     return (
-        <div>
-            <Typography component="h1" variant="h3" align="center">
-                订 单 执 行 流 程 监 控
-            </Typography>
-            <div style={{ marginTop: 10, height: `calc(100vh - 180px)`, width: '100%', background: theme.palette.background.default }}>
+        <MainCard title="订单执行流程监控">
+            {/* <Typography component="h1" variant="h3" align="center"> */}
+            {/*    订 单 执 行 流 程 监 控 */}
+            {/* </Typography> */}
+            <div style={{ marginTop: 10, height: `calc(100vh - 265px)`, width: '100%', background: theme.palette.background.default }}>
                 <DataGrid
                     // autoHeight
                     autoPageSize
@@ -86,6 +87,6 @@ export default function CustomerManagement() {
                     }}
                 />
             </div>
-        </div>
+        </MainCard>
     );
 }

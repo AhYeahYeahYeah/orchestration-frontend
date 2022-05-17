@@ -37,7 +37,7 @@ export default function ControllableStates({ updateFlowinstance, workOptions, op
     }
     return (
         <>
-            <Button variant="contained" onClick={() => handleClickOpen()}>
+            <Button variant="outlined" onClick={() => handleClickOpen()}>
                 {buttonValue}
             </Button>
             {buttonValue === '新建' ? (

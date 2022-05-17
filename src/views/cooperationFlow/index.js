@@ -76,6 +76,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import SaveIcon from '@mui/icons-material/Save';
 import { green, red } from '@mui/material/colors';
 import { useNavigate } from 'react-router-dom';
+import MainCard from '../../ui-component/cards/MainCard';
 
 const nodeTypes = {
     No: NoSelector,
@@ -1401,25 +1402,49 @@ const CooperationFlow = () => {
         navigate('/cooperation');
     }
     return (
-        <>
-            <Grid container>
-                <Grid item xs={9}>
-                    {/* eslint-disable-next-line react/jsx-no-bind */}
-                    <Button onClick={Quit} variant="outlined">
-                        退出
-                    </Button>
-                </Grid>
-                <Typography variant="h5" mt={1}>
-                    {`正在编辑:  `}{' '}
-                </Typography>
-                <AvatarGroup max={3} sx={{ ml: 2 }}>
-                    {avatar.map((value, index) => (
-                        <Box key={index}>
-                            <Avatar src={value} sx={{ width: 30, height: 30 }} />
-                        </Box>
-                    ))}
-                </AvatarGroup>
-            </Grid>
+        <MainCard
+            title="多人在线协作"
+            secondary={
+                <Box sx={{ display: 'flex' }}>
+                    <Box sx={{ display: 'flex' }}>
+                        <Typography variant="h5" mt={1}>
+                            {`正在编辑:  `}{' '}
+                        </Typography>
+                        <AvatarGroup max={3} sx={{ ml: 2 }}>
+                            {avatar.map((value, index) => (
+                                <Box key={index}>
+                                    <Avatar src={value} sx={{ width: 30, height: 30 }} />
+                                </Box>
+                            ))}
+                        </AvatarGroup>
+                    </Box>
+                    <Box sx={{ display: 'flex', ml: 5 }}>
+                        {/* eslint-disable-next-line react/jsx-no-bind */}
+                        <Button onClick={Quit} variant="outlined">
+                            退出
+                        </Button>
+                    </Box>
+                </Box>
+            }
+        >
+            {/* <Grid container> */}
+            {/*    <Grid item xs={9}> */}
+            {/*        /!* eslint-disable-next-line react/jsx-no-bind *!/ */}
+            {/*        <Button onClick={Quit} variant="outlined"> */}
+            {/*            退出 */}
+            {/*        </Button> */}
+            {/*    </Grid> */}
+            {/*    <Typography variant="h5" mt={1}> */}
+            {/*        {`正在编辑:  `}{' '} */}
+            {/*    </Typography> */}
+            {/*    <AvatarGroup max={3} sx={{ ml: 2 }}> */}
+            {/*        {avatar.map((value, index) => ( */}
+            {/*            <Box key={index}> */}
+            {/*                <Avatar src={value} sx={{ width: 30, height: 30 }} /> */}
+            {/*            </Box> */}
+            {/*        ))} */}
+            {/*    </AvatarGroup> */}
+            {/* </Grid> */}
             {/* eslint-disable-next-line react/jsx-no-undef */}
             {/* eslint-disable-next-line react/jsx-no-bind */}
             {/* eslint-disable-next-line react/jsx-no-bind */}
@@ -1636,7 +1661,7 @@ const CooperationFlow = () => {
                     </Box>
                 </DialogContent>
             </Dialog>
-        </>
+        </MainCard>
     );
 };
 

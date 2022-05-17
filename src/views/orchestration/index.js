@@ -122,6 +122,20 @@ const Transition = forwardRef((props, ref) => <Slide direction="up" ref={ref} {.
 
 // const getLogId = () => `Log_${LogId++}`;
 const Orchestration = () => {
+    const nodeDefStyle = {
+        border: '1px solid black',
+        padding: 10,
+        width: 150,
+        borderRadius: 8,
+        background: 'white'
+    };
+    const nodeSelectStyle = {
+        border: '1px solid black',
+        padding: 10,
+        width: 210,
+        borderRadius: 8,
+        background: 'white'
+    };
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const theme = useTheme();
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -442,7 +456,7 @@ const Orchestration = () => {
                     position,
                     data: { updateBid, blackName: '' },
                     flag: `${type}`,
-                    style: { border: '1px solid black', padding: 10, borderRadius: 8, width: 210 },
+                    style: nodeSelectStyle,
                     visited: 0
                 };
                 break;
@@ -454,7 +468,7 @@ const Orchestration = () => {
                     position,
                     data: { updateWid, whiteName: '' },
                     flag: `${type}`,
-                    style: { border: '1px solid black', padding: 10, borderRadius: 8, width: 210 },
+                    style: nodeSelectStyle,
                     visited: 0
                 };
                 break;
@@ -466,7 +480,7 @@ const Orchestration = () => {
                     position,
                     data: { updateFid, workFlowName: '', updateLookInstance, onlyOpenLook },
                     flag: `${type}`,
-                    style: { border: '1px solid black', padding: 10, borderRadius: 8, width: 210 },
+                    style: nodeSelectStyle,
                     visited: 0
                 };
                 break;
@@ -477,7 +491,7 @@ const Orchestration = () => {
                     position,
                     data: { label: ` ${type} node ` },
                     flag: `${type}`,
-                    style: { border: '1px solid black', padding: 10, borderRadius: 8, width: 140 },
+                    style: nodeDefStyle,
                     visited: 0
                 };
                 break;
@@ -489,7 +503,7 @@ const Orchestration = () => {
                     position,
                     data: { label: ` ${type} node ` },
                     flag: `${type}`,
-                    style: { border: '1px solid black', padding: 10, borderRadius: 8, width: 140 },
+                    style: nodeDefStyle,
                     visited: 0
                 };
                 break;
@@ -501,7 +515,7 @@ const Orchestration = () => {
                     position,
                     data: { label: ` ${type} node ` },
                     flag: `${type}`,
-                    style: { border: '1px solid black', padding: 12, borderRadius: 8, width: 140 },
+                    style: nodeDefStyle,
                     visited: 0
                 };
                 break;
@@ -513,7 +527,7 @@ const Orchestration = () => {
                     position,
                     data: { label: ` ${type} node ` },
                     flag: `${type}`,
-                    style: { border: '1px solid black', padding: 10, borderRadius: 8, width: 140 },
+                    style: nodeDefStyle,
                     visited: 0
                 };
                 break;
@@ -525,7 +539,7 @@ const Orchestration = () => {
                     position,
                     data: { label: ` ${type} node ` },
                     flag: `${type}`,
-                    style: { border: '1px solid black', padding: 10, borderRadius: 8, width: 140 },
+                    style: nodeDefStyle,
                     visited: 0
                 };
                 break;
@@ -537,7 +551,7 @@ const Orchestration = () => {
                     position,
                     data: { updateRegions, regions: [] },
                     flag: `${type}`,
-                    style: { border: '1px solid black', padding: 10, borderRadius: 8, width: 210 },
+                    style: nodeSelectStyle,
                     visited: 0
                 };
                 break;
@@ -549,7 +563,7 @@ const Orchestration = () => {
                     position,
                     data: { updateGid, groupName: '' },
                     flag: `${type}`,
-                    style: { border: '1px solid black', padding: 10, borderRadius: 8, width: 210 },
+                    style: nodeSelectStyle,
                     visited: 0
                 };
                 break;
@@ -561,7 +575,7 @@ const Orchestration = () => {
                     position,
                     data: { label: ` ${type} node ` },
                     flag: `${type}`,
-                    style: { border: '1px solid black', padding: 10, borderRadius: 8, width: 140 },
+                    style: nodeDefStyle,
                     visited: 0
                 };
                 break;
@@ -573,7 +587,7 @@ const Orchestration = () => {
                     position,
                     data: { label: ` ${type} node ` },
                     flag: `${type}`,
-                    style: { border: '1px solid black', padding: 10, borderRadius: 8, width: 140 },
+                    style: nodeDefStyle,
                     visited: 0
                 };
                 break;
@@ -605,7 +619,7 @@ const Orchestration = () => {
                     position,
                     data: { label: ` ${type} node ` },
                     flag: `${type}`,
-                    style: { border: '1px solid black', padding: 10, borderRadius: 8, width: 140 },
+                    style: nodeDefStyle,
                     visited: 0
                 };
                 break;

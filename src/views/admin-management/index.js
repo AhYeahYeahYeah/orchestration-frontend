@@ -2,9 +2,10 @@ import * as React from 'react';
 import { DataGrid, gridPageCountSelector, gridPageSelector, GridToolbar, useGridApiContext, useGridSelector } from '@mui/x-data-grid';
 import { useTheme } from '@mui/material/styles';
 import { Pagination, Slide, Chip, Snackbar, Alert } from '@mui/material';
-import Typography from '@mui/material/Typography';
+// import Typography from '@mui/material/Typography';
 import { EntityApi } from '../../api/restful';
 import { Update } from '@mui/icons-material';
+import MainCard from '../../ui-component/cards/MainCard';
 
 function CustomPagination() {
     const apiRef = useGridApiContext();
@@ -110,11 +111,11 @@ export default function AdminManagement() {
             });
     }, []);
     return (
-        <div>
-            <Typography component="h1" variant="h3" align="center">
-                管理员信息
-            </Typography>
-            <div style={{ marginTop: 10, height: `calc(100vh - 220px)`, width: '100%', background: theme.palette.background.default }}>
+        <MainCard title="管理员信息">
+            {/* <Typography component="h1" variant="h3" align="center"> */}
+            {/*    管理员信息 */}
+            {/* </Typography> */}
+            <div style={{ marginTop: 10, height: `calc(100vh - 285px)`, width: '100%', background: theme.palette.background.default }}>
                 <DataGrid
                     // autoHeight
                     autoPageSize
@@ -132,7 +133,7 @@ export default function AdminManagement() {
             </div>
             <Slide direction="up" in={JSON.stringify(editRowsModel) !== '{}'} mountOnEnter unmountOnExit>
                 <Chip
-                    sx={{ position: 'fixed', marginTop: 3, right: '3.7%', background: '#ff9800' }}
+                    sx={{ position: 'fixed', marginTop: 3.5, right: '3.7%', background: '#ff9800' }}
                     label="确定更改"
                     /* eslint-disable-next-line react/jsx-no-bind  */
                     onClick={updateAdmin}
@@ -150,6 +151,6 @@ export default function AdminManagement() {
                     {snackbarMsg}
                 </Alert>
             </Snackbar>
-        </div>
+        </MainCard>
     );
 }

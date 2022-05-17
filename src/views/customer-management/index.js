@@ -2,8 +2,9 @@ import * as React from 'react';
 import { DataGrid, gridPageCountSelector, gridPageSelector, GridToolbar, useGridApiContext, useGridSelector } from '@mui/x-data-grid';
 import { useTheme } from '@mui/material/styles';
 import { Alert, Pagination, Snackbar } from '@mui/material';
-import Typography from '@mui/material/Typography';
+// import Typography from '@mui/material/Typography';
 import { EntityApi } from '../../api/restful';
+import MainCard from '../../ui-component/cards/MainCard';
 
 function CustomPagination() {
     const apiRef = useGridApiContext();
@@ -72,11 +73,11 @@ export default function CustomerManagement() {
             });
     }, []);
     return (
-        <div>
-            <Typography component="h1" variant="h3" align="center">
-                客户信息
-            </Typography>
-            <div style={{ marginTop: 10, height: `calc(100vh - 180px)`, width: '100%', background: theme.palette.background.default }}>
+        <MainCard title="客户信息">
+            {/* <Typography component="h1" variant="h3" align="center"> */}
+            {/*    客户信息 */}
+            {/* </Typography> */}
+            <div style={{ marginTop: 10, height: `calc(100vh - 265px)`, width: '100%', background: theme.palette.background.default }}>
                 <DataGrid
                     // autoHeight
                     autoPageSize
@@ -99,6 +100,6 @@ export default function CustomerManagement() {
                     {snackbarMsg}
                 </Alert>
             </Snackbar>
-        </div>
+        </MainCard>
     );
 }

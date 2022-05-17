@@ -10,7 +10,7 @@ import {
 } from '@mui/x-data-grid';
 import { useTheme } from '@mui/material/styles';
 import { Alert, DialogActions, DialogContent, Fab, Grid, Pagination, Snackbar, TextField } from '@mui/material';
-import Typography from '@mui/material/Typography';
+// import Typography from '@mui/material/Typography';
 // import { EntityApi } from '../../api/restful';
 import DeleteIcon from '@mui/icons-material/Delete';
 import sha1 from 'js-sha1';
@@ -23,6 +23,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import DeleteModel from './DeleteModel';
 import { useNavigate } from 'react-router-dom';
+import MainCard from '../../ui-component/cards/MainCard';
 
 function CustomPagination() {
     const apiRef = useGridApiContext();
@@ -220,11 +221,11 @@ export default function Cooperation() {
         };
     }, [deleteOpen, navigate, roomParam]);
     return (
-        <div>
-            <Typography component="h1" variant="h3" align="center">
-                在线协作编排
-            </Typography>
-            <div style={{ marginTop: 10, height: `calc(100vh - 180px)`, width: '100%', background: theme.palette.background.default }}>
+        <MainCard title="在线协作编排">
+            {/* <Typography component="h1" variant="h3" align="center"> */}
+            {/*    在线协作编排 */}
+            {/* </Typography> */}
+            <div style={{ marginTop: 10, height: `calc(100vh - 265px)`, width: '100%', background: theme.palette.background.default }}>
                 <DataGrid
                     // autoHeight
                     autoPageSize
@@ -284,6 +285,6 @@ export default function Cooperation() {
                     {snackbarMsg}
                 </Alert>
             </Snackbar>
-        </div>
+        </MainCard>
     );
 }
