@@ -66,7 +66,7 @@ export default function CardWorkFlow({ setFid, initName, updateLookInstance, onl
             <Grid container>
                 <Grid item xs={6} sx={{ ml: 6 }}>
                     <Typography variant="h6" component="div">
-                        编 排 模 板
+                        编排模板
                     </Typography>
                 </Grid>
                 <Grid item xs={2}>

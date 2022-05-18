@@ -15,6 +15,7 @@ export default function ControllableStates({ value, saveId, name }) {
         <div>
             <Autocomplete
                 value={initName}
+                size="small"
                 onChange={(event, newValue) => {
                     // console.log(newValue);
                     saveId(newValue);

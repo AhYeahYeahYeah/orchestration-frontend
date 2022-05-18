@@ -20,7 +20,7 @@ export default function CardUnlock() {
         // </Box>
         <div align="center">
             <Typography variant="h6" component="div">
-                库 存 解 锁
+                库存解锁
             </Typography>
         </div>
     );

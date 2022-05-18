@@ -17,7 +17,7 @@ export default function CardLock() {
     return (
         <div align="center">
             <Typography variant="h6" component="div">
-                库 存 锁 定
+                库存锁定
             </Typography>
         </div>
     );

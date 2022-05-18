@@ -20,7 +20,7 @@ export default function CardLog() {
         // </Box>
         <div align="center">
             <Typography variant="h6" component="div">
-                日 志 录 入
+                日志录入
             </Typography>
         </div>
     );

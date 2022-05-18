@@ -1,7 +1,7 @@
 // assets
-import { IconDashboard, IconList } from '@tabler/icons';
+import { FormatListBulletedOutlined } from '@mui/icons-material';
 // constant
-const icons = { IconDashboard, IconList };
+const icons = { FormatListBulletedOutlined };
 
 // ==============================|| LISTS MENU ITEMS ||============================== //
 
@@ -15,7 +15,7 @@ const lists = {
             id: 'black-and-white-list',
             title: '黑白名单',
             type: 'collapse',
-            icon: icons.IconList,
+            icon: icons.FormatListBulletedOutlined,
             children: [
                 {
                     id: 'whitelist',
@@ -38,7 +38,7 @@ const lists = {
             title: '用户组',
             type: 'item',
             url: '/group',
-            icon: icons.IconList,
+            icon: icons.FormatListBulletedOutlined,
             breadcrumbs: false
         }
     ]

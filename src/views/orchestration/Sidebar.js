@@ -10,19 +10,17 @@ import {
     LockOpen,
     Pageview,
     RateReview,
-    Reply,
     SwitchCamera,
     ViewList,
     Warehouse
 } from '@mui/icons-material';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import ControllableStates from './ControllableStates';
 import PropTypes from 'prop-types';
 import ServiceInfoModel from './ServiceInfoModel';
 import { useState } from 'react';
 import { GridActionsCellItem } from '@mui/x-data-grid';
 
-export default function Sidebar({ onRestore, updateFlowinstance, workOptions, serviceInfo, workFlowInstanceName, openFull }) {
+export default function Sidebar({ serviceInfo, workFlowInstanceName }) {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
     const [serviceShow, setServiceShow] = useState({});
@@ -44,13 +42,12 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
         <Grid sx={{ left: '80%', width: 200, height: '100%', background: theme.palette.background.default }}>
             <Box sx={{ marginTop: 1.5 }}>
                 <Grid container>
-                    <Grid item xs={2}>
-                        {/* eslint-disable-next-line react/destructuring-assignment */}
-                        <GridActionsCellItem icon={<Reply />} onClick={onRestore} />
-                    </Grid>
-                    <Grid item xs={8}>
-                        <ControllableStates updateFlowinstance={updateFlowinstance} workOptions={workOptions} openFull={openFull} />
-                    </Grid>
+                    {/* <Grid item xs={2}> */}
+                    {/*     <GridActionsCellItem icon={<Reply />} onClick={onRestore} /> */}
+                    {/* </Grid> */}
+                    {/* <Grid item xs={8}> */}
+                    {/*     <ControllableStates updateFlowinstance={updateFlowinstance} workOptions={workOptions} openFull={openFull} /> */}
+                    {/* </Grid> */}
                     {workFlowInstanceName === '' || workFlowInstanceName === '新建' ? (
                         ''
                     ) : (
@@ -295,10 +292,6 @@ export default function Sidebar({ onRestore, updateFlowinstance, workOptions, se
     );
 }
 Sidebar.propTypes = {
-    onRestore: PropTypes.func,
-    updateFlowinstance: PropTypes.func,
-    workOptions: PropTypes.array,
     serviceInfo: PropTypes.array,
-    workFlowInstanceName: PropTypes.string,
-    openFull: PropTypes.bool
+    workFlowInstanceName: PropTypes.string
 };

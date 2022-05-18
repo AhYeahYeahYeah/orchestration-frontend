@@ -20,7 +20,7 @@ export default function CardUpdate() {
         // </Box>
         <div align="center">
             <Typography variant="h6" component="div">
-                库 存 更 新
+                库存更新
             </Typography>
         </div>
     );

@@ -1,8 +1,7 @@
 // assets
-import { IconDashboard } from '@tabler/icons';
-import { Monitor } from '@mui/icons-material';
+import { MonitorOutlined, DashboardOutlined } from '@mui/icons-material';
 // constant
-const icons = { IconDashboard, Monitor };
+const icons = { DashboardOutlined, MonitorOutlined };
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 
@@ -16,7 +15,7 @@ const dashboard = {
             title: '仪表盘',
             type: 'item',
             url: '/dashboard',
-            icon: icons.IconDashboard,
+            icon: icons.DashboardOutlined,
             breadcrumbs: false
         },
         {
@@ -24,7 +23,7 @@ const dashboard = {
             title: '流程监控',
             type: 'item',
             url: '/monitor',
-            icon: icons.Monitor,
+            icon: icons.MonitorOutlined,
             breadcrumbs: false
         }
     ]

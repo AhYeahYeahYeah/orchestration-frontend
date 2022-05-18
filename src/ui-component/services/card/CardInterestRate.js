@@ -20,7 +20,7 @@ export default function CardInterestRate() {
         // </Box>
         <div align="center">
             <Typography variant="h6" component="div">
-                利 息 计 算
+                利息计算
             </Typography>
         </div>
     );

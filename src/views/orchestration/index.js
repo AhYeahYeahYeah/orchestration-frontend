@@ -16,19 +16,7 @@ import Sidebar from './Sidebar';
 import SidebarOpen from './SidebarOpen';
 import './dnd.css';
 import { useTheme } from '@mui/material/styles';
-import {
-    Alert,
-    Chip,
-    CircularProgress,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    Fab,
-    Grid,
-    Slide,
-    Snackbar
-} from '@mui/material';
+import { Alert, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Fab, Grid, Slide, Snackbar } from '@mui/material';
 import { InputNode, WorkflowBuilder } from '../../utils/workflowBuilder';
 import {
     log,
@@ -59,7 +47,17 @@ import UpdateSelector from '../../ui-component/services/UpdateSelector';
 import WhiteSelector from '../../ui-component/services/WhiteSelector';
 import LogSelector from '../../ui-component/services/LogSelector';
 import SwitchSelector from '../../ui-component/caseCard/SwitchSelector';
-import { Check, Close, CloseOutlined, FlagCircle, FullscreenExitOutlined, PanToolOutlined, PhotoCamera } from '@mui/icons-material';
+import {
+    Check,
+    Close,
+    CloseOutlined,
+    FlagCircle,
+    FullscreenExitOutlined,
+    PanToolOutlined,
+    PhotoCamera,
+    Undo,
+    ManageSearchOutlined
+} from '@mui/icons-material';
 import AddModel from './AddModel';
 import { GridActionsCellItem } from '@mui/x-data-grid';
 import TerminateSelector from '../../ui-component/services/TerminateSelector';
@@ -79,6 +77,7 @@ import html2canvas from 'html2canvas';
 import MainCard from '../../ui-component/cards/MainCard';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import ControllableStates from './ControllableStates';
 
 const nodeTypes = {
     No: NoSelector,
@@ -178,6 +177,7 @@ const Orchestration = () => {
     const [success, setSuccess] = useState(false);
     const [testMsg, setTestMsg] = useState('');
     const [wrong, setWrong] = useState(false);
+    const [flowName, setFlowName] = useState('新建');
     const buttonSx = {
         ...(success && {
             bgcolor: green[500],
@@ -1390,12 +1390,15 @@ const Orchestration = () => {
     }
     return (
         <MainCard
-            title="编排界面"
+            title={flowName === '新建' ? '编排流程' : `编排流程：${flowName}`}
             secondary={
-                <Box sx={{ display: 'flex', mr: 6 }}>
-                    <ToggleButtonGroup aria-label="text alignment" size="small">
+                <Box sx={{ display: 'flex', mr: 4 }}>
+                    <ToggleButtonGroup aria-label="text alignment" size="small" sx={{ mr: 2 }}>
                         <ToggleButton value="left" aria-label="left aligned" onClick={() => handleClickOpenFull()}>
                             <FullscreenExitOutlined />
+                        </ToggleButton>
+                        <ToggleButton value="left" aria-label="left aligned" onClick={() => onRestore()}>
+                            <Undo />
                         </ToggleButton>
                         <ToggleButton value="center" aria-label="centered" onClick={() => handleOpenLook()}>
                             <FlagCircle />
@@ -1403,31 +1406,24 @@ const Orchestration = () => {
                         <ToggleButton value="right" aria-label="right aligned" onClick={() => getFlowToPicture()}>
                             <PhotoCamera />
                         </ToggleButton>
+
+                        <ToggleButton
+                            value="right"
+                            aria-label="right aligned"
+                            onClick={() => window.open(`http://conductor.rinne.top:5000/workflowDef/${flowName}`)}
+                            disabled={flowName === '新建'}
+                        >
+                            <ManageSearchOutlined />
+                        </ToggleButton>
                     </ToggleButtonGroup>
-                    {/* <Chip */}
-                    {/*    // sx={{ position: 'fixed', left: '82%', top: '91.7%', zIndex: 999 }} */}
-                    {/*    sx={{ ml: 1 }} */}
-                    {/*    label="全屏" */}
-                    {/*    onClick={handleClickOpenFull} */}
-                    {/*    icon={<FullscreenExitOutlined />} */}
-                    {/*    variant="outlined" */}
-                    {/* /> */}
-                    {/* <Chip */}
-                    {/*    // sx={{ position: 'fixed', left: '88%', top: '91.7%', zIndex: 999 }} */}
-                    {/*    sx={{ ml: 1 }} */}
-                    {/*    label="悬浮" */}
-                    {/*    onClick={() => handleOpenLook()} */}
-                    {/*    icon={<FlagCircle />} */}
-                    {/*    variant="outlined" */}
-                    {/* /> */}
-                    {/* <Chip */}
-                    {/*    sx={{ ml: 1 }} */}
-                    {/*    // sx={{ position: 'fixed', left: '91%', top: '16%', zIndex: 999 }} */}
-                    {/*    label="导出" */}
-                    {/*    onClick={() => getFlowToPicture()} */}
-                    {/*    icon={<PhotoCamera fontSize="small" />} */}
-                    {/*    variant="outlined" */}
-                    {/* /> */}
+                    <ControllableStates
+                        // eslint-disable-next-line react/jsx-no-bind
+                        updateFlowinstance={() => updateFlowinstance()}
+                        workOptions={workOptions}
+                        openFull={openFull}
+                        setName={setFlowName}
+                        name={flowName}
+                    />
                 </Box>
             }
         >
@@ -1454,7 +1450,7 @@ const Orchestration = () => {
                     onClick={handleFullClose}
                 />
                 <Grid sx={{ position: 'relative', height: '100%', background: theme.palette.background.default }}>
-                    <div className="dndflow">
+                    <Box className="dndflow" sx={{ height: '100vh' }}>
                         <ReactFlowProvider>
                             <div className="reactflow-wrapper" ref={reactFlowWrapperOpen}>
                                 <ReactFlow
@@ -1487,7 +1483,7 @@ const Orchestration = () => {
                             </Fab>
                             <AddModel open={open} handleClose={handleClose} workInstance={workInstance} onSave={onSave} />
                         </ReactFlowProvider>
-                    </div>
+                    </Box>
                     <Snackbar
                         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
                         open={snackbarOpen}
@@ -1499,17 +1495,16 @@ const Orchestration = () => {
                         </Alert>
                     </Snackbar>
                 </Grid>
-                <Chip
-                    sx={{ position: 'fixed', left: '88%', top: '91.7%', zIndex: 999 }}
-                    label="悬浮"
-                    /* eslint-disable-next-line react/jsx-no-bind */
-                    onClick={handleOpenLook}
-                    icon={<FlagCircle />}
-                    variant="outlined"
-                />
+                {/* <Chip */}
+                {/*    sx={{ position: 'fixed', left: '88%', top: '91.7%', zIndex: 999 }} */}
+                {/*    label="悬浮" */}
+                {/*    onClick={handleOpenLook} */}
+                {/*    icon={<FlagCircle />} */}
+                {/*    variant="outlined" */}
+                {/* /> */}
             </Dialog>
             <Grid sx={{ position: 'relative', height: '100%', background: theme.palette.background.default }}>
-                <div className="dndflow">
+                <Box className="dndflow" sx={{ height: 'calc(100vh - 265px)' }}>
                     <ReactFlowProvider>
                         <div className="reactflow-wrapper" ref={reactFlowWrapper} id="flow">
                             <ReactFlow
@@ -1545,7 +1540,7 @@ const Orchestration = () => {
                         </Fab>
                         <AddModel open={open} handleClose={handleClose} workInstance={workInstance} onSave={onSave} />
                     </ReactFlowProvider>
-                </div>
+                </Box>
                 <Snackbar
                     anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
                     open={snackbarOpen}
@@ -1563,7 +1558,7 @@ const Orchestration = () => {
                         position: 'fixed',
                         '& > :not(style)': {
                             width: 400,
-                            height: 465
+                            height: 400
                         },
                         zIndex: 1500,
                         top: '3%',
@@ -1582,7 +1577,7 @@ const Orchestration = () => {
                                 sx={{ position: 'fixed', right: '0.5%', top: '0.5%', zIndex: 999 }}
                                 icon={<PanToolOutlined />}
                             />
-                            <div className="dndflow">
+                            <Box className="dndflow" sx={{ height: '100%' }}>
                                 <ReactFlowProvider>
                                     <div className="reactflow-wrapper">
                                         <ReactFlow
@@ -1602,7 +1597,7 @@ const Orchestration = () => {
                                         </ReactFlow>
                                     </div>
                                 </ReactFlowProvider>
-                            </div>
+                            </Box>
                         </Paper>
                     </Draggable>
                 </Box>

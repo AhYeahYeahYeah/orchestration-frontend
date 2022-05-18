@@ -20,7 +20,7 @@ export default function CardTerminate() {
         // </Box>
         <div align="center">
             <Typography variant="h6" component="div">
-                终 止
+                终止
             </Typography>
         </div>
     );

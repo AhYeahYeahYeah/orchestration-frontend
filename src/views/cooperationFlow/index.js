@@ -19,7 +19,6 @@ import { useTheme } from '@mui/material/styles';
 import {
     Alert,
     Avatar,
-    Chip,
     CircularProgress,
     Dialog,
     DialogActions,
@@ -59,7 +58,7 @@ import UpdateSelector from '../../ui-component/services/UpdateSelector';
 import WhiteSelector from '../../ui-component/services/WhiteSelector';
 import LogSelector from '../../ui-component/services/LogSelector';
 import SwitchSelector from '../../ui-component/caseCard/SwitchSelector';
-import { Check, Close, CloseOutlined, FlagCircle, FullscreenExitOutlined, PanToolOutlined } from '@mui/icons-material';
+import { Check, Close, CloseOutlined, FlagCircle, FullscreenExitOutlined, PanToolOutlined, Undo } from '@mui/icons-material';
 import AddModel from './AddModel';
 import { GridActionsCellItem } from '@mui/x-data-grid';
 import TerminateSelector from '../../ui-component/services/TerminateSelector';
@@ -675,7 +674,7 @@ const CooperationFlow = () => {
                     flow_queue.push(JSON.stringify(flow.elements[i]));
                     console.log(flow.elements[i].data);
                 }
-                let workflowSave = {};
+                let workflowSave;
                 if (workInstance.length === 0) {
                     workflowSave = {
                         name: workNew.name,
@@ -1436,6 +1435,9 @@ const CooperationFlow = () => {
                         <ToggleButton value="left" aria-label="left aligned" onClick={() => handleClickOpenFull()}>
                             <FullscreenExitOutlined />
                         </ToggleButton>
+                        <ToggleButton value="left" aria-label="left aligned" onClick={() => onRestore()}>
+                            <Undo />
+                        </ToggleButton>
                         <ToggleButton value="center" aria-label="centered" onClick={() => handleOpenLook()}>
                             <FlagCircle />
                         </ToggleButton>
@@ -1492,7 +1494,7 @@ const CooperationFlow = () => {
                     onClick={handleFullClose}
                 />
                 <Grid sx={{ position: 'relative', height: '100%', background: theme.palette.background.default }}>
-                    <div className="dndflow">
+                    <Box className="dndflow" sx={{ height: '100vh' }}>
                         <ReactFlowProvider>
                             <div className="reactflow-wrapper" ref={reactFlowWrapperOpen}>
                                 <ReactFlow
@@ -1519,7 +1521,7 @@ const CooperationFlow = () => {
                             </Fab>
                             <AddModel open={open} handleClose={handleClose} workInstance={workInstance} onSave={onSave} />
                         </ReactFlowProvider>
-                    </div>
+                    </Box>
                     <Snackbar
                         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
                         open={snackbarOpen}
@@ -1531,17 +1533,16 @@ const CooperationFlow = () => {
                         </Alert>
                     </Snackbar>
                 </Grid>
-                <Chip
-                    sx={{ position: 'fixed', left: '88%', top: '91.7%', zIndex: 999 }}
-                    label="悬浮"
-                    /* eslint-disable-next-line react/jsx-no-bind */
-                    onClick={handleOpenLook}
-                    icon={<FlagCircle />}
-                    variant="outlined"
-                />
+                {/* <Chip */}
+                {/*    sx={{ position: 'fixed', left: '88%', top: '91.7%', zIndex: 999 }} */}
+                {/*    label="悬浮" */}
+                {/*    onClick={handleOpenLook} */}
+                {/*    icon={<FlagCircle />} */}
+                {/*    variant="outlined" */}
+                {/* /> */}
             </Dialog>
             <Grid sx={{ position: 'relative', height: '93%', background: theme.palette.background.default, mt: 0.5 }}>
-                <div className="dndflow">
+                <Box className="dndflow" sx={{ height: 'calc(100vh - 260px)' }}>
                     <ReactFlowProvider>
                         <div className="reactflow-wrapper" ref={reactFlowWrapper}>
                             <ReactFlow
@@ -1568,7 +1569,7 @@ const CooperationFlow = () => {
                         </Fab>
                         <AddModel open={open} handleClose={handleClose} workInstance={workInstance} onSave={onSave} />
                     </ReactFlowProvider>
-                </div>
+                </Box>
                 <Snackbar
                     anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
                     open={snackbarOpen}
@@ -1580,28 +1581,27 @@ const CooperationFlow = () => {
                     </Alert>
                 </Snackbar>
             </Grid>
-            <Chip
-                sx={{ position: 'fixed', left: '82%', top: '91.7%', zIndex: 999 }}
-                label="全屏"
-                onClick={handleClickOpenFull}
-                icon={<FullscreenExitOutlined />}
-                variant="outlined"
-            />
-            <Chip
-                sx={{ position: 'fixed', left: '88%', top: '91.7%', zIndex: 999 }}
-                label="悬浮"
-                /* eslint-disable-next-line react/jsx-no-bind */
-                onClick={handleOpenLook}
-                icon={<FlagCircle />}
-                variant="outlined"
-            />
+            {/* <Chip */}
+            {/*     sx={{ position: 'fixed', left: '82%', top: '91.7%', zIndex: 999 }} */}
+            {/*     label="全屏" */}
+            {/*     onClick={handleClickOpenFull} */}
+            {/*     icon={<FullscreenExitOutlined />} */}
+            {/*     variant="outlined" */}
+            {/* /> */}
+            {/* <Chip */}
+            {/*     sx={{ position: 'fixed', left: '88%', top: '91.7%', zIndex: 999 }} */}
+            {/*     label="悬浮" */}
+            {/*     onClick={handleOpenLook} */}
+            {/*     icon={<FlagCircle />} */}
+            {/*     variant="outlined" */}
+            {/* /> */}
             {lookFlag === true ? (
                 <Box
                     sx={{
                         position: 'fixed',
                         '& > :not(style)': {
                             width: 400,
-                            height: 400
+                            height: 465
                         },
                         zIndex: 1500,
                         top: '3%',
@@ -1620,7 +1620,7 @@ const CooperationFlow = () => {
                                 sx={{ position: 'fixed', right: '0.5%', top: '0.5%', zIndex: 999 }}
                                 icon={<PanToolOutlined />}
                             />
-                            <div className="dndflow">
+                            <Box className="dndflow" sx={{ height: '100%' }}>
                                 <ReactFlowProvider>
                                     <div className="reactflow-wrapper" ref={reactFlowWrapperLook}>
                                         <ReactFlow
@@ -1640,7 +1640,7 @@ const CooperationFlow = () => {
                                         </ReactFlow>
                                     </div>
                                 </ReactFlowProvider>
-                            </div>
+                            </Box>
                         </Paper>
                     </Draggable>
                 </Box>

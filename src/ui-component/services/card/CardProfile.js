@@ -20,7 +20,7 @@ export default function CardLock() {
         // </Box>
         <div align="center">
             <Typography variant="h6" component="div">
-                用 户 信 息 校 验
+                用户信息校验
             </Typography>
         </div>
     );

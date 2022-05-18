@@ -94,7 +94,7 @@ const MainLayout = () => {
     }, []);
 
     return (
-        <Box sx={{ display: 'flex', background: '#f5f5f5' }}>
+        <Box sx={{ display: 'flex' }}>
             <CssBaseline />
             {/* header */}
             <AppBar
@@ -107,7 +107,7 @@ const MainLayout = () => {
                     transition: leftDrawerOpened ? theme.transitions.create('width') : 'none'
                 }}
             >
-                <Toolbar sx={{ background: '#f5f5f5' }}>
+                <Toolbar>
                     <Header handleLeftDrawerToggle={handleLeftDrawerToggle} />
                 </Toolbar>
             </AppBar>

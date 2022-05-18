@@ -9,7 +9,6 @@ import {
     Lock,
     LockOpen,
     RateReview,
-    Reply,
     SwitchCamera,
     ViewList,
     Warehouse
@@ -18,9 +17,8 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import PropTypes from 'prop-types';
 import ServiceInfoModel from './ServiceInfoModel';
 import { useState } from 'react';
-import { GridActionsCellItem } from '@mui/x-data-grid';
 
-export default function Sidebar({ onRestore, serviceInfo }) {
+export default function Sidebar({ serviceInfo }) {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
     const [serviceShow, setServiceShow] = useState({});
@@ -40,17 +38,17 @@ export default function Sidebar({ onRestore, serviceInfo }) {
 
     return (
         <Grid sx={{ left: '80%', width: 200, height: '100%', background: theme.palette.background.default }}>
-            <Box sx={{ marginTop: 1.5 }}>
-                <Grid container>
-                    <Grid item xs={2}>
-                        {/* eslint-disable-next-line react/destructuring-assignment */}
-                        <GridActionsCellItem icon={<Reply />} onClick={onRestore} />
-                    </Grid>
-                    {/* <Grid item xs={8}> */}
-                    {/*    <ControllableStates updateFlowinstance={updateFlowinstance} workOptions={workOptions} /> */}
-                    {/* </Grid> */}
-                </Grid>
-            </Box>
+            {/* <Box sx={{ marginTop: 1.5 }}> */}
+            {/*    <Grid container> */}
+            {/*        <Grid item xs={2}> */}
+            {/*            /!* eslint-disable-next-line react/destructuring-assignment *!/ */}
+            {/*            /!* <GridActionsCellItem icon={<Reply />} onClick={onRestore} /> *!/ */}
+            {/*        </Grid> */}
+            {/*        /!* <Grid item xs={8}> *!/ */}
+            {/*        /!*    <ControllableStates updateFlowinstance={updateFlowinstance} workOptions={workOptions} /> *!/ */}
+            {/*        /!* </Grid> *!/ */}
+            {/*    </Grid> */}
+            {/* </Box> */}
             <Box sx={{ position: 'absolute', height: '80%' }}>
                 <PerfectScrollbar
                     component="div"
@@ -282,6 +280,5 @@ export default function Sidebar({ onRestore, serviceInfo }) {
     );
 }
 Sidebar.propTypes = {
-    onRestore: PropTypes.func,
     serviceInfo: PropTypes.array
 };

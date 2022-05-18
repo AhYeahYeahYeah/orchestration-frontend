@@ -6,7 +6,6 @@ import { Avatar, Box, ButtonBase } from '@mui/material';
 
 // project imports
 import LogoSection from '../LogoSection';
-import SearchSection from './SearchSection';
 import ProfileSection from './ProfileSection';
 import NotificationSection from './NotificationSection';
 
@@ -39,8 +38,8 @@ const Header = ({ handleLeftDrawerToggle }) => {
                             ...theme.typography.commonAvatar,
                             ...theme.typography.mediumAvatar,
                             transition: 'all .2s ease-in-out',
-                            background: theme.palette.primary.dark,
-                            color: theme.palette.primary.light,
+                            background: theme.palette.background.paper,
+                            color: theme.palette.grey['700'],
                             '&:hover': {
                                 background: theme.palette.primary.light,
                                 color: theme.palette.primary.dark
@@ -55,7 +54,7 @@ const Header = ({ handleLeftDrawerToggle }) => {
             </Box>
 
             {/* header search */}
-            <SearchSection />
+            {/* <SearchSection /> */}
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ flexGrow: 1 }} />
 

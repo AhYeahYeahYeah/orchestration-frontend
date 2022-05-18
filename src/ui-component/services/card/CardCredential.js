@@ -20,7 +20,7 @@ export default function CardCredential() {
         // </Box>
         <div align="center">
             <Typography variant="h6" component="div">
-                证 件 检 查
+                证件检查
             </Typography>
         </div>
     );

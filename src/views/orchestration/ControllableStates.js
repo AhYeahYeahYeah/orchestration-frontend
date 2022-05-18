@@ -3,16 +3,15 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import PropTypes from 'prop-types';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
-import Typography from '@mui/material/Typography';
 
 // const optionInitial = ['新建', '模板1'];
 // eslint-disable-next-line react/prop-types
-export default function ControllableStates({ updateFlowinstance, workOptions, openFull }) {
+export default function ControllableStates({ updateFlowinstance, workOptions, setName, name }) {
     // eslint-disable-next-line no-use-before-define
     const [value, setValue] = React.useState('新建');
     const [buttonValue, setButtonValue] = React.useState('新建');
     const [open, setOpen] = React.useState(false);
-    const [name, setName] = React.useState('新建');
+    // const [name, setName] = React.useState('新建');
     // const [inputValue, setInputValue] = React.useState('');
     // const [options, setOptions] = React.useState(workOptions);
 
@@ -40,16 +39,16 @@ export default function ControllableStates({ updateFlowinstance, workOptions, op
             <Button variant="outlined" onClick={() => handleClickOpen()}>
                 {buttonValue}
             </Button>
-            {buttonValue === '新建' ? (
-                ''
-            ) : (
-                <Typography
-                    variant="h4"
-                    sx={{ position: 'fixed', right: '15%', zIndex: 9999, top: openFull ? '1%' : '15%', transition: 2 }}
-                >
-                    {name}
-                </Typography>
-            )}
+            {/* {buttonValue === '新建' ? ( */}
+            {/*    '' */}
+            {/* ) : ( */}
+            {/*    <Typography */}
+            {/*        variant="h4" */}
+            {/*        sx={{ position: 'fixed', right: '15%', zIndex: 9999, top: openFull ? '1%' : '15%', transition: 2 }} */}
+            {/*    > */}
+            {/*        {name} */}
+            {/*    </Typography> */}
+            {/* )} */}
             <Dialog
                 open={open}
                 onClose={() => {
@@ -113,5 +112,7 @@ export default function ControllableStates({ updateFlowinstance, workOptions, op
 ControllableStates.protoTypes = {
     updateFlowinstance: PropTypes.func,
     workOptions: PropTypes.array,
-    openFull: PropTypes.bool
+    openFull: PropTypes.bool,
+    setName: PropTypes.func,
+    name: PropTypes.string
 };
