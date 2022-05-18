@@ -97,16 +97,7 @@ const nodeTypes = {
     Terminate: TerminateSelector,
     WorkFlow: WorkFlowSelector
 };
-const initialElements = [
-    {
-        id: '1',
-        type: 'input',
-        data: { label: ' 起点 ' },
-        position: { x: 250, y: 5 },
-        flag: null,
-        selectable: false
-    }
-];
+const initialElements = [];
 // let id = 0;
 // // eslint-disable-next-line no-plusplus
 // const getId = () => `dndnode_${id++}`;
