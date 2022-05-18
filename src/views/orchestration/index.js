@@ -75,6 +75,10 @@ import SaveIcon from '@mui/icons-material/Save';
 import { green, red } from '@mui/material/colors';
 import { temp } from './FlowTemp';
 import html2canvas from 'html2canvas';
+// import AvatarGroup from '@mui/material/AvatarGroup';
+import MainCard from '../../ui-component/cards/MainCard';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 const nodeTypes = {
     No: NoSelector,
@@ -1339,8 +1343,94 @@ const Orchestration = () => {
             // mediaStream.getTracks()[0].stop();
         });
     }
+    function getFlowToPicture() {
+        const flow = document.getElementById('flow');
+        html2canvas(flow, {
+            scale: 10,
+            dpi: 5000000
+        }).then((canvas) => {
+            const imgUrl = canvas.toDataURL();
+            // 获取截图base64
+            console.log(imgUrl.substring(22));
+
+            const eventPayload = {
+                content: imgUrl.substring(22),
+                // 图片base64格式太多，此处省略。不包含前缀：data:image/png;base64,
+                fileName: `${Date.now()}.png`,
+                imageType: 'png'
+            };
+
+            // console.log(eventPayload);
+            const content = eventPayload.content;
+            const imageType = eventPayload.imageType;
+            const fileName = eventPayload.fileName;
+            if (content) {
+                // 接口返回的数据部分
+                // 解析图片
+                // 因接口直接返回了base64代码部分，所以不需要截取，如果含"data:image/png;base64," 则需要自己做截取处理
+                const raw = window.atob(content);
+                const rawLength = raw.length;
+                const uInt8Array = new Uint8Array(rawLength);
+                // eslint-disable-next-line no-plusplus
+                for (let i = 0; i < rawLength; i++) {
+                    uInt8Array[i] = raw.charCodeAt(i);
+                }
+                const blob = new Blob([uInt8Array], { type: `image/${imageType}` });
+                // 保存图片
+                const aLink = document.createElement('a');
+                const evt = document.createEvent('HTMLEvents');
+                evt.initEvent('click', true, true);
+                aLink.download = fileName;
+                aLink.href = URL.createObjectURL(blob);
+                aLink.click();
+            } else {
+                console.log('没有base64代码');
+            }
+        });
+    }
     return (
-        <>
+        <MainCard
+            title="编排界面"
+            secondary={
+                <Box sx={{ display: 'flex', mr: 6 }}>
+                    <ToggleButtonGroup aria-label="text alignment" size="small">
+                        <ToggleButton value="left" aria-label="left aligned" onClick={() => handleClickOpenFull()}>
+                            <FullscreenExitOutlined />
+                        </ToggleButton>
+                        <ToggleButton value="center" aria-label="centered" onClick={() => handleOpenLook()}>
+                            <FlagCircle />
+                        </ToggleButton>
+                        <ToggleButton value="right" aria-label="right aligned" onClick={() => getFlowToPicture()}>
+                            <PhotoCamera />
+                        </ToggleButton>
+                    </ToggleButtonGroup>
+                    {/* <Chip */}
+                    {/*    // sx={{ position: 'fixed', left: '82%', top: '91.7%', zIndex: 999 }} */}
+                    {/*    sx={{ ml: 1 }} */}
+                    {/*    label="全屏" */}
+                    {/*    onClick={handleClickOpenFull} */}
+                    {/*    icon={<FullscreenExitOutlined />} */}
+                    {/*    variant="outlined" */}
+                    {/* /> */}
+                    {/* <Chip */}
+                    {/*    // sx={{ position: 'fixed', left: '88%', top: '91.7%', zIndex: 999 }} */}
+                    {/*    sx={{ ml: 1 }} */}
+                    {/*    label="悬浮" */}
+                    {/*    onClick={() => handleOpenLook()} */}
+                    {/*    icon={<FlagCircle />} */}
+                    {/*    variant="outlined" */}
+                    {/* /> */}
+                    {/* <Chip */}
+                    {/*    sx={{ ml: 1 }} */}
+                    {/*    // sx={{ position: 'fixed', left: '91%', top: '16%', zIndex: 999 }} */}
+                    {/*    label="导出" */}
+                    {/*    onClick={() => getFlowToPicture()} */}
+                    {/*    icon={<PhotoCamera fontSize="small" />} */}
+                    {/*    variant="outlined" */}
+                    {/* /> */}
+                </Box>
+            }
+        >
             {/* eslint-disable-next-line react/jsx-no-bind */}
             <Dialog open={cameraOpen} onClose={handleCameraClose}>
                 <DialogTitle>
@@ -1418,57 +1508,6 @@ const Orchestration = () => {
                     variant="outlined"
                 />
             </Dialog>
-            <Chip
-                sx={{ position: 'fixed', left: '91%', top: '16%', zIndex: 999 }}
-                label="导出"
-                onClick={() => {
-                    const flow = document.getElementById('flow');
-                    html2canvas(flow, {
-                        scale: 10,
-                        dpi: 5000000
-                    }).then((canvas) => {
-                        const imgUrl = canvas.toDataURL();
-                        // 获取截图base64
-                        console.log(imgUrl.substring(22));
-
-                        const eventPayload = {
-                            content: imgUrl.substring(22),
-                            // 图片base64格式太多，此处省略。不包含前缀：data:image/png;base64,
-                            fileName: `${Date.now()}.png`,
-                            imageType: 'png'
-                        };
-
-                        // console.log(eventPayload);
-                        const content = eventPayload.content;
-                        const imageType = eventPayload.imageType;
-                        const fileName = eventPayload.fileName;
-                        if (content) {
-                            // 接口返回的数据部分
-                            // 解析图片
-                            // 因接口直接返回了base64代码部分，所以不需要截取，如果含"data:image/png;base64," 则需要自己做截取处理
-                            const raw = window.atob(content);
-                            const rawLength = raw.length;
-                            const uInt8Array = new Uint8Array(rawLength);
-                            // eslint-disable-next-line no-plusplus
-                            for (let i = 0; i < rawLength; i++) {
-                                uInt8Array[i] = raw.charCodeAt(i);
-                            }
-                            const blob = new Blob([uInt8Array], { type: `image/${imageType}` });
-                            // 保存图片
-                            const aLink = document.createElement('a');
-                            const evt = document.createEvent('HTMLEvents');
-                            evt.initEvent('click', true, true);
-                            aLink.download = fileName;
-                            aLink.href = URL.createObjectURL(blob);
-                            aLink.click();
-                        } else {
-                            console.log('没有base64代码');
-                        }
-                    });
-                }}
-                icon={<PhotoCamera fontSize="small" />}
-                variant="outlined"
-            />
             <Grid sx={{ position: 'relative', height: '100%', background: theme.palette.background.default }}>
                 <div className="dndflow">
                     <ReactFlowProvider>
@@ -1518,27 +1557,13 @@ const Orchestration = () => {
                     </Alert>
                 </Snackbar>
             </Grid>
-            <Chip
-                sx={{ position: 'fixed', left: '82%', top: '91.7%', zIndex: 999 }}
-                label="全屏"
-                onClick={handleClickOpenFull}
-                icon={<FullscreenExitOutlined />}
-                variant="outlined"
-            />
-            <Chip
-                sx={{ position: 'fixed', left: '88%', top: '91.7%', zIndex: 999 }}
-                label="悬浮"
-                onClick={() => handleOpenLook()}
-                icon={<FlagCircle />}
-                variant="outlined"
-            />
             {lookFlag === true ? (
                 <Box
                     sx={{
                         position: 'fixed',
                         '& > :not(style)': {
                             width: 400,
-                            height: 400
+                            height: 465
                         },
                         zIndex: 1500,
                         top: '3%',
@@ -1620,7 +1645,7 @@ const Orchestration = () => {
                     </Box>
                 </DialogContent>
             </Dialog>
-        </>
+        </MainCard>
     );
 };
 

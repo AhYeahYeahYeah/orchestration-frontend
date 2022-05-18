@@ -77,6 +77,8 @@ import SaveIcon from '@mui/icons-material/Save';
 import { green, red } from '@mui/material/colors';
 import { useNavigate } from 'react-router-dom';
 import MainCard from '../../ui-component/cards/MainCard';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import ToggleButton from '@mui/material/ToggleButton';
 
 const nodeTypes = {
     No: NoSelector,
@@ -1418,6 +1420,14 @@ const CooperationFlow = () => {
                             ))}
                         </AvatarGroup>
                     </Box>
+                    <ToggleButtonGroup aria-label="text alignment" size="small" sx={{ ml: 2 }}>
+                        <ToggleButton value="left" aria-label="left aligned" onClick={() => handleClickOpenFull()}>
+                            <FullscreenExitOutlined />
+                        </ToggleButton>
+                        <ToggleButton value="center" aria-label="centered" onClick={() => handleOpenLook()}>
+                            <FlagCircle />
+                        </ToggleButton>
+                    </ToggleButtonGroup>
                     <Box sx={{ display: 'flex', ml: 5 }}>
                         {/* eslint-disable-next-line react/jsx-no-bind */}
                         <Button onClick={Quit} variant="outlined">
