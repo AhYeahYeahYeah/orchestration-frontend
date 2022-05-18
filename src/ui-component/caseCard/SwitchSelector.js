@@ -12,11 +12,11 @@ export default function SwitchSelector() {
             <Handle
                 type="target"
                 position="top"
-                style={{ background: '#555', width: 10, height: 10, zIndex: 99 }}
+                style={{ background: '#FFFFFF', width: 8, height: 8, border: '1px solid black', zIndex: 99 }}
                 // onConnect={(params) => console.log('handle onConnect', params)}
             />
             <SwitchCard />
-            <Handle type="source" position="bottom" style={{ background: '#555', width: 10, height: 10 }} />
+            <Handle type="source" position="bottom" style={{ background: '#FFFFFF', width: 8, height: 8, border: '1px solid black' }} />
         </>
     );
 }

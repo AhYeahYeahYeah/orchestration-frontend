@@ -12,11 +12,11 @@ export default function ProfileSelector() {
             <Handle
                 type="target"
                 position="top"
-                style={{ background: '#555', width: 10, height: 10 }}
+                style={{ background: '#FFFFFF', width: 8, height: 8, border: '1px solid black' }}
                 // onConnect={(params) => console.log('handle onConnect', params)}
             />
             <CardProfile />
-            <Handle type="source" position="bottom" style={{ background: '#555', width: 10, height: 10 }} />
+            <Handle type="source" position="bottom" style={{ background: '#FFFFFF', width: 8, height: 8, border: '1px solid black' }} />
         </>
     );
 }

@@ -130,14 +130,14 @@ const Orchestration = () => {
         border: '1px solid black',
         padding: 10,
         width: 150,
-        borderRadius: 8,
+        borderRadius: 3,
         background: 'white'
     };
     const nodeSelectStyle = {
         border: '1px solid black',
         padding: 10,
         width: 210,
-        borderRadius: 8,
+        borderRadius: 3,
         background: 'white'
     };
     // eslint-disable-next-line react-hooks/rules-of-hooks
