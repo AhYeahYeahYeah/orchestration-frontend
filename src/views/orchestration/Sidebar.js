@@ -8,7 +8,6 @@ import {
     FactCheck,
     Lock,
     LockOpen,
-    Pageview,
     RateReview,
     SwitchCamera,
     ViewList,
@@ -18,9 +17,8 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import PropTypes from 'prop-types';
 import ServiceInfoModel from './ServiceInfoModel';
 import { useState } from 'react';
-import { GridActionsCellItem } from '@mui/x-data-grid';
 
-export default function Sidebar({ serviceInfo, workFlowInstanceName }) {
+export default function Sidebar({ serviceInfo }) {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
     const [serviceShow, setServiceShow] = useState({});
@@ -40,27 +38,6 @@ export default function Sidebar({ serviceInfo, workFlowInstanceName }) {
 
     return (
         <Grid sx={{ left: '80%', width: 200, height: '100%', background: theme.palette.background.default }}>
-            <Box sx={{ marginTop: 1.5 }}>
-                <Grid container>
-                    {/* <Grid item xs={2}> */}
-                    {/*     <GridActionsCellItem icon={<Reply />} onClick={onRestore} /> */}
-                    {/* </Grid> */}
-                    {/* <Grid item xs={8}> */}
-                    {/*     <ControllableStates updateFlowinstance={updateFlowinstance} workOptions={workOptions} openFull={openFull} /> */}
-                    {/* </Grid> */}
-                    {workFlowInstanceName === '' || workFlowInstanceName === '新建' ? (
-                        ''
-                    ) : (
-                        <Grid item xs={1}>
-                            {/* eslint-disable-next-line react/destructuring-assignment */}
-                            <GridActionsCellItem
-                                icon={<Pageview />}
-                                onClick={() => window.open(`http://conductor.rinne.top:5000/workflowDef/${workFlowInstanceName}`)}
-                            />
-                        </Grid>
-                    )}
-                </Grid>
-            </Box>
             <Box sx={{ position: 'absolute', height: '80%' }}>
                 <PerfectScrollbar
                     component="div"
@@ -292,6 +269,5 @@ export default function Sidebar({ serviceInfo, workFlowInstanceName }) {
     );
 }
 Sidebar.propTypes = {
-    serviceInfo: PropTypes.array,
-    workFlowInstanceName: PropTypes.string
+    serviceInfo: PropTypes.array
 };

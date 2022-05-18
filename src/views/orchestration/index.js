@@ -1418,7 +1418,7 @@ const Orchestration = () => {
                     </ToggleButtonGroup>
                     <ControllableStates
                         // eslint-disable-next-line react/jsx-no-bind
-                        updateFlowinstance={() => updateFlowinstance()}
+                        updateFlowinstance={updateFlowinstance}
                         workOptions={workOptions}
                         openFull={openFull}
                         setName={setFlowName}
