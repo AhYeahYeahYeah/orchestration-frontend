@@ -1,58 +1,14 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
+import ProductCard from '../../ui-component/ProductCard';
 import { Alert, Fab, Grid, Snackbar, Pagination } from '@mui/material';
-import { Add, Delete, Edit } from '@mui/icons-material';
+import { Add } from '@mui/icons-material';
 import AddProductModel from './AddProductModel';
 import UpdateProductModel from './UpdateProductModel';
 import { EntityApi } from '../../api/restful';
-import { GridActionsCellItem } from '@mui/x-data-grid';
 import { useState } from 'react';
+import anime from 'animejs';
 // import { useTheme } from '@mui/material/styles';
-
-const card = (updatehandleOpen, value, deleteProduct) => (
-    <>
-        <CardContent>
-            <Grid container spacing={2}>
-                <Grid item xs={10}>
-                    <Typography variant="h5" sx={{ fontSize: 18 }} gutterBottom>
-                        产品名字：{value.productName}
-                    </Typography>
-                </Grid>
-                <Grid item xs={1}>
-                    <GridActionsCellItem icon={<Edit />} onClick={() => updatehandleOpen(value)} />
-                    {/* <SimpleDialog open={open} handleClose={handleClose}/> */}
-                </Grid>
-                <Grid item xs={1}>
-                    <GridActionsCellItem icon={<Delete />} onClick={() => deleteProduct(value)} />
-                    {/* <SimpleDialog open={open} handleClose={handleClose}/> */}
-                </Grid>
-                <Grid item xs={6}>
-                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                        产品编号：{value.productNum}
-                    </Typography>
-                </Grid>
-                <Grid item xs={6}>
-                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                        产品库存：{value.storage}
-                    </Typography>
-                </Grid>
-                <Grid item xs={6}>
-                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                        年化利率：{(Number(value.annualRate) * 100).toFixed(2)}%
-                    </Typography>
-                </Grid>
-                <Grid item xs={6}>
-                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                        风险等级：{value.riskLevel}
-                    </Typography>
-                </Grid>
-            </Grid>
-        </CardContent>
-    </>
-);
 
 export default function Product() {
     const [open, setOpen] = React.useState(false);
@@ -64,6 +20,8 @@ export default function Product() {
     const [workflows, setWorkflows] = React.useState([]);
     const [workName, setWorkName] = React.useState([]);
     const [perm, setPerm] = React.useState(false);
+    const animationRef = React.useRef(null);
+
     const handleSnackbarClose = () => {
         setSnackbarOpen(false);
         setSnackbarMsg('');
@@ -113,7 +71,7 @@ export default function Product() {
         });
     }
 
-    function updateProduct(value) {
+    const updateProduct = (value) => {
         const entityApi = new EntityApi(localStorage.getItem('admin_token'));
         entityApi.updateProduct(value).then((res) => {
             if (res.status === 200) {
@@ -126,8 +84,8 @@ export default function Product() {
                 });
             }
         });
-    }
-    function deleteProduct(value) {
+    };
+    const deleteProduct = (value) => {
         const entityApi = new EntityApi(localStorage.getItem('admin_token'));
         entityApi.deleteProduct(value.pid).then((res) => {
             if (res.status === 200) {
@@ -143,10 +101,20 @@ export default function Product() {
                 });
             }
         });
-    }
+    };
     function updatePage(value) {
         setProductPage(product.slice(9 * (value - 1), 9 * (value - 1) + 9));
     }
+
+    animationRef.current = anime({
+        targets: '.p-card',
+        scale: [
+            { value: 0.8, easing: 'easeOutSine', duration: 200 },
+            { value: 1, easing: 'easeOutSine', duration: 200 }
+        ],
+        delay: anime.stagger(200, { grid: [3, 3], from: 'first', axis: 'x' })
+    });
+
     React.useEffect(() => {
         const entityApi = new EntityApi(localStorage.getItem('admin_token'));
         entityApi
@@ -175,14 +143,16 @@ export default function Product() {
                 setSnackbarMsg('您无权限查看！');
                 setSnackbarOpen(true);
             });
+
+        animationRef.current.restart();
     }, []);
 
     return (
         <Grid container spacing={3}>
             {productPage.map((value) => (
-                <Grid item lg={4} sm={6} xs={12} key={value.pid}>
+                <Grid item lg={4} sm={6} xs={12} key={value.pid} className="p-card">
                     <Box>
-                        <Card variant="outlined">{card(updatehandleOpen, value, deleteProduct)}</Card>
+                        <ProductCard updatehandleOpenHandler={updatehandleOpen} valueObject={value} deleteProductHandler={deleteProduct} />
                     </Box>
                 </Grid>
             ))}
@@ -209,7 +179,6 @@ export default function Product() {
             <UpdateProductModel
                 updateOpen={updateOpen}
                 updatehandleClose={updatehandleClose}
-                /* eslint-disable-next-line react/jsx-no-bind */
                 updateProduct={updateProduct}
                 /* eslint-disable-next-line react/jsx-no-duplicate-props */
                 updateproductsingle={updateproductsingle}
