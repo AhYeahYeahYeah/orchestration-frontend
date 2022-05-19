@@ -9,6 +9,7 @@ import { useTheme } from '@mui/material/styles';
 
 export default function ProductCard({ updatehandleOpenHandler, valueObject, deleteProductHandler }) {
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [isMouseOver, setIsMouseOver] = React.useState(false);
     const divRef = React.useRef(null);
     const theme = useTheme();
 
@@ -23,8 +24,16 @@ export default function ProductCard({ updatehandleOpenHandler, valueObject, dele
         setAnchorEl(null);
     }
 
+    const handleMouseEnter = () => {
+        setIsMouseOver(true);
+    };
+
+    const handleMouseLeave = () => {
+        setIsMouseOver(false);
+    };
+
     return (
-        <Card raised elevation={1}>
+        <Card onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} elevation={isMouseOver ? 4 : 1}>
             <CardHeader
                 avatar={
                     <Avatar sx={{ bgcolor: theme.palette.primary.light }} variant="rounded">
