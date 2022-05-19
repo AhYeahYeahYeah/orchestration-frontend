@@ -20,6 +20,10 @@ export default function Product() {
     const [workflows, setWorkflows] = React.useState([]);
     const [workName, setWorkName] = React.useState([]);
     const [perm, setPerm] = React.useState(false);
+    const [defaults, setDefaults] = useState(1);
+    const [count, setCount] = useState(0);
+    const [productPage, setProductPage] = useState([]);
+    const [opacity, setOpacity] = useState(0);
     const animationRef = React.useRef(null);
 
     const handleSnackbarClose = () => {
@@ -53,9 +57,7 @@ export default function Product() {
     const updatehandleClose = () => {
         setUpdateOpen(false);
     };
-    const [defaults, setDefaults] = useState(1);
-    const [count, setCount] = useState(0);
-    const [productPage, setProductPage] = useState([]);
+
     function addProduct(value) {
         const entityApi = new EntityApi(localStorage.getItem('admin_token'));
         entityApi.addProduct(value).then((res) => {
@@ -104,16 +106,8 @@ export default function Product() {
     };
     function updatePage(value) {
         setProductPage(product.slice(9 * (value - 1), 9 * (value - 1) + 9));
+        setOpacity(1);
     }
-
-    animationRef.current = anime({
-        targets: '.p-card',
-        scale: [
-            { value: 0.8, easing: 'easeOutSine', duration: 200 },
-            { value: 1, easing: 'easeOutSine', duration: 200 }
-        ],
-        delay: anime.stagger(200, { grid: [3, 3], from: 'first', axis: 'x' })
-    });
 
     React.useEffect(() => {
         const entityApi = new EntityApi(localStorage.getItem('admin_token'));
@@ -134,6 +128,16 @@ export default function Product() {
                                 queue.push(re.data[i].name);
                             }
                             setWorkName(queue);
+
+                            animationRef.current = anime({
+                                targets: '.p-card',
+                                opacity: [{ value: 1, easing: 'easeInCubic', duration: 400 }],
+                                scale: [
+                                    { value: 0.9, easing: 'easeInCirc', duration: 1 },
+                                    { value: 1, easing: 'easeOutCirc', duration: 400 }
+                                ],
+                                delay: anime.stagger(100, { grid: [3, 3], from: 'first', axis: 'x' })
+                            });
                         }
                     });
                 }
@@ -143,14 +147,12 @@ export default function Product() {
                 setSnackbarMsg('您无权限查看！');
                 setSnackbarOpen(true);
             });
-
-        animationRef.current.restart();
     }, []);
 
     return (
         <Grid container spacing={3}>
             {productPage.map((value) => (
-                <Grid item lg={4} sm={6} xs={12} key={value.pid} className="p-card">
+                <Grid item lg={4} sm={6} xs={12} key={value.pid} className="p-card" sx={{ opacity }}>
                     <Box>
                         <ProductCard updatehandleOpenHandler={updatehandleOpen} valueObject={value} deleteProductHandler={deleteProduct} />
                     </Box>
