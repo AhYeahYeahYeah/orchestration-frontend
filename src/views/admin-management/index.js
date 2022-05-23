@@ -105,7 +105,8 @@ export default function AdminManagement() {
                     // console.log(customerInfo);
                 }
             })
-            .catch(() => {
+            .catch((res) => {
+                console.log(res);
                 setSnackbarMsg('您无权限查看！');
                 setSnackbarOpen(true);
             });

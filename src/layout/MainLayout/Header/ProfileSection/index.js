@@ -84,8 +84,15 @@ const ProfileSection = () => {
         if (localStorage.getItem('admin') === null) {
             window.location.href = '/';
         } else {
-            const admin = JSON.parse(localStorage.getItem('admin'));
-            setAdmin(admin);
+            const eneity = new EntityApi(localStorage.getItem('admin_token'));
+            eneity
+                .getOrders()
+                .then(() => {
+                    const admin = JSON.parse(localStorage.getItem('admin'));
+                    setAdmin(admin);
+                })
+                // eslint-disable-next-line no-return-assign
+                .catch(() => (window.location.href = '/'));
         }
     }, []);
 
